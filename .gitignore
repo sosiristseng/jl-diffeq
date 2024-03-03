@@ -59,4 +59,4 @@ LocalPreferences.toml
 .CondaPkg
 
 # Generated files
-*.ipynb
+# *.ipynb

@@ -4,5 +4,12 @@
 format: jb-book
 root: index
 chapters:
-  - file: pythonplot
-  - file: plots/plotsjl
+  - file: 01-ode
+  - file: 02-sde
+  - file: 03-catalyst
+  - file: 04-optimization
+  - file: 05-steadystate
+  - file: ch01-03-ensemble
+  - file: ch01-05-callback
+  - file: ch02-01-symbolics
+  - file: ch03-01-neuron

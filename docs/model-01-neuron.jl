@@ -201,7 +201,7 @@ function HH_tms!(du, u, p, t)
     du[3] = (alpha_m(v) * (1.0 - m)) - (beta_m(v) * m)
     du[4] = (alpha_h(v) * (1.0 - h)) - (beta_h(v) * h)
 
-    # Synaptic variables
+    ## Synaptic variables
     du[5] = -(u / tau_u)
     du[6] = (1-R) / tau_R
     du[7] = -(gsyn / tau)
@@ -232,7 +232,6 @@ plot!(fig, sol2, idxs=1, label="v (50s)")
 fig |> PNG
 
 # If we increase the period between these events, facilitation does not occur.
-
 p = [35.0, 40.0, 0.3, -77.0, 55.0, -65.0, 1, 0, 30, 500, 50, 0.5, 0.005, 0]
 u0 = [-60, n_inf(-60), m_inf(-60), h_inf(-60), 0.0, 1.0, 0.0]
 tspan = (0.0, 5300.0)

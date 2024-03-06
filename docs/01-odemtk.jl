@@ -228,7 +228,7 @@ function pendulum!(du, u, p, t)
     du[2] = T*x
     du[3] = dy
     du[4] = T*y - g
-    # Do not write your function like this after you've learned MTK
+    ## Do not write your function like this after you've learned MTK
     du[5] = x^2 + y^2 - L^2
     return nothing
 end

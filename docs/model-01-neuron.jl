@@ -45,9 +45,9 @@ tspan = (0.0, 40.0)
 p = [10.0, -75.0, 5.0, -55.0, 0] ## p = (gL, EL, C, Vth, I)
 prob = ODEProblem(lif, u0, tspan, p, callback=cb)
 sol = solve(prob)
-plot(sol) |> PNG
+plot(sol, label="voltage") |> PNG
 
-# The model is resting at `-75` while there is no input. At `t=10` the input increases by `210` and the model starts to spike. Spiking does not start immediately because the input first has to charge the membrane capacitance. Increasing the input again at `t=15` increases the firing rate. Note that the firing is extremely regular because LIF model is just a simple RC circuit.
+# The model rests at `-75` mV if there is no input. At `t=10` the input increases by `210` mV and the neuron starts to spike. Spiking does not start immediately because the input first has to charge the membrane capacitance. Increasing the input again at `t=15` increases the spike firing rate. Note that the firing is extremely regular because LIF model is just a simple RC circuit.
 
 #===
 
@@ -69,8 +69,8 @@ When $v \geq$ 30 mV, $v$ resets to $c$, $u$ increased by $d$.
 using DifferentialEquations
 using Plots
 
-# In-place form of model
-function izh!(du, u, p, t);
+# In-place form of tauhe Izhikevich Model
+function izh!(du, u, p, t)
     a, b, c, d, I = p
 
     du[1] = 0.04 * u[1]^2 + 5 * u[1] + 140 - u[2] + I
@@ -120,19 +120,20 @@ plot(sol, idxs=1, label="v") |> PNG
 The [Hodgkin-Huxley (HH) model](https://en.wikipedia.org/wiki/Hodgkin%E2%80%93Huxley_model) is a biophysically realistic neuron model. All parameters and mechanisms of the model represent biological mechanisms. Opeing and closing of sodium and potassium channels depolarize and hyperpolarize the membrane potential.
 ===#
 
+## Potassium ion-channel rate functions
+alpha_n(v) = (0.02 * (v - 25.0)) / (1.0 - exp((-1.0 * (v - 25.0)) / 9.0))
+beta_n(v) = (-0.002 * (v - 25.0)) / (1.0 - exp((v - 25.0) / 9.0))
+
+## Sodium ion-channel rate functions
+alpha_m(v) = (0.182*(v + 35.0)) / (1.0 - exp((-1.0 * (v + 35.0)) / 9.0))
+beta_m(v) = (-0.124 * (v + 35.0)) / (1.0 - exp((v + 35.0) / 9.0))
+alpha_h(v) = 0.25 * exp((-1.0 * (v + 90.0)) / 12.0)
+beta_h(v) = (0.25 * exp((v + 62.0) / 6.0)) / exp((v + 90.0) / 12.0)
+
 function HH!(du,u,p,t)
     gK, gNa, gL, EK, ENa, EL, C, I = p
     v, n, m, h = u
 
-    ## Potassium ion-channel rate functions
-    alpha_n(v) = (0.02 * (v - 25.0)) / (1.0 - exp((-1.0 * (v - 25.0)) / 9.0))
-    beta_n(v) = (-0.002 * (v - 25.0)) / (1.0 - exp((v - 25.0) / 9.0))
-
-    ## Sodium ion-channel rate functions
-    alpha_m(v) = (0.182*(v + 35.0)) / (1.0 - exp((-1.0 * (v + 35.0)) / 9.0))
-    beta_m(v) = (-0.124 * (v + 35.0)) / (1.0 - exp((v + 35.0) / 9.0))
-    alpha_h(v) = 0.25 * exp((-1.0 * (v + 90.0)) / 12.0)
-    beta_h(v) = (0.25 * exp((v + 62.0) / 6.0)) / exp((v + 90.0) / 12.0)
 
     du[1] = (-(gK * (n^4.0) * (v - EK)) - (gNa * (m ^ 3.0) * h * (v - ENa)) - (gL * (v - EL)) + I) / C
     du[2] = (alpha_n(v) * (1.0 - n)) - (beta_n(v) * n)

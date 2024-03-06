@@ -42,6 +42,7 @@ eqs = [
 @named sys = ODESystem(eqs, t)
 
 # `structural_simplify()` simplifies the two equations to one.
+# You can also use `@mtkbuild sys = ODESystem(eqs, t)` to merge these two steps into one
 sys = structural_simplify(sys)
 
 # Setup initial conditions, time span, parameter values, the `ODEProblem`, and solve the problem.
@@ -247,7 +248,6 @@ tracedSys = modelingtoolkitize(pendulum_prob)
 pendulumSys = tracedSys |> dae_index_lowering |> structural_simplify
 
 # The default `u0` is included in the system already so one can use an empty array `[]` as the initial conditions.
-
 prob = ODAEProblem(pendulumSys, [], tspan)
 sol = solve(prob, abstol=1e-8, reltol=1e-8)
 plot(sol, idxs=states(tracedSys)) |> PNG

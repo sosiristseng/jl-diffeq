@@ -78,3 +78,28 @@ plot!(fig, sim, linealpha=0.6, color=:red, idxs=(0,2))
 # Show the distribution of the ensemble solutions
 summ = EnsembleSummary(sim, 0:0.1:10)
 plot(summ, fillalpha=0.5) |> PNG
+
+# ## Ensemble simulations of Modelingtoolkit (MTK) models
+# Radioactive decay example
+using ModelingToolkit
+using DifferentialEquations
+
+@variables t c(t) = 1.0
+@parameters λ = 1.0
+D = Differential(t)
+@mtkbuild sys = ODESystem([D(c) ~ -λ * c], t)
+prob = ODEProblem(sys, [], (0.0, 2.0), [])
+
+# Use the symboilic interface to change the parameter(s)
+# By `prob.ps[symbol]` or `setp()` function factory
+function changemtkparam(prob, i, repeat)
+    ## Make a new copy of the parameter vector
+    ## Ensure the changed will not affect the original ODE problem
+    newprob = remake(prob, p=copy(prob.p))
+    newprob.ps[λ] = i * 0.5
+    newprob
+end
+
+ensemble_prob = EnsembleProblem(prob, prob_func=changemtkparam)
+sim = solve(ensemble_prob, trajectories=10)
+plot(sim, fillalpha=0.5) |> PNG

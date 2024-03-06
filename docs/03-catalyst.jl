@@ -1,16 +1,8 @@
-#===
-
-# Catalyst.jl
-
-`Catalyst.jl` is a domain specific language (DSL) for high performance simulation and modeling of chemical reaction networks. `Catalyst.jl` is based on `ModelingToolkit.jl` for symbolic transformations.
-
-This part is lalrgely based on [Catalyst.jl Docs](https://docs.sciml.ai/Catalyst/dev/).
-
-## Repressilator
-
-[Repressilator](https://en.wikipedia.org/wiki/Repressilator) model:
-
-===#
+# # Catalyst.jl
+# `Catalyst.jl` is a domain specific language (DSL) for high performance simulation and modeling of chemical reaction networks. `Catalyst.jl` is based on `ModelingToolkit.jl` for symbolic transformations and generating model code.
+# This part is lalrgely based on [Catalyst.jl Docs](https://docs.sciml.ai/Catalyst/dev/).
+# ## Repressilator
+# [Repressilator](https://en.wikipedia.org/wiki/Repressilator) model with three components in a negative feedback loop.
 
 using Catalyst
 using ModelingToolkit
@@ -42,29 +34,38 @@ parameters(repressilator)
 # Reactions in the reaction network
 reactions(repressilator)
 
-# ### Convert a reaction network to an ODE system
+# ### Convert to an ODE system
 odesys = convert(ODESystem, repressilator)
 
-# To setup parameters (`ps`) and initial conditions (`u₀`), you can use symbols to map the values.
+# To setup parameters (`ps`) and initial conditions (`u₀`), you can use Julia symbols to map the values.
 p = [:α => .5, :K => 40, :n => 2, :δ => log(2)/120, :γ => 5e-3, :β => 20*log(2)/120, :μ => log(2)/60]
 u₀ = [:m₁ => 0., :m₂ => 0., :m₃ => 0., :P₁ => 20.,:P₂ => 0.,:P₃ => 0.]
 
-# Or you can extract MTK symbols with the `@unpack` macro (recommended, since it's less error-prone)
+# Or you can also use MTK symbols from the ODE system with the `@unpack` macro (recommended)
 @unpack m₁, m₂, m₃, P₁, P₂, P₃, α, K, n, δ, γ, β, μ = repressilator
 p = [α => .5, K => 40, n => 2, δ => log(2)/120, γ => 5e-3, β => 20*log(2)/120, μ => log(2)/60]
 u₀ = [m₁ => 0., m₂ => 0., m₃ => 0., P₁ => 20., P₂ => 0., P₃ => 0.]
 
-# Then we can solve this ODE problem
+# Then we can solve this reaction network
 tspan = (0., 10000.)
 oprob = ODEProblem(odesys, u₀, tspan, p)
 sol = solve(oprob)
 plot(sol) |> PNG
 
-# Use extracted symbols to make a phase plot.
+# Use extracted symbols for a phase plot.
 plot(sol, idxs = (P₁, P₂)) |> PNG
 
-# ### Convert to Stochastic simulations
-# You can create a stochastic model from the very same reaction network.
+# ### Convert to Stochastic Differential Equation (SDE) Models
+# Convert the very same reaction network to Chemical Langevin Equation (CLE), adding Brownian motion terms to the state variables.
+tspan = (0., 10000.)
+sprob = SDEProblem(repressilator, u₀, tspan, p)
+
+# solve and plot, `tstops` is used to specify enough points that the plot looks well-resolved.
+sol = solve(sprob, LambaEulerHeun(), tstops=range(0.0, tspan[2]; length=1001))
+plot(sol) |> PNG
+
+# ### Convert to Gillespie's stochastic simulation
+# Create a Gillespie stochastic simulation model from the same reaction network.
 # The initial conditions should be integers
 u₀ = [m₁ => 0, m₂ => 0, m₃ => 0, P₁ => 20, P₂ => 0, P₃ => 0]
 
@@ -72,41 +73,14 @@ u₀ = [m₁ => 0, m₂ => 0, m₃ => 0, P₁ => 20, P₂ => 0, P₃ => 0]
 dprob = DiscreteProblem(repressilator, u₀, tspan, p)
 
 # Create a `JumpProblem`, and specify Gillespie's Direct Method as the solver.
-jprob = JumpProblem(repressilator, dprob, Direct(), save_positions=(false,false))
+jprob = JumpProblem(repressilator, dprob, Direct(), save_positions=(false, false))
 
 # Solve and visualize the problem.
 sol = solve(jprob, SSAStepper(), saveat=10.)
 plot(sol) |> PNG
 
 #===
-
-## Chemical Langevin Equation (CLE) Stochastic Differential Equation (SDE) Models
-
-Stochastic Differential Equation (SDE) Models are in the middle ground of deterministic ODE model and Gillispie stochastic models, by introducing noise terms into the differential equations system.
-
-Take the birth-death process as example:
-
-===#
-
-bdp = @reaction_network begin
-    c₁, X --> 2X
-    c₂, X --> 0
-    c₃, 0 --> X
-end
-
-@unpack c₁, c₂, c₃, X = bdp
-p = (c₁ => 1.0, c₂ => 2.0, c₃ => 50.)
-u₀ = [X => 5.]
-tspan = (0., 4.)
-sprob = SDEProblem(bdp, u₀, tspan, p)
-
-# solve and plot, `tstops` is used to specify enough points that the plot looks well-resolved.
-
-sol = solve(sprob, LambaEM(), tstops=range(0., step=4e-3, length=1001))
-plot(sol) |> PNG
-
-#===
-## Generating Reaction Systems Programmatically
+## Generating reaction systems programmatically
 
 There are two ways to create a reaction for `ReactionSystem`s:
 - `Reaction()` function
@@ -166,7 +140,7 @@ rxs = [(@reaction hillr($P₃,α,K,n), ∅ --> m₁),
 @named repressilator2 = ReactionSystem(rxs, t)
 
 # ## Conservation laws
-# We can use conservation laws to eliminiate some state variables. For example, in the chemical reaction `A + B <--> C`, given the initial concentrations of A, B, and C, the solver only needs to solve one state variable (either [A], [B], or [C]) instead of all three of them.
+# We can use conservation laws to eliminate dependent variables. For example, in the chemical reaction `A + B <--> C`, given the initial concentrations of A, B, and C, the solver only needs to solve one state variable (either [A], [B], or [C]) instead of all three of them.
 
 rn = @reaction_network begin
     (k₊,k₋), A + B <--> C
@@ -175,18 +149,19 @@ end
 # initial condition and parameter values
 setdefaults!(rn, [:A => 1.0, :B => 2.0, :C => 0.0, :k₊ => 1.0, :k₋ => 1.0])
 
-# Let's convert it to a system of ODEs, using the conservation laws of the system to eliminate two of the species, leaving only one of them as the state variable.
+# Let's convert it to a system of ODEs, using the conservation laws to eliminate two species, leaving only one of them as the state variable.
+# The conserved quantities will be denoted as `Γ`s
 osys = convert(ODESystem, rn; remove_conserved=true)
 
-#---
+# Only one state variable (unknown) need to be solved
 states(osys)
 
-#---
+# The other two are constrained by conserved quantities
 observed(osys)
 
-#---
+# Sovle the problem
 oprob = ODEProblem(osys, [], (0.0, 10.0), [])
 sol = solve(oprob, Tsit5())
 
-#---
+# You can still trace the eliminated variable
 plot(sol, idxs=osys.C) |> PNG

@@ -159,12 +159,8 @@ newsol = solve(newprob, Tsit5())
 plot(sol)
 plot!(newsol) |> PNG
 
-#===
-
-## Estimate multiple parameters
-Let's use the Lotka-Volterra (Fox-rabbit) equations with all 4 parameters free.
-
-===#
+# ### Estimate multiple parameters
+# Let's use the Lotka-Volterra (Fox-rabbit) equations with all 4 parameters free.
 
 function f2(du, u, p, t)
     du[1] = dx = p[1]*u[1] - p[2]*u[1]*u[2]

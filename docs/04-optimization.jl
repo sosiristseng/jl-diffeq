@@ -114,7 +114,7 @@ data = [sol.(ts, idxs=1) sol.(ts, idxs=2)] .* (1 .+ 0.03 .* randn(length(ts), 2)
 
 # Plotting the sample dataset and the true solution.
 plot(sol)
-scatter!(fig, ts, data, label=["u1 data" "u2 data"])
+scatter!(ts, data, label=["u1 data" "u2 data"])
 
 #===
 `DiffEqParamEstim.build_loss_objective()` builds a loss function for the ODE problem for the data.

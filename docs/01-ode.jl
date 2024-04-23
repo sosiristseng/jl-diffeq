@@ -38,7 +38,6 @@ $$
 
 using DifferentialEquations
 using Plots
-using DisplayAs: PNG
 
 # The exponential decay ODE model, out-of-place (3-parameter) form
 expdecay(u, p, t) = p * u
@@ -51,7 +50,7 @@ prob = ODEProblem(expdecay, u0, tspan, p) ## Define the problem
 sol = solve(prob) ## Solve the problem
 
 # Visualize the solution with `Plots.jl`.
-plot(sol, label="Exp decay") |> PNG
+plot(sol, label="Exp decay")
 
 # Solution handling: https://docs.sciml.ai/DiffEqDocs/stable/basics/solution/
 # The mostly used feature is `sol(t)`, the state variables at time `t`. `t` could be a scalar or a vector-like sequence. The result state variables are calculated with interpolation.
@@ -68,7 +67,6 @@ sol.t
 sol.u
 
 #===
-
 ### The SIR model
 
 A more complicated example is the [SIR model](https://www.maa.org/press/periodicals/loci/joma/the-sir-model-for-spread-of-disease-the-differential-equation-model) describing infectious disease spreading. There are 3 state variables and 2 parameters.
@@ -91,27 +89,25 @@ $$
 
 - $\beta$ : the rate of infection when susceptible and infectious people meet
 - $\gamma$ : the rate of recovery of infectious people
-
 ===#
 
 using DifferentialEquations
 using Plots
 
 # Here we use the in-place form: `f!(du, u, p ,t)` for the SIR model. The output is written to the first argument `du`, without allocating a new array in each function call.
-
 function sir!(du, u, p, t)
-	s, i, r = u
-	β, γ = p
-	v1 = β * s * i
-	v2 = γ * i
+    s, i, r = u
+    β, γ = p
+    v1 = β * s * i
+    v2 = γ * i
     du[1] = -v1
     du[2] = v1 - v2
     du[3] = v2
-	return nothing
+    return nothing
 end
 
 # Setup parameters, initial conditions, time span, and the ODE problem.
-p = (β = 1.0, γ = 0.3)
+p = (β=1.0, γ=0.3)
 u0 = [0.99, 0.01, 0.00]
 tspan = (0.0, 20.0)
 prob = ODEProblem(sir!, u0, tspan, p)
@@ -120,7 +116,7 @@ prob = ODEProblem(sir!, u0, tspan, p)
 sol = solve(prob)
 
 # Visualize the solution
-plot(sol, labels=["S" "I" "R"], legend=:right) |> PNG
+plot(sol, labels=["S" "I" "R"], legend=:right)
 
 # `sol[i]`: all components at timestep `i`
 sol[2]
@@ -159,30 +155,29 @@ using Plots
 
 #---
 function lorenz!(du, u, p, t)
-    du.x = p.σ*(u.y-u.x)
-    du.y = u.x*(p.ρ-u.z) - u.y
-    du.z = u.x*u.y - p.β*u.z
+    du.x = p.σ * (u.y - u.x)
+    du.y = u.x * (p.ρ - u.z) - u.y
+    du.z = u.x * u.y - p.β * u.z
     return nothing
 end
 
 #---
 u0 = ComponentArray(x=1.0, y=0.0, z=0.0)
-p = (σ=10.0, ρ=28.0, β=8/3)
+p = (σ=10.0, ρ=28.0, β=8 / 3)
 tspan = (0.0, 100.0)
 prob = ODEProblem(lorenz!, u0, tspan, p)
 sol = solve(prob)
 
 # `idxs=(1, 2, 3)` makes a phase plot with 1st, 2nd, and the 3rd state variable.
-plot(sol, idxs=(1, 2, 3), size=(400,400)) |> PNG
+plot(sol, idxs=(1, 2, 3), size=(400, 400))
 
 # The plot recipe is using interpolation for smoothing. You can turn off `denseplot` to see the difference.
-plot(sol, idxs=(1, 2, 3), denseplot=false, size=(400,400)) |> PNG
+plot(sol, idxs=(1, 2, 3), denseplot=false, size=(400, 400))
 
 # The zeroth variable in `idxs` is the independent variable (usually time). The FOLLOWING command plots the time series of the second state variable (`y`).
-plot(sol, idxs=(0, 2)) |> PNG
+plot(sol, idxs=(0, 2))
 
 #===
-
 ### Non-autonomous ODEs
 
 In non-autonomous ODEs, term(s) in the right-hadn-side (RHS) maybe time-dependent. For example, in this pendulum model has an external, time-dependent, force.
@@ -199,7 +194,6 @@ $$
 - M: time-dependent external torgue
 - $l$: pendulum length
 - $g$: gravitional acceleration
-
 ===#
 
 using DifferentialEquations
@@ -210,7 +204,7 @@ function pendulum!(du, u, p, t)
     m = 1.0                             ## mass [kg]
     g = 9.81                            ## gravitational acceleration [m/s²]
     du[1] = u[2]                        ## θ'(t) = ω(t)
-    du[2] = -3g/(2l)*sin(u[1]) + 3/(m*l^2)*p(t) # ω'(t) = -3g/(2l) sin θ(t) + 3/(ml^2)M(t)
+    du[2] = -3g / (2l) * sin(u[1]) + 3 / (m * l^2) * p(t) # ω'(t) = -3g/(2l) sin θ(t) + 3/(ml^2)M(t)
 end
 
 u0 = [0.01, 0.0]                     ## initial angular deflection [rad] and angular velocity [rad/s]
@@ -222,32 +216,30 @@ prob = ODEProblem(pendulum!, u0, tspan, M)
 sol = solve(prob)
 
 plot(sol, linewidth=2, xaxis="t", label=["θ [rad]" "ω [rad/s]"])
-plot!(M, tspan..., label="Ext. force") |> PNG
+plot!(M, tspan..., label="Ext. force")
 
 #===
-
 ### Linear ODE system
 
 The ODE system could be anything as long as it returns the derivatives of state variables. In this example, the ODE system is described by a matrix differential operator.
 
 $\dot{u} = Au$
-
 ===#
 
 using DifferentialEquations
 using Plots
 
 A = [
-    1. 0  0 -5
-    4 -2  4 -3
-    -4  0  0  1
-    5 -2  2  3
+    1.0 0 0 -5
+    4 -2 4 -3
+    -4 0 0 1
+    5 -2 2 3
 ]
 
 u0 = rand(4, 2)
 
 tspan = (0.0, 1.0)
-f = (u, p, t) -> A*u
+f = (u, p, t) -> A * u
 prob = ODEProblem(f, u0, tspan)
 sol = solve(prob)
-plot(sol) |> PNG
+plot(sol)

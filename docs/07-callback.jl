@@ -1,5 +1,4 @@
 #===
-
 # Callbacks and Events
 
 Docs:
@@ -29,7 +28,6 @@ The drug concentration in the blood follows exponential decay.
 
 using DifferentialEquations
 using Plots
-using DisplayAs: PNG
 
 # Exponential decay
 function dosing!(du, u, p, t)
@@ -42,33 +40,33 @@ tspan = (0.0, 10.0)
 prob = ODEProblem(dosing!, u0, tspan)
 sol = solve(prob, Tsit5())
 
-plot(sol, lw=3) |> PNG
+plot(sol, lw=3)
 
 # Add a dose of 10 at `t = 4`. You may need to force the solver to stop at `t==4` by using `tstops=[4.0]` to properly apply the callback.
-condition(u, t, integrator) = t==4
+condition(u, t, integrator) = t == 4
 affect!(integrator) = integrator.u[1] += 10
 cb = DiscreteCallback(condition, affect!)
 
 sol = solve(prob, Tsit5(), callback=cb, tstops=[4.0])
-plot(sol) |> PNG
+plot(sol)
 
 # Applying multiple doses.
 dosetimes = [4.0, 8.0]
-condition(u,t,integrator) = t ∈ dosetimes
+condition(u, t, integrator) = t ∈ dosetimes
 affect!(integrator) = integrator.u[1] += 10
-cb = DiscreteCallback(condition,affect!)
+cb = DiscreteCallback(condition, affect!)
 
 sol = solve(prob, Tsit5(), callback=cb, tstops=dosetimes)
-plot(sol) |> PNG
+plot(sol)
 
 # Conditional dosing. Note that a dose was not given at t=6 because the conceentration is not more than 1.
 dosetimes = [4.0, 6.0, 8.0]
-condition(u,t,integrator) = t ∈ dosetimes && (u[1] < 1.0)
+condition(u, t, integrator) = t ∈ dosetimes && (u[1] < 1.0)
 affect!(integrator) = integrator.u[1] += 10integrator.t
 cb = DiscreteCallback(condition, affect!)
 
 sol = solve(prob, Tsit5(), callback=cb, tstops=dosetimes)
-plot(sol) |> PNG
+plot(sol)
 
 #===
 
@@ -81,7 +79,7 @@ dosetimes = [4.0, 8.0]
 affect!(integrator) = integrator.u[1] += 10
 cb = PresetTimeCallback(dosetimes, affect!)
 sol = solve(prob, Tsit5(), callback=cb)
-plot(sol) |> PNG
+plot(sol)
 
 #===
 
@@ -96,7 +94,7 @@ affect!(integrator) = integrator.u[1] += 10
 cb = PeriodicCallback(affect!, 1.0)
 
 sol = solve(prob, Tsit5(), callback=cb)
-plot(sol) |> PNG
+plot(sol)
 
 # ## Continuous Callback
 # ### bouncing Ball example
@@ -127,7 +125,7 @@ p = 9.8
 
 prob = ODEProblem(ball!, u0, tspan, p)
 sol = solve(prob, Tsit5(), callback=cb)
-plot(sol, label=["Position" "Velocity"]) |> PNG
+plot(sol, label=["Position" "Velocity"])
 
 # ### Vector Continuous Callback
 # You can group multiple callbacks together into a vector. In this example, we will simulate bouncing ball with multiple walls.
@@ -149,9 +147,9 @@ end
 
 function affect!(integrator, idx)
     if idx == 1
-      integrator.u[2] = -0.9integrator.u[2]
+        integrator.u[2] = -0.9integrator.u[2]
     elseif idx == 2
-      integrator.u[4] = -0.9integrator.u[4]
+        integrator.u[4] = -0.9integrator.u[4]
     end
 end
 
@@ -161,10 +159,9 @@ tspan = (0.0, 15.0)
 p = 9.8
 prob = ODEProblem(ball_2d!, u0, tspan, p)
 sol = solve(prob, Tsit5(), callback=cb, dt=1e-3, adaptive=false)
-plot(sol, idxs=(3, 1)) |> PNG
+plot(sol, idxs=(3, 1))
 
 #===
-
 ## Other Callbacks
 
 https://diffeq.sciml.ai/stable/features/callback_library/
@@ -176,5 +173,4 @@ https://diffeq.sciml.ai/stable/features/callback_library/
 - `FunctionCallingCallback((u, t, int) -> func_content; funcat=[t1, t2, ...])`: call a function at the time points (t1, t2, ...) of interest.
 - `SavingCallback((u, t, int) -> data_to_be_saved, dataprototype)`: call a function and saves the result.
 - `IterativeCallback(time_choice(int) -> t2, user_affect!)`: apply an effect at the time of the next callback.
-
 ===#

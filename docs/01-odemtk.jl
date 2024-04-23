@@ -19,7 +19,6 @@ See also [Simulating Big Models in Julia with ModelingToolkit @ JuliaCon 2021 Wo
 using ModelingToolkit
 using DifferentialEquations
 using Plots
-using DisplayAs: PNG
 
 #---
 ## independent variable (time) and dependent variables
@@ -53,7 +52,7 @@ prob = ODEProblem(sys, u0, tspan, p)
 sol = solve(prob)
 
 # Visualize the solution with `Plots.jl`.
-plot(sol, label="Exp decay") |> PNG
+plot(sol, label="Exp decay")
 
 # The solution interface provides symbolic access. So you can access the results of `c` directly.
 sol[c]
@@ -62,10 +61,10 @@ sol[c]
 sol(0.0:0.1:2.0, idxs=c)
 
 # The eliminated term (RHS in this example) is still tracible.
-plot(sol, idxs=[c, RHS], legend=:right) |> PNG
+plot(sol, idxs=[c, RHS], legend=:right)
 
 # The interface allows symbolic calculations.
-plot(sol, idxs=[c*1000]) |> PNG
+plot(sol, idxs=[c * 1000])
 
 #===
 ## Lorenz system
@@ -73,8 +72,8 @@ plot(sol, idxs=[c*1000]) |> PNG
 We use the same Lorenz system example as above. Here we setup the initial conditions and parameters with default values.
 ===#
 
-@variables t x(t)=1.0 y(t)=0.0 z(t)=0.0
-@parameters (σ=10.0, ρ=28.0, β=8/3)
+@variables t x(t) = 1.0 y(t) = 0.0 z(t) = 0.0
+@parameters (σ=10.0, ρ=28.0, β=8 / 3)
 
 D = Differential(t)
 
@@ -92,7 +91,7 @@ prob = ODEProblem(sys, [], tspan, [])
 sol = solve(prob)
 
 # Plot the solution with symbols instead of index numbers.
-plot(sol, idxs=(x, y, z), size=(400,400)) |> PNG
+plot(sol, idxs=(x, y, z), size=(400, 400))
 
 # ## Non-autonomous ODEs
 # Sometimes a model might have a time-variant external force, which is too complex or impossible to express it symbolically. In such situation, one could apply `@register_symbolic` to it to exclude it from symbolic transformations and use it numberically.
@@ -108,17 +107,16 @@ f_fun(t) = t >= 10 ? value_vector[end] : value_vector[Int(floor(t))+1]
 
 # "Register" arbitrary Julia functions to be excluded from symbolic transformations. Just use it as-is (numberically).
 @register_symbolic f_fun(t)
-@named fol_external_f = ODESystem([f ~ f_fun(t), D(x) ~ (f - x)/τ], t)
+@named fol_external_f = ODESystem([f ~ f_fun(t), D(x) ~ (f - x) / τ], t)
 
 #---
 sys = structural_simplify(fol_external_f)
 prob = ODEProblem(sys, [x => 0.0], (0.0, 10.0), [τ => 0.75])
 sol = solve(prob)
-plot(sol, idxs=[x, f]) |> PNG
+plot(sol, idxs=[x, f])
 
 # ## Second-order ODE systems
 # `ode_order_lowering(sys)` automatically transforms a second-order ODE into two first-order ODEs.
-
 using Plots
 using ModelingToolkit
 using DifferentialEquations
@@ -128,7 +126,7 @@ using DifferentialEquations
 D = Differential(t)
 
 eqs = [
-    D(D(x)) ~ σ * (y-x),
+    D(D(x)) ~ σ * (y - x),
     D(y) ~ x * (ρ - z) - y,
     D(z) ~ x * y - β * z
 ]
@@ -148,13 +146,13 @@ u0 = [
 p = [
     σ => 28.0,
     ρ => 10.0,
-    β => 8/3
+    β => 8 / 3
 ]
 
 tspan = (0.0, 100.0)
 prob = ODEProblem(sys, u0, tspan, p, jac=true)
 sol = solve(prob)
-plot(sol, idxs=(x, y, z), label="Trajectory", size=(500,500)) |> PNG
+plot(sol, idxs=(x, y, z), label="Trajectory", size=(500, 500))
 
 # ## Composing systems
 # By defining connection equation(s) to couple ODE systems together, we can build component-based, hierarchical models.
@@ -165,7 +163,6 @@ using DifferentialEquations
 
 @parameters σ ρ β
 @variables t x(t) y(t) z(t)
-
 D = Differential(t)
 
 eqs = [
@@ -183,7 +180,7 @@ eqs = [
 
 connections = [0 ~ lorenz1.x + lorenz2.y + a * γ]
 
-@named connLorenz = ODESystem(connections, t , [a], [γ], systems = [lorenz1, lorenz2])
+@named connLorenz = ODESystem(connections, t, [a], [γ], systems=[lorenz1, lorenz2])
 
 # All state variables in the combined system
 states(connLorenz)
@@ -196,26 +193,23 @@ u0 = [
 ]
 
 p = [
-    lorenz1.σ => 10.0, lorenz1.ρ => 28.0, lorenz1.β => 8/3,
-    lorenz2.σ => 10.0, lorenz2.ρ => 28.0, lorenz2.β => 8/3,
+    lorenz1.σ => 10.0, lorenz1.ρ => 28.0, lorenz1.β => 8 / 3,
+    lorenz2.σ => 10.0, lorenz2.ρ => 28.0, lorenz2.β => 8 / 3,
     γ => 2.0
 ]
 
 tspan = (0.0, 100.0)
 sys = connLorenz |> structural_simplify
 sol = solve(ODEProblem(sys, u0, tspan, p, jac=true))
-plot(sol, idxs=(a, lorenz1.x, lorenz2.x), size=(600,600)) |> PNG
+plot(sol, idxs=(a, lorenz1.x, lorenz2.x), size=(600, 600))
 
 #===
-
 ### Convert existing functions into MTK systems
 
 `modelingtoolkitize(prob)` generates MKT systems from regular DE problems. I t can also generate analytic Jacobin functions for faster solving.
 
 Example: **[DAE index reduction](https://mtk.sciml.ai/stable/mtkitize_tutorials/modelingtoolkitize_index_reduction/)** for the pendulum problem, which cannot be solved by regular ODE solvers.
-
 ===#
-
 using Plots
 using ModelingToolkit
 using DifferentialEquations
@@ -226,16 +220,16 @@ function pendulum!(du, u, p, t)
     x, dx, y, dy, T = u
     g, L = p
     du[1] = dx
-    du[2] = T*x
+    du[2] = T * x
     du[3] = dy
-    du[4] = T*y - g
+    du[4] = T * y - g
     ## Do not write your function like this after you've learned MTK
     du[5] = x^2 + y^2 - L^2
     return nothing
 end
 
 #---
-pendulum_fun! = ODEFunction(pendulum!, mass_matrix = Diagonal([1, 1, 1, 1, 0]))
+pendulum_fun! = ODEFunction(pendulum!, mass_matrix=Diagonal([1, 1, 1, 1, 0]))
 u0 = [1.0, 0.0, 0.0, 0.0, 0.0]
 p = [9.8, 1.0]
 tspan = (0.0, 10.0)
@@ -250,4 +244,4 @@ pendulumSys = tracedSys |> dae_index_lowering |> structural_simplify
 # The default `u0` is included in the system already so one can use an empty array `[]` as the initial conditions.
 prob = ODAEProblem(pendulumSys, [], tspan)
 sol = solve(prob, abstol=1e-8, reltol=1e-8)
-plot(sol, idxs=states(tracedSys)) |> PNG
+plot(sol, idxs=states(tracedSys))

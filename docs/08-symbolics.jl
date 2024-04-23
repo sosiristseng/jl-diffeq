@@ -29,7 +29,6 @@ Source:
 - `simplify`
 
 ===#
-
 using Symbolics
 using Latexify
 
@@ -38,9 +37,9 @@ using Latexify
 x^2 + y^2
 
 # You can use Latexify to see the LaTeX code.
-A = [x^2 + y 0 2x
-     0       0 2y
-     y^2 + x 0 0]
+A = [x^2+y 0 2x
+    0 0 2y
+    y^2+x 0 0]
 
 latexify(A)
 
@@ -54,10 +53,10 @@ Symbolics.gradient(x^2 + y^2, [x, y])
 Symbolics.jacobian([x^2 + y^2; y^2], [x, y])
 
 # Substitute: `Symbolics.substitute(expr, mapping)`
-Symbolics.substitute(sin(x)^2 + 2 + cos(x)^2, Dict(x=>y^2))
+Symbolics.substitute(sin(x)^2 + 2 + cos(x)^2, Dict(x => y^2))
 
 #---
-Symbolics.substitute(sin(x)^2 + 2 + cos(x)^2, Dict(x=>1.0))
+Symbolics.substitute(sin(x)^2 + 2 + cos(x)^2, Dict(x => 1.0))
 
 # Simplify: `Symbolics.simplify(expr)`
 Symbolics.simplify(sin(x)^2 + 2 + cos(x)^2)
@@ -103,9 +102,10 @@ We use the vector form of Rosenbrock function
 
 ===#
 
-rosenbrock(xs) = sum( 1:length(xs)-1) do i
-    100*(xs[i+1] - xs[i]^2)^2 + (1 - xs[i])^2
-end
+rosenbrock(xs) =
+    sum(1:length(xs)-1) do i
+        100 * (xs[i+1] - xs[i]^2)^2 + (1 - xs[i])^2
+    end
 
 # The function is at minimum when xs are all one's
 rosenbrock(ones(100))
@@ -138,8 +138,7 @@ hes_sp = Symbolics.hessian_sparsity(rxs, xs)
 
 # Visualize the sparse matrix with `Plots.spy()`
 using Plots
-using DisplayAs: PNG
-spy(hes_sp) |> PNG
+spy(hes_sp)
 
 #===
 

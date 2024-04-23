@@ -11,21 +11,19 @@ Solving steady state solutions for an ODE system is to find a combination of sta
 - Running the ODE solver until a steady state is reached (`DynamicSS()` and `DifferentialEquations.jl`)
 - Using a root-finding algorithm to find a steady state (`SSRootfind()` and `NonlinearSolve.jl`)
 
+## Defining a steady state problem
 ===#
-
-# ## Defining a steady state problem
-
 using DifferentialEquations
 
 model(u, p, t) = 1 - p * u
 
-p = 1.0 ## Parameter
-u0 = 0.0 ## Initial condition
-prob = SteadyStateProblem(model, u0, p) ## Define the problem
+p = 1.0
+u0 = 0.0
+prob = SteadyStateProblem(model, u0, p)
 alg = DynamicSS(Tsit5())
-sol = solve(prob, alg) ## Solve the problem
 
-# The result should be close to 1.0.
+# Solve the problem. The result should be close to 1.0.
+sol = solve(prob, alg) ##
 
 # ## Modelingtoolkit solving nonlinear systems
 # Use `NonlinearSolve.jl` and `NonlinearSystem()`.
@@ -36,7 +34,7 @@ using NonlinearSolve
 @parameters σ ρ β
 
 eqs = [
-    0 ~ σ * (y-x),
+    0 ~ σ * (y - x),
     0 ~ x * (ρ - z) - y,
     0 ~ x * y - β * z
 ]
@@ -44,7 +42,7 @@ eqs = [
 @named ns = NonlinearSystem(eqs, [x, y, z], [σ, ρ, β])
 
 guess = [x => 1.0, y => 0.0, z => 0.0]
-ps = [σ => 10.0, ρ => 26.0, β => 8/3]
+ps = [σ => 10.0, ρ => 26.0, β => 8 / 3]
 prob = NonlinearProblem(ns, guess, ps)
 sol = solve(prob, NewtonRaphson()) ## The results should be all zeroes
 
@@ -64,9 +62,8 @@ eqs = [
 
 # You can simplify the problem using `structural_simplify()`.
 # There will be only one state variable left. The solve can solve the problem faster.
-
 simple_sys = structural_simplify(sys)
-prob = NonlinearProblem(simple_sys, [u5=>0.0])
+prob = NonlinearProblem(simple_sys, [u5 => 0.0])
 sol = solve(prob, NewtonRaphson())
 
 # The answer should be 1.6 and 1.0.

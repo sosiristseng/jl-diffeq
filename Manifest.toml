@@ -47,9 +47,9 @@ weakdeps = ["StaticArrays"]
 
 [[deps.AliasTables]]
 deps = ["Random"]
-git-tree-sha1 = "ca95b2220ef440817963baa71525a8f2f4ae7f8f"
+git-tree-sha1 = "6f186dadec4d7725aa88d18487139d512f02db7b"
 uuid = "66dad0bd-aa9a-41b7-9441-69ab47430ed8"
-version = "1.0.0"
+version = "1.1.0"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -104,9 +104,9 @@ uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 
 [[deps.BandedMatrices]]
 deps = ["ArrayLayouts", "FillArrays", "LinearAlgebra", "PrecompileTools"]
-git-tree-sha1 = "c946c5014cf4cdbfacacb363b110e7bffba3e742"
+git-tree-sha1 = "30b7ea34abc4fe816eb1a5f434a43da804836163"
 uuid = "aae01518-5342-5314-be14-df237901396f"
-version = "1.6.1"
+version = "1.7.0"
 weakdeps = ["SparseArrays"]
 
     [deps.BandedMatrices.extensions]

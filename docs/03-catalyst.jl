@@ -3,7 +3,7 @@
 
 `Catalyst.jl` is a domain specific language (DSL) for high performance simulation and modeling of chemical reaction networks. `Catalyst.jl` is based on `ModelingToolkit.jl` for symbolic transformations and generating model code.
 
-This part is lalrgely based on [Catalyst.jl Docs](https://docs.sciml.ai/Catalyst/dev/).
+This part is lalrgely based on [Catalyst.jl Docs](https://docs.sciml.ai/Catalyst/).
 
 ## Repressilator
 [Repressilator](https://en.wikipedia.org/wiki/Repressilator) model with three components in a negative feedback loop.

@@ -61,13 +61,10 @@ cons = [
 
 @named sys = OptimizationSystem(loss, [x, y], [a, b], constraints=cons)
 
-u0 = [
-    x => 0.14
-    y => 0.14
-]
+u0 = [x => 0.14, y => 0.14]
 prob = OptimizationProblem(sys, u0, grad=true, hess=true, cons_j=true, cons_h=true)
 
-## Interior point Newton for contrained optimization
+# Use interior point Newton method for contrained optimization
 solve(prob, IPNewton())
 
 #===
@@ -93,6 +90,7 @@ Let's optimize the parameters of the Lotka-Volterra equation.
 using DifferentialEquations
 using Plots
 using DiffEqParamEstim
+using ForwardDiff
 using Optimization
 using OptimizationOptimJL
 
@@ -171,7 +169,6 @@ ts = range(tspan[begin], tspan[end], 200)
 data = [sol.(ts, idxs=1) sol.(ts, idxs=2)] .* (1 .+ 0.01 .* randn(length(ts), 2))
 
 # Then we can find multiple parameters at once using the same steps. True parameters are `[1.5, 1.0, 3.0, 1.0]`.
-
 cost_function = build_loss_objective(
     prob, alg, L2Loss(collect(ts), transpose(data)),
     Optimization.AutoForwardDiff(),

@@ -14,8 +14,17 @@ NonlinearSolve = "8913a72c-1f9b-4ce2-8d82-65094dcecaec"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
 OptimizationOptimJL = "36348300-93cb-4f02-beb5-3c3902f8871e"
+OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 SimpleUnPack = "ce78b400-467f-4804-87d8-8f486da07d0a"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
+
+[preferences.BoundaryValueDiffEq]
+PrecompileMIRK = false
+PrecompileMIRKNLLS = false
+PrecompileMultipleShooting = false
+PrecompileMultipleShootingNLLS = false
+PrecompileShooting = false
+PrecompileShootingNLLS = false

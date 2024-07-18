@@ -1,5 +1,4 @@
-#===
-
+md"""
 # Julia Differential Equations
 
 - https://github.com/SciML/DifferentialEquations.jl : high-performance solvers for differential equations.
@@ -7,7 +6,8 @@
 - https://github.com/SciML/Catalyst.jl : a symbolic modeling package for analysis and high performance simulation of chemical reaction networks.
 
 ## Runtime environment
-==#
+"""
+
 import InteractiveUtils
 InteractiveUtils.versioninfo()
 

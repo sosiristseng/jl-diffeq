@@ -7,10 +7,13 @@ chapters:
   - file: 01-ode
   - file: 01-odemtk
   - file: 02-sde
-  - file: 03-catalyst
   - file: 04-optimization
   - file: 05-steadystate
   - file: 06-ensemble
   - file: 07-callback
   - file: 08-symbolics
+  - file: 09-tips
   - file: model-01-neuron
+  - file: cat-01-repressilator
+  - file: cat-02-generate-reactions
+  - file: cat-03-tips

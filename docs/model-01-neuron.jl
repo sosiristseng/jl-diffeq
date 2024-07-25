@@ -193,7 +193,7 @@ function HH_tms!(du, u, p, t)
     du[3] = (alpha_m(v) * (1.0 - m)) - (beta_m(v) * m)
     du[4] = (alpha_h(v) * (1.0 - h)) - (beta_h(v) * h)
 
-    # Synaptic variables
+    ## Synaptic variables
     du[5] = -(u / tau_u)
     du[6] = (1 - R) / tau_R
     du[7] = -(gsyn / tau)

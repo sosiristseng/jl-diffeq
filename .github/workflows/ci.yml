@@ -25,14 +25,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
     - name: Setup Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
       id: setup-python
       with:
         python-version: '3.x'
     - name: Cache python venv
-      uses: actions/cache@v4
+      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
       if: ${{ contains(runner.name, 'GitHub Actions') }}
       id: cache-venv
       with:
@@ -48,7 +48,7 @@ jobs:
         echo "PYTHON=${VIRTUAL_ENV}/bin/python" >> $GITHUB_ENV
         echo "JULIA_PYTHONCALL_EXE=${VIRTUAL_ENV}/bin/python">> $GITHUB_ENV
     - name: Cache executed notebooks
-      uses: actions/cache@v4
+      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
       id: cache-nb
       with:
         path: ${{ env.NBCACHE }}
@@ -56,17 +56,17 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nb-${{ env.CACHE_NUM }}-${{ hashFiles('src/**', 'Project.toml', 'Manifest.toml', 'requirements.txt') }}-
     - name: Read Julia version
-      uses: SebRollen/toml-action@v1.2.0
+      uses: SebRollen/toml-action@b1b3628f55fc3a28208d4203ada8b737e9687876 # v1.2.0
       id: read_toml
       with:
         file: 'Manifest.toml'
         field: 'julia_version'
     - name: Setup Julia
-      uses: julia-actions/setup-julia@v2
+      uses: julia-actions/setup-julia@780022b48dfc0c2c6b94cfee6a9284850107d037 # v2
       with:
         version: ${{ steps.read_toml.outputs.value }}
     - name: Restore Julia packages
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
       if: ${{ contains(runner.name, 'GitHub Actions') }}
       id: cache-julia
       with:
@@ -87,7 +87,7 @@ jobs:
         Pkg.precompile()
         Pkg.gc(collect_delay=Day(0))
     - name: Save Julia packages
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
       if: ${{ contains(runner.name, 'GitHub Actions') && steps.cache-julia.outputs.cache-hit != 'true' }}
       with:
         path: |
@@ -102,7 +102,7 @@ jobs:
       run: jupyter-book build docs/
     - name: Upload pages artifact
       if: ${{ github.ref == 'refs/heads/main' }}
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
       with:
         path: docs/_build/html/
 
@@ -122,4 +122,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

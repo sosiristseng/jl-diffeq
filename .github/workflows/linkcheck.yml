@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Setup Julia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@780022b48dfc0c2c6b94cfee6a9284850107d037 # v2
       - name: Convert literate notebooks to ipynb files
         shell: julia --color=yes {0}
         working-directory: ${{ env.DIR }}
@@ -41,12 +41,12 @@ jobs:
             end
           end
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5
         id: setup-python
         with:
           python-version: '3.x'
       - name: Cache python
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
         id: cache-py
         with:
           key: ${{ runner.os }}-py-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}

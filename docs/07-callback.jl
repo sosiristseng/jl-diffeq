@@ -150,9 +150,9 @@ plot(sol, idxs=(3, 1))
 
 https://diffeq.sciml.ai/stable/features/callback_library/
 
-- `ManifoldProjection(g)`: keep `g(u) = 0`. For energy conservation.
-- `AutoAbstol()`: automatically adapt the absolute tolerance like [the functionality in MATLAB](https://www.mathworks.com/help/simulink/gui/absolute-tolerance.html).
-- `PositiveDomain()`: enforce non-negative solution. **The system should be defined also outside the positive domain**. There is also a more general version `GeneralDomain()`.
+- `ManifoldProjection(g)`: keep `g(u) = 0` for energy conservation.
+- `AutoAbstol()`: automatically adapt the absolute tolerance.
+- `PositiveDomain()`: enforce non-negative solution. **The system should also be defined outside the positive domain**. There is also a more general version `GeneralDomain()`.
 - `StepsizeLimiter((u,p,t) -> maxtimestep)`: restrict maximal allowed time step.
 - `FunctionCallingCallback((u, t, int) -> func_content; funcat=[t1, t2, ...])`: call a function at the time points (t1, t2, ...) of interest.
 - `SavingCallback((u, t, int) -> data_to_be_saved, dataprototype)`: call a function and saves the result.

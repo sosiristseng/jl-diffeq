@@ -26,7 +26,7 @@
 
 - https://github.com/fredrikekre/Literate.jl : converting _literated_ `jl` files to Markdown (`md`) or Jupyter notebooks (`ipynb`).
 - https://github.com/stevengj/NBInclude.jl : converting Jupyter notebooks (`ipynb`) to _literated_ `jl` files by using `nbexport("myfile.jl", "myfile.ipynb")`.
-- https://github.com/PumasAI/QuartoNotebookRunner.jl: run [Quarto](https://quarto.org/) notebooks containing Julia code and save the results to Jupyter notebooks.
+- https://github.com/PumasAI/QuartoNotebookRunner.jl : run [Quarto](https://quarto.org/) notebooks containing Julia code and save the results to Jupyter notebooks.
 
 ### Optimization
 

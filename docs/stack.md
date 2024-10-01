@@ -26,11 +26,12 @@
 
 - https://github.com/fredrikekre/Literate.jl : converting _literated_ `jl` files to Markdown (`md`) or Jupyter notebooks (`ipynb`).
 - https://github.com/stevengj/NBInclude.jl : converting Jupyter notebooks (`ipynb`) to _literated_ `jl` files by using `nbexport("myfile.jl", "myfile.ipynb")`.
+- https://github.com/PumasAI/QuartoNotebookRunner.jl: run [Quarto](https://quarto.org/) notebooks containing Julia code and save the results to Jupyter notebooks.
 
 ### Optimization
 
 - https://github.com/baggepinnen/Hyperopt.jl : Hyperparameter optimization for every cost function with multiprocessing and multithreading support.
-- https://github.com/SciML/Optimization.jl : A unified interface for [various optimizers](https://docs.sciml.ai/Optimization/stable/#Overview-of-the-Optimizers)
+- https://github.com/SciML/Optimization.jl : A unified interface for various optimizers.
     - `OptimizationBBO` for black-box optimization from https://github.com/robertfeldt/BlackBoxOptim.jl
     - `OptimizationEvolutionary` for genetic algorithm from https://github.com/wildart/Evolutionary.jl
     - `OptimizationOptimJL` for optimization methods from https://github.com/JuliaNLSolvers/Optim.jl
@@ -45,10 +46,10 @@
 
 ### Modeling and simulation
 
-- https://github.com/SciML/DifferentialEquations.jl : solving differential eqautions.
+- https://github.com/SciML/DifferentialEquations.jl : solving differential equations.
 - https://github.com/SciML/ModelingToolkit.jl : a symbolic modeling framework.
   - https://github.com/JuliaSymbolics/Symbolics.jl : a computer algebra system (CAS) for symbolic calculations.
-- https://github.com/SciML/Catalyst.jl : a domain-specific language (DSL) for shemical reaction networks.
+- https://github.com/SciML/Catalyst.jl : a domain-specific language (DSL) for chemical reaction networks.
 - https://github.com/JuliaDynamics/Agents.jl : agent-based modeling (ABM).
 
 #### Partial differential equations (PDEs)

@@ -4,7 +4,6 @@
 format: jb-book
 root: index
 chapters:
-  - file: stack
   - file: 01-ode
   - file: 01-odemtk
   - file: 02-sde

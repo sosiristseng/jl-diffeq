@@ -12,17 +12,17 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NBCONVERT_JOBS: '6'
-  LITERATE_PROC: '6'
+  NBCONVERT_JOBS: '3'
+  LITERATE_PROC: '3'
   JULIA_NUM_THREADS: '2'
   ALLOWERRORS: 'false'
+  NBCACHE: '.cache'
   JULIA_CONDAPKG_BACKEND: 'Null'
   JULIA_CI: 'true'
-  NBCACHE: '.cache'
 
 jobs:
   CI:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -36,11 +36,8 @@ jobs:
         pip install uv
         uv pip install --system -r requirements.txt
     - name: Read Julia version
-      uses: SebRollen/toml-action@v1.2.0
       id: read_toml
-      with:
-        file: 'Manifest.toml'
-        field: 'julia_version'
+      run: echo value=$(python -c 'import tomllib; from pathlib import Path; print(tomllib.loads(Path("Manifest.toml").read_text())["julia_version"])') >> "$GITHUB_OUTPUT"
     - name: Get environment hash
       id: hash
       run: |
@@ -50,17 +47,19 @@ jobs:
       uses: actions/cache@v4
       id: cache-nb
       with:
-        path: ${{ env.NBCACHE }}
-        key: ${{ steps.hash.outputs.ver }}-${{ steps.hash.outputs.value }}-${{ hashFiles('docs/**/*.ipynb', 'docs/**/*.jl') }}
+        path: |
+          ${{ env.NBCACHE }}/**/*.ipynb
+          ${{ env.NBCACHE }}/**/*.sha
+        key: notebook-${{ steps.hash.outputs.value }}-${{ hashFiles('docs/**/*.ipynb', 'docs/**/*.jl') }}
         restore-keys: |
-          ${{ steps.hash.outputs.ver }}-${{ steps.hash.outputs.value }}-
+          notebook-${{ steps.hash.outputs.value }}-
     - name: Setup Julia
       uses: julia-actions/setup-julia@v2
       with:
         version: ${{ steps.read_toml.outputs.value }}
     - name: Restore Julia packages
       uses: actions/cache/restore@v4
-      if: ${{ runner.environment == 'github-hosted'}}
+      if: ${{ runner.environment == 'github-hosted' }}
       id: cache-julia
       with:
         path: ~/.julia
@@ -70,9 +69,11 @@ jobs:
     - name: Install Julia packages
       if: ${{ runner.environment == 'self-hosted' || steps.cache-julia.outputs.cache-hit != 'true' }}
       shell: julia --color=yes {0}
+      env:
+        JUPYTER: 'jupyter'
       run: |
         using Pkg
-        Pkg.add(["IJulia", "Literate", "PrettyTables", "JSON"])
+        Pkg.add(["IJulia", "Literate", "Tables", "MarkdownTables", "JSON"])
         Pkg.activate(".")
         Pkg.instantiate()
         Pkg.precompile()

@@ -19,7 +19,4 @@ chapters:
   - file: 08-symbolics
   - file: 09-tips
   - file: model-01-neuron
-  - file: cat-01-repressilator
-  - file: cat-02-generate-reactions
-  - file: cat-03-tips
   - file: runtime.jl

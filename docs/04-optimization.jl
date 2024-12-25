@@ -42,7 +42,7 @@ using OptimizationOptimJL
 xdata = range(0, stop=10, length=20)
 ydata = model(xdata, [1.0 2.0]) + 0.01 * randn(length(xdata))
 
-function loss(p, data)
+function lossl2(p, data)
     x, y = data
     y_pred = model(x, p)
     return sum(abs2, y_pred .- y)
@@ -50,7 +50,7 @@ end
 
 p0 = [0.5, 0.5]
 data = [xdata, ydata]
-prob = OptimizationProblem(loss, p0, data)
+prob = OptimizationProblem(lossl2, p0, data)
 res = solve(prob, Optim.NelderMead())
 
 #===

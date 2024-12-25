@@ -4,9 +4,14 @@
 format: jb-book
 root: index
 chapters:
-  - file: 01-ode
-  - file: 01-odemtk
-  - file: 02-sde
+  - file: ode-01-diffeq
+    sections:
+    - file: ode-02-mtk
+    - file: ode-03-catalyst
+  - file: sde-01-diffeq
+    sections:
+    - file: sde-02-mtk
+    - file: sde-03-catalyst
   - file: 04-optimization
   - file: 05-steadystate
   - file: 06-ensemble
@@ -17,3 +22,4 @@ chapters:
   - file: cat-01-repressilator
   - file: cat-02-generate-reactions
   - file: cat-03-tips
+  - file: runtime.jl

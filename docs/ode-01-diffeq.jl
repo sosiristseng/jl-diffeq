@@ -3,9 +3,7 @@
 
 - [DifferentialEquations.jl docs](https://diffeq.sciml.ai/dev/index.html)
 
-## General steps to solve ODEs (in the old way)
-
-- Define a model function representing the right-hand-side (RHS) of the system.
+Define a model function representing the right-hand-side (RHS) of the system.
   - Out-of-place form: `f(u, p, t)` where `u` is the state variable(s), `p` is the parameter(s), and `t` is the independent variable (usually time). The output is the right hand side (RHS) of the differential equation system.
   - In-place form: `f!(du, u, p, t)`, where the output is saved to `du`. The rest is the same as the out-of-place form. The in-place function may be faster since it does not allocate a new array in each call.
 - Initial conditions (`u0`) for the state variable(s).
@@ -15,7 +13,7 @@
 ===#
 
 #===
-### Radioactive decay
+## Radioactive decay example
 
 The decaying rate of a nuclear isotope is proprotional to its concentration (number):
 
@@ -37,7 +35,7 @@ using Plots
 # The exponential decay ODE model, out-of-place (3-parameter) form
 expdecay(u, p, t) = p * u
 
-#---
+# Setup ODE problem
 p = -1.0 ## Parameter
 u0 = 1.0 ## Initial condition
 tspan = (0.0, 2.0) ## Simulation start and end time points
@@ -47,7 +45,8 @@ sol = solve(prob) ## Solve the problem
 # Visualize the solution with `Plots.jl`.
 plot(sol, label="Exp decay")
 
-# Solution handling: https://docs.sciml.ai/DiffEqDocs/stable/basics/solution/
+## # Solution handling
+# https://docs.sciml.ai/DiffEqDocs/stable/basics/solution/
 # The mostly used feature is `sol(t)`, the state variables at time `t`. `t` could be a scalar or a vector-like sequence. The result state variables are calculated with interpolation.
 sol(1.0)
 
@@ -61,7 +60,7 @@ sol.t
 sol.u
 
 #===
-### The SIR model
+## The SIR model
 
 A more complicated example is the SIR model describing infectious disease spreading. There are 3 state variables and 2 parameters.
 
@@ -127,7 +126,7 @@ sol(10, idxs=2)
 sol(0.0:0.1:20.0, idxs=2)
 
 #===
-### Lorenz system
+## Lorenz system
 
 The Lorenz system is a system of ordinary differential equations having chaotic solutions for certain parameter values and initial conditions. ([Wikipedia](https://en.wikipedia.org/wiki/Lorenz_system))
 
@@ -145,7 +144,7 @@ using ComponentArrays
 using OrdinaryDiffEq
 using Plots
 
-#---
+# The coupled ODEs
 function lorenz!(du, u, p, t)
     du.x = p.σ * (u.y - u.x)
     du.y = u.x * (p.ρ - u.z) - u.y
@@ -153,24 +152,24 @@ function lorenz!(du, u, p, t)
     return nothing
 end
 
-#---
+# Setup problem and solve it
 u0 = ComponentArray(x=1.0, y=0.0, z=0.0)
-p = (σ=10.0, ρ=28.0, β=8 / 3)
+p = ComponentArray(σ=10.0, ρ=28.0, β=8 / 3)
 tspan = (0.0, 100.0)
 prob = ODEProblem(lorenz!, u0, tspan, p)
 sol = solve(prob)
 
 # `idxs=(1, 2, 3)` makes a phase plot with 1st, 2nd, and the 3rd state variable.
-plot(sol, idxs=(1, 2, 3), size=(400, 400))
+plot(sol, idxs=(1, 2, 3), size=(400, 400), label=false)
 
-# The plot recipe is using interpolation for smoothing. You can turn off `denseplot` to see the difference.
+# The plot recipe uses interpolation to smooth the curve. You can turn off `denseplot` to see the difference.
 plot(sol, idxs=(1, 2, 3), denseplot=false, size=(400, 400))
 
 # The zeroth variable in `idxs` is the independent variable (usually time). The following command plots the time series of the second state variable (`y`).
 plot(sol, idxs=(0, 2))
 
 #===
-### Non-autonomous ODEs
+## Non-autonomous ODEs
 
 In non-autonomous ODEs, term(s) in the right-hand-side (RHS) maybe time-dependent. For example, in this pendulum model has an external, time-dependent, force.
 
@@ -211,7 +210,7 @@ plot(sol, linewidth=2, xaxis="t", label=["θ [rad]" "ω [rad/s]"])
 plot!(M, tspan..., label="Ext. force")
 
 #===
-### Linear ODE system
+## Linear ODE system
 
 The ODE system could be anything as long as it returns the derivatives of state variables. In this example, the ODE system is described by a matrix differential operator.
 

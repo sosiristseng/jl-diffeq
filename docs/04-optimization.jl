@@ -1,10 +1,62 @@
 #===
-# Optimization Problems
+# Optimization Problem
 
-From: https://docs.sciml.ai/ModelingToolkit/stable/tutorials/optimization/
+Wikipedia: https://en.wikipedia.org/wiki/Optimization_problem
 
+Given a target (loss) function and a set of parameters. Find the parameters set (subjects to contraints) to minimize the function.
+
+- Curve fitting: [LsqFit.jl](https://github.com/JuliaNLSolvers/LsqFit.jl)
+- General optimization problems: [Optim.jl](https://github.com/JuliaNLSolvers/Optim.jl)
+- Use with ModelingToolkit: [Optimization.jl](https://github.com/SciML/Optimization.jl)
+===#
+
+#===
+## Curve fitting using LsqFit
+
+[LsqFit.jl](https://github.com/JuliaNLSolvers/LsqFit.jl) package is a small library that provides basic least-squares fitting in pure Julia.
+===#
+using LsqFit
+@. model(x, p) = p[1] * exp(-x * p[2])
+
+# Generate data
+xdata = range(0, stop=10, length=20)
+ydata = model(xdata, [1.0 2.0]) + 0.01 * randn(length(xdata))
+# Initial guess
+p0 = [0.5, 0.5]
+
+# Fit the model
+fit = curve_fit(model, xdata, ydata, p0; autodiff=:forwarddiff)
+
+# The parameters
+coef(fit)
+
+#===
+## Curve fitting using Optimization.jl
+===#
+using Optimization
+using OptimizationOptimJL
+
+@. model(x, p) = p[1] * exp(-x * p[2])
+
+# Generate data
+xdata = range(0, stop=10, length=20)
+ydata = model(xdata, [1.0 2.0]) + 0.01 * randn(length(xdata))
+
+function lossl2(p, data)
+    x, y = data
+    y_pred = model(x, p)
+    return sum(abs2, y_pred .- y)
+end
+
+p0 = [0.5, 0.5]
+data = [xdata, ydata]
+prob = OptimizationProblem(lossl2, p0, data)
+res = solve(prob, Optim.NelderMead())
+
+#===
 ## 2D Rosenbrock Function
 
+From: https://docs.sciml.ai/ModelingToolkit/stable/tutorials/optimization/
 Wikipedia: https://en.wikipedia.org/wiki/Rosenbrock_function
 
 Find $(x, y)$ that minimizes the loss function $(a - x)^2 + b(y - x^2)^2$
@@ -29,10 +81,10 @@ loss = (a - x)^2 + b * (y - x^2)^2
 @mtkbuild sys = OptimizationSystem(loss, [x, y], [a, b])
 
 # Initial guess
-u0 = [ x => 1.0, y => 2.0]
+u0 = [x => 1.0, y => 2.0]
 
 # parameters
-p = [ a => 1.0, b => 100.0]
+p = [a => 1.0, b => 100.0]
 
 # ModelingToolkit can generate gradient and Hessian to solve the problem more efficiently.
 prob = OptimizationProblem(sys, u0, p, grad=true, hess=true)

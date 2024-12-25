@@ -66,3 +66,26 @@ sol = solve(prob, NewtonRaphson())
 
 # The answer should be 1.6 and 1.0.
 @show sol[u5] sol[u1];
+
+# ## Finding Steady States through Homotopy Continuation
+# For systems of rational polynomials. e.g., mass-action reactions and reaction rates with integer Hill coefficients.
+# Source: https://docs.sciml.ai/Catalyst/stable/steady_state_functionality/homotopy_continuation/#homotopy_continuation
+using Catalyst
+import HomotopyContinuation
+
+wilhelm_2009_model = @reaction_network begin
+    k1, Y --> 2X
+    k2, 2X --> X + Y
+    k3, X + Y --> Y
+    k4, X --> 0
+end
+
+#---
+ps = [:k1 => 8.0, :k2 => 2.0, :k3 => 1.0, :k4 => 1.5]
+steady_states = hc_steady_states(wilhelm_2009_model, ps)
+
+# ## Steady state stability computation
+# `Catalyst.steady_state_stability()`
+
+using Catalyst
+[Catalyst.steady_state_stability(sstate, wilhelm_2009_model, ps) for sstate in steady_states]

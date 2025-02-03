@@ -49,7 +49,7 @@ jobs:
   execute:
     needs: setup
     strategy:
-      max-parallel: 10
+      max-parallel: 20
       fail-fast: false
       matrix:
         notebook: ${{ fromJSON(needs.setup.outputs.matrix) }}

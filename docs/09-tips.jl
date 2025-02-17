@@ -101,6 +101,6 @@ f = ODEFunction(fol_separate)
 f([0.0], [1.0], 0.0)
 
 # If you already have the ODEproblem, the function is `prob.f`.
-prob = ODEProblem(sys, [x => 0.0], (0.0, 1.0), [τ => 1.0])
+prob = ODEProblem(fol_separate, [x => 0.0], (0.0, 1.0), [τ => 1.0])
 f = prob.f
 f([0.0], [1.0], 0.0)

@@ -51,7 +51,7 @@ plot(sol, plot_analytic=true)
 sol = solve(prob, SRIW1(), dt=dt, adaptive=false)
 plot(sol, plot_analytic=true)
 
-# The solver is adaptive and can find dt itself
+# The solver is adaptive and can find time steps itself
 sol = solve(prob, SRIW1())
 plot(sol, plot_analytic=true)
 
@@ -73,7 +73,7 @@ function σ_lorenz!(du, u, p, t)
 end
 
 prob_sde_lorenz = SDEProblem(lorenz!, σ_lorenz!, [1.0, 0.0, 0.0], (0.0, 20.0))
-sol = solve(prob_sde_lorenz)
+sol = solve(prob_sde_lorenz, SRIW1())
 plot(sol, idxs=(1, 2, 3), label=false)
 
 # ### SDEs with scalar Noise
@@ -128,7 +128,7 @@ tspan = (0.0, 1.0)
 
 # The noise matrix itself is determined by the keyword argument noise_rate_prototype
 prob = SDEProblem(f, g, u0, tspan, noise_rate_prototype=zeros(2, 4))
-sol = solve(prob, LambaEM())
+sol = solve(prob, LambaEulerHeun())
 plot(sol)
 
 #===
@@ -157,9 +157,6 @@ sol = solve(prob, RandomEM(), dt=1 / 100)
 plot(sol)
 
 # Systems of RODEs
-using StochasticDiffEq
-using Plots
-
 function f4(du, u, p, t, W)
     du[1] = 2u[1] * sin(W[1] - W[2])
     du[2] = -2u[2] * cos(W[1] + W[2])

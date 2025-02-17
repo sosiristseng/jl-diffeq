@@ -12,7 +12,8 @@ Solving steady state solutions for an ODE system is to find a combination of sta
 ===#
 
 # ## Defining a steady state problem
-using DifferentialEquations
+using SteadyStateDiffEq
+using OrdinaryDiffEq
 
 model(u, p, t) = 1 - p * u
 
@@ -46,7 +47,7 @@ prob = NonlinearProblem(ns, guess, ps)
 sol = solve(prob, NewtonRaphson()) ## The results should be all zeroes
 
 # Another nonlinear system example with `structural_simplify()`.
-@parameters t
+@independent_variables t
 @variables u1(t) u2(t) u3(t) u4(t) u5(t)
 
 eqs = [
@@ -80,12 +81,11 @@ wilhelm_2009_model = @reaction_network begin
     k4, X --> 0
 end
 
-#---
+# There are three steady states
 ps = [:k1 => 8.0, :k2 => 2.0, :k3 => 1.0, :k4 => 1.5]
 steady_states = hc_steady_states(wilhelm_2009_model, ps)
 
 # ## Steady state stability computation
-# `Catalyst.steady_state_stability()`
-
+# `Catalyst.steady_state_stability()` shows there are two stable and one unstable steady states.
 using Catalyst
 [Catalyst.steady_state_stability(sstate, wilhelm_2009_model, ps) for sstate in steady_states]

@@ -79,10 +79,11 @@ nm.sqrt(-1.0) ## returns NaN
 ## ODE function from an MTK ODE system
 # `f = ODEFunction(sys)` could be useful in visualizing vector fields.
 using ModelingToolkit
-using DifferentialEquations
+using OrdinaryDiffEq
 using Plots
 
-@variables t x(t) RHS(t)
+@independent_variables t
+@variables x(t) RHS(t)
 @parameters τ
 D = Differential(t)
 
@@ -93,9 +94,13 @@ eqs = [
     D(x) ~ RHS
 ]
 
-@named fol_separate = ODESystem(eqs, t)
-sys = structural_simplify(fol_separate)
-f = ODEFunction(sys)
+@mtkbuild fol_separate = ODESystem(eqs, t)
+f = ODEFunction(fol_separate)
 
 # f(u, p, t) returns the value of derivatives
+f([0.0], [1.0], 0.0)
+
+# If you already have the ODEproblem, the function is `prob.f`.
+prob = ODEProblem(sys, [x => 0.0], (0.0, 1.0), [τ => 1.0])
+f = prob.f
 f([0.0], [1.0], 0.0)

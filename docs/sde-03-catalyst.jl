@@ -2,7 +2,8 @@
 # ## Repressilator SDE
 using Catalyst
 using ModelingToolkit
-using DifferentialEquations
+using StochasticDiffEq
+using JumpProcesses
 using Plots
 
 # Model is the same as building the ODE problem
@@ -30,9 +31,7 @@ u₀ = [m₁ => 0.0, m₂ => 0.0, m₃ => 0.0, P₁ => 20.0, P₂ => 0.0, P₃ =
 
 tspan = (0.0, 10000.0)
 sprob = SDEProblem(repressilator, u₀, tspan, p)
-
-# `tstops` is used here to specify enough points that the plot looks well-resolved.
-sol = solve(sprob, LambaEulerHeun(), tstops=range(0.0, tspan[2]; length=1001))
+sol = solve(sprob, LambaEulerHeun())
 plot(sol)
 
 # ## Using Gillespie's stochastic simulation algorithm (SSA)

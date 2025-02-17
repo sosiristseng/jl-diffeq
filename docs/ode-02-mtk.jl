@@ -161,7 +161,6 @@ plot(sol, idxs=(x, y, z), label="Trajectory", size=(500, 500))
 
 By connecting equation(s) to couple ODE systems together, we can build component-based, hierarchical models.
 ===#
-
 using Plots
 using ModelingToolkit
 using OrdinaryDiffEq

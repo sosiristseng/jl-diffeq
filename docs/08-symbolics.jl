@@ -169,8 +169,8 @@ isapprox(foop(inxs), out)
 
 # You can save the generated function for later use: `write("function.jl", string(fexprs[2]))`
 # Here, `ForwardDiff.jl` checks if our gradient generated from `Symbolics.jl` is correct.
-using ForwardDiff
-ForwardDiff.gradient(rosenbrock, inxs) ≈ out
+using ForwardDiff: gradient
+gradient(rosenbrock, inxs) ≈ out
 
 # Sparse Hessian matrix, only non-zero expressions are calculated.
 hexprs = build_function(hes_sp, xs)

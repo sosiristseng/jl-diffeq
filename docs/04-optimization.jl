@@ -137,7 +137,7 @@ The key function is `DiffEqParamEstim.build_loss_objective()`, which builds a lo
 
 Let's optimize the parameters of the Lotka-Volterra equation.
 ===#
-using DifferentialEquations
+using OrdinaryDiffEq
 using Plots
 using DiffEqParamEstim
 using ForwardDiff
@@ -190,7 +190,7 @@ plot(
     xaxis="Parameter", yaxis="Cost", title="1-Parameter Cost Function"
 )
 
-# There is a dip (minimum) in the cost function at the true parameter value (1.5). We can use an optimizer, e.g., `Optimization.jl`, to find the parameter value that minimizes the cost. (1.5 in this case)
+# There is a dip (minimum) in the cost function at the true parameter value (1.5). We can use an optimizer e.g., `Optimization.jl`, to find the parameter value that minimizes the cost. (1.5 in this case)
 optprob = Optimization.OptimizationProblem(cost_function, [1.42])
 optsol = solve(optprob, BFGS())
 
@@ -225,4 +225,4 @@ cost_function = build_loss_objective(
     maxiters=10000, verbose=false
 )
 optprob = Optimization.OptimizationProblem(cost_function, [1.3, 0.8, 2.8, 1.2])
-result_bfgs = solve(optprob, BFGS())
+result_bfgs = solve(optprob, LBFGS())

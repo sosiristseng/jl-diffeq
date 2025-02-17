@@ -16,7 +16,7 @@ Solving the equation: $du=f(u,p,t)dt + g(u,p,t)dW$
 - $f(u,p,t)$ is the ordinary differential equations (ODEs) part
 - $g(u,p,t)$ is the stochastic part, paired with a Brownian motion term $dW$.
 ===#
-using DifferentialEquations
+using StochasticDiffEq
 using Plots
 
 # ODE function
@@ -51,13 +51,13 @@ plot(sol, plot_analytic=true)
 sol = solve(prob, SRIW1(), dt=dt, adaptive=false)
 plot(sol, plot_analytic=true)
 
-# The solver is adaptive and can find dt itself
+# The solver is adaptive and can find time steps itself
 sol = solve(prob, SRIW1())
 plot(sol, plot_analytic=true)
 
 # ### SDEs with diagonal Noise
 # Each state variable are influenced by its own noise. Here we use the Lorenz system with noise as an example.
-using DifferentialEquations
+using StochasticDiffEq
 using Plots
 
 function lorenz!(du, u, p, t)
@@ -73,12 +73,13 @@ function σ_lorenz!(du, u, p, t)
 end
 
 prob_sde_lorenz = SDEProblem(lorenz!, σ_lorenz!, [1.0, 0.0, 0.0], (0.0, 20.0))
-sol = solve(prob_sde_lorenz)
+sol = solve(prob_sde_lorenz, SRIW1())
 plot(sol, idxs=(1, 2, 3), label=false)
 
 # ### SDEs with scalar Noise
 # The same noise process (`W`) is applied to all state variables.
-using DifferentialEquations
+using StochasticDiffEq
+using DiffEqNoiseProcess: WienerProcess
 using Plots
 
 # Exponential growth with noise
@@ -106,7 +107,7 @@ du_2 &= f_2(u,p,t)dt + g_{21}(u,p,t)dW_1 + g_{22}(u,p,t)dW_2 + g_{23}(u,p,t)dW_3
 \end{aligned}
 $$
 ===#
-using DifferentialEquations
+using StochasticDiffEq
 using Plots
 
 f = (du, u, p, t) -> du .= 1.01u
@@ -127,7 +128,7 @@ tspan = (0.0, 1.0)
 
 # The noise matrix itself is determined by the keyword argument noise_rate_prototype
 prob = SDEProblem(f, g, u0, tspan, noise_rate_prototype=zeros(2, 4))
-sol = solve(prob, LambaEM())
+sol = solve(prob, LambaEulerHeun())
 plot(sol)
 
 #===
@@ -145,7 +146,7 @@ The model function signature is
 - `f(u, p, t, W)` (out-of-place form).
 - `f(du, u, p, t, W)` (in-place form).
 ===#
-using DifferentialEquations
+using StochasticDiffEq
 using Plots
 
 # Scalar RODEs
@@ -156,9 +157,6 @@ sol = solve(prob, RandomEM(), dt=1 / 100)
 plot(sol)
 
 # Systems of RODEs
-using DifferentialEquations
-using Plots
-
 function f4(du, u, p, t, W)
     du[1] = 2u[1] * sin(W[1] - W[2])
     du[2] = -2u[2] * cos(W[1] + W[2])

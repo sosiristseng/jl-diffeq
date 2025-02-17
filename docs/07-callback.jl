@@ -24,7 +24,8 @@ sol = solve(prob, alg, callback=cb)
 
 The drug concentration in the blood follows exponential decay.
 ===#
-using DifferentialEquations
+using OrdinaryDiffEq
+using DiffEqCallbacks
 using Plots
 
 # Exponential decay model
@@ -85,7 +86,8 @@ plot(sol)
 
 # ## Continuous Callback
 # ### bouncing Ball example
-using DifferentialEquations
+using OrdinaryDiffEq
+using DiffEqCallbacks
 using Plots
 
 function ball!(du, u, p, t)
@@ -115,6 +117,10 @@ plot(sol, label=["Position" "Velocity"])
 
 # ### Vector Continuous Callback
 # You can group multiple callbacks together into a vector. In this example, we will simulate bouncing ball with multiple walls.
+using OrdinaryDiffEq
+using DiffEqCallbacks
+using Plots
+
 function ball_2d!(du, u, p, t)
     du[1] = u[2]  ## x_pos
     du[2] = -p    ## x_vel

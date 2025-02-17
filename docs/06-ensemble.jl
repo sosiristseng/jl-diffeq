@@ -5,9 +5,9 @@ Docs: https://diffeq.sciml.ai/stable/features/ensemble/
 
 ## Solving an ODE With Different Initial Conditions
 
-Solving $\dot{u} = 1.01u$ with $u(0)=0.5$ and $t \in [0, 1]$
+Solving $\dot{u} = 1.01u$ with $u(0)=0.5$ and $t \in [0, 1]$ with multiple initial conditions.
 ===#
-using DifferentialEquations
+using OrdinaryDiffEq
 using Plots
 
 # Linear ODE which starts at 0.5 and solves from t=0.0 to t=1.0
@@ -20,7 +20,7 @@ function prob_func(prob, i, repeat)
 end
 
 #===
-You could also obtain the necessary data from the outside of `prob_func()`
+The function could also capture the necessary data outside.
 
 ```julia
 initial_conditions = range(0, stop=1, length=100)
@@ -34,16 +34,19 @@ end
 # Define an ensemble problem
 ensemble_prob = EnsembleProblem(prob; prob_func=prob_func)
 
-# Ensemble simulations use multithreading by default
+# Ensemble simulations are solved by multithreading by default
 sim = solve(ensemble_prob, trajectories=100)
 
-# Each element in the result is an ODE solution
+# Each element in the results is an ODE solution
 sim[1]
 
 # You can plot all the results at once
 plot(sim, linealpha=0.4)
 
 # ## Solving an SDE with Different Parameters
+using StochasticDiffEq
+using Plots
+
 function lotka_volterra!(du, u, p, t)
     du[1] = p[1] * u[1] - p[2] * u[1] * u[2]
     du[2] = -3 * u[2] + u[1] * u[2]
@@ -66,8 +69,8 @@ end
 ensemble_prob = EnsembleProblem(prob, prob_func=prob_func)
 sim = solve(ensemble_prob, SRIW1(), trajectories=10)
 
-fig = plot(sim, linealpha=0.6, color=:blue, idxs=(0, 1))
-plot!(fig, sim, linealpha=0.6, color=:red, idxs=(0, 2))
+plot(sim, linealpha=0.5, color=:blue, idxs=(0, 1))
+plot!(sim, linealpha=0.5, color=:red, idxs=(0, 2))
 
 # Show the distribution of the ensemble solutions
 summ = EnsembleSummary(sim, 0:0.1:10)
@@ -76,13 +79,16 @@ plot(summ, fillalpha=0.5)
 # ## Ensemble simulations of Modelingtoolkit (MTK) models
 # Radioactive decay example
 using ModelingToolkit
-using DifferentialEquations
+using OrdinaryDiffEq
+using Plots
 
-@variables t c(t) = 1.0
+@independent_variables t
+@variables c(t) = 1.0
 @parameters λ = 1.0
 D = Differential(t)
 @mtkbuild sys = ODESystem([D(c) ~ -λ * c], t)
 prob = ODEProblem(sys, [], (0.0, 2.0), [])
+solve(prob)
 
 # Use the symbolic interface to change the parameter(s).
 function changemtkparam(prob, i, repeat)
@@ -91,6 +97,6 @@ function changemtkparam(prob, i, repeat)
     remake(prob, p=[λ => i * 0.5])
 end
 
-ensemble_prob = EnsembleProblem(prob, prob_func=changemtkparam)
-sim = solve(ensemble_prob, trajectories=10)
-plot(sim, fillalpha=0.5)
+eprob = EnsembleProblem(prob, prob_func=changemtkparam)
+sim = solve(eprob, trajectories=10)
+plot(sim, linealpha=0.5)

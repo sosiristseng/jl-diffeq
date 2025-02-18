@@ -73,7 +73,7 @@ jobs:
       shell: julia --color=yes {0}
       run: |
         using Pkg
-        Pkg.add(["IJulia", "Literate", "Tables", "MarkdownTables", "JSON"])
+        Pkg.add(["Literate", "Tables", "MarkdownTables", "JSON"])
         Pkg.activate(".")
         Pkg.instantiate()
         Pkg.precompile()

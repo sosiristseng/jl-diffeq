@@ -121,6 +121,7 @@ function main(;
 
     if !isempty(ipynbs)
         Pkg.add("IJulia")
+        Pkg.build("IJulia")
 
         # nbconvert command array
         ntasks = parse(Int, get(ENV, "NBCONVERT_JOBS", "1"))

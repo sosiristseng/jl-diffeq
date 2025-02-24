@@ -117,7 +117,7 @@ plot(sol, idxs=[x, f])
 ===#
 using Plots
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 
 @parameters σ ρ β
 @independent_variables t

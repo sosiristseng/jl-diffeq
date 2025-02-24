@@ -79,7 +79,7 @@ nm.sqrt(-1.0) ## returns NaN
 ## ODE function from an MTK ODE system
 # `f = ODEFunction(sys)` could be useful in visualizing vector fields.
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 @independent_variables t
@@ -101,6 +101,6 @@ f = ODEFunction(fol_separate)
 f([0.0], [1.0], 0.0)
 
 # If you already have the ODEproblem, the function is `prob.f`.
-prob = ODEProblem(fol_separate, [x => 0.0], (0.0, 1.0), [τ => 1.0])
+prob = ODEProblem(fol_separate, [x => 0.0], (0.0, 1.0), [τ => 1.0]);
 f = prob.f
 f([0.0], [1.0], 0.0)

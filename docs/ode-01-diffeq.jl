@@ -15,7 +15,7 @@ Define a model function representing the right-hand-side (RHS) of the system.
 #===
 ## Radioactive decay example
 
-The decaying rate of a nuclear isotope is proprotional to its concentration (number):
+The decaying rate of a nuclear isotope is proportional to its concentration (number):
 
 $$
 \frac{d}{dt}C(t) = - \lambda C(t)
@@ -29,7 +29,7 @@ $$
 
 - $\lambda$: The rate constant of nuclear decay. The half-life: $t_{\frac{1}{2}} = \frac{ln2}{\lambda}$.
 ===#
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 # The exponential decay ODE model, out-of-place (3-parameter) form
@@ -43,9 +43,9 @@ prob = ODEProblem(expdecay, u0, tspan, p) ## Define the problem
 sol = solve(prob) ## Solve the problem
 
 # Visualize the solution with `Plots.jl`.
-plot(sol, label="Exp decay")
+plot(sol)
 
-## # Solution handling
+# ## Solution handling
 # https://docs.sciml.ai/DiffEqDocs/stable/basics/solution/
 # The mostly used feature is `sol(t)`, the state variables at time `t`. `t` could be a scalar or a vector-like sequence. The result state variables are calculated with interpolation.
 sol(1.0)
@@ -83,7 +83,7 @@ $$
 - $\beta$ : the rate of infection when susceptible and infectious people meet
 - $\gamma$ : the rate of recovery of infectious people
 ===#
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 # Here we use the in-place form: `f!(du, u, p ,t)` for the SIR model. The output is written to the first argument `du`, without allocating a new array in each function call.
@@ -119,54 +119,11 @@ sol[1, 2]
 # `sol[i, :]`: the time series for the `i`th component.
 sol[1, :]
 
-# `sol(t,idxs=1)`: the 1st element in time point(s) `t` with interpolation. `t` can be a scalar or a vector.
+# `sol(t, idxs=1)`: the 1st element in time point(s) `t` with interpolation. `t` can be a scalar or a vector.
 sol(10, idxs=2)
 
 #---
 sol(0.0:0.1:20.0, idxs=2)
-
-#===
-## Lorenz system
-
-The Lorenz system is a system of ordinary differential equations having chaotic solutions for certain parameter values and initial conditions. ([Wikipedia](https://en.wikipedia.org/wiki/Lorenz_system))
-
-$$
-\begin{align}
-  \frac{dx}{dt} &=& \sigma(y-x) \\
-  \frac{dy}{dt} &=& x(\rho - z) -y \\
-  \frac{dz}{dt} &=& xy - \beta z
-\end{align}
-$$
-
-In this example, we will use NamedTuple for the parameters and [ComponentArrays.jl](https://github.com/jonniedie/ComponentArrays.jl) for the state variaBLE to access elements by their names.
-===#
-using ComponentArrays
-using OrdinaryDiffEq
-using Plots
-
-# The coupled ODEs
-function lorenz!(du, u, p, t)
-    du.x = p.σ * (u.y - u.x)
-    du.y = u.x * (p.ρ - u.z) - u.y
-    du.z = u.x * u.y - p.β * u.z
-    return nothing
-end
-
-# Setup problem and solve it
-u0 = ComponentArray(x=1.0, y=0.0, z=0.0)
-p = ComponentArray(σ=10.0, ρ=28.0, β=8 / 3)
-tspan = (0.0, 100.0)
-prob = ODEProblem(lorenz!, u0, tspan, p)
-sol = solve(prob)
-
-# `idxs=(1, 2, 3)` makes a phase plot with 1st, 2nd, and the 3rd state variable.
-plot(sol, idxs=(1, 2, 3), size=(400, 400), label=false)
-
-# The plot recipe uses interpolation to smooth the curve. You can turn off `denseplot` to see the difference.
-plot(sol, idxs=(1, 2, 3), denseplot=false, size=(400, 400))
-
-# The zeroth variable in `idxs` is the independent variable (usually time). The following command plots the time series of the second state variable (`y`).
-plot(sol, idxs=(0, 2))
 
 #===
 ## Non-autonomous ODEs
@@ -186,8 +143,7 @@ $$
 - $l$: pendulum length
 - $g$: gradational acceleration
 ===#
-
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 function pendulum!(du, u, p, t)
@@ -196,6 +152,7 @@ function pendulum!(du, u, p, t)
     g = 9.81                            ## gravitational acceleration [m/s²]
     du[1] = u[2]                        ## θ'(t) = ω(t)
     du[2] = -3g / (2l) * sin(u[1]) + 3 / (m * l^2) * p(t) # ω'(t) = -3g/(2l) sin θ(t) + 3/(ml^2)M(t)
+    return nothing
 end
 
 u0 = [0.01, 0.0]                     ## initial angular deflection [rad] and angular velocity [rad/s]
@@ -216,8 +173,7 @@ The ODE system could be anything as long as it returns the derivatives of state 
 
 $\dot{u} = Au$
 ===#
-
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 A = [

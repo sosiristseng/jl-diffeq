@@ -3,7 +3,7 @@
 
 Wikipedia: https://en.wikipedia.org/wiki/Optimization_problem
 
-Given a target (loss) function and a set of parameters. Find the parameters set (subjects to contraints) to minimize the function.
+Given a target (loss) function and a set of parameters. Find the parameters set (subjects to constraints) to minimize the function.
 
 - Curve fitting: [LsqFit.jl](https://github.com/JuliaNLSolvers/LsqFit.jl)
 - General optimization problems: [Optim.jl](https://github.com/JuliaNLSolvers/Optim.jl)
@@ -137,7 +137,7 @@ The key function is `DiffEqParamEstim.build_loss_objective()`, which builds a lo
 
 Let's optimize the parameters of the Lotka-Volterra equation.
 ===#
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 using DiffEqParamEstim
 using ForwardDiff

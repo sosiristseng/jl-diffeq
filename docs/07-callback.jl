@@ -24,8 +24,7 @@ sol = solve(prob, alg, callback=cb)
 
 The drug concentration in the blood follows exponential decay.
 ===#
-using OrdinaryDiffEq
-using DiffEqCallbacks
+using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 # Exponential decay model
@@ -57,7 +56,7 @@ cb = DiscreteCallback(condition, affect!)
 sol = solve(prob, Tsit5(), callback=cb, tstops=dosetimes)
 plot(sol)
 
-# Conditional dosing. Note that a dose was not given at t=6 because the concentration is not more than 1.
+# Conditional dosing. Note that a dose was not given at t=6 because the concentration is not less than 1.
 dosetimes = [4.0, 6.0, 8.0]
 condition(u, t, integrator) = t ∈ dosetimes && (u[1] < 1.0)
 affect!(integrator) = integrator.u[1] += 10integrator.t
@@ -86,8 +85,7 @@ plot(sol)
 
 # ## Continuous Callback
 # ### bouncing Ball example
-using OrdinaryDiffEq
-using DiffEqCallbacks
+using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 function ball!(du, u, p, t)
@@ -117,8 +115,7 @@ plot(sol, label=["Position" "Velocity"])
 
 # ### Vector Continuous Callback
 # You can group multiple callbacks together into a vector. In this example, we will simulate bouncing ball with multiple walls.
-using OrdinaryDiffEq
-using DiffEqCallbacks
+using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 function ball_2d!(du, u, p, t)
@@ -154,7 +151,7 @@ plot(sol, idxs=(3, 1))
 #===
 ## Other Callbacks
 
-https://diffeq.sciml.ai/stable/features/callback_library/
+https://docs.sciml.ai/DiffEqCallbacks/stable/
 
 - `ManifoldProjection(g)`: keep `g(u) = 0` for energy conservation.
 - `AutoAbstol()`: automatically adapt the absolute tolerance.

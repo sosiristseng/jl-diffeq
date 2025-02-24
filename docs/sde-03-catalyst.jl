@@ -2,8 +2,7 @@
 # ## Repressilator SDE
 using Catalyst
 using ModelingToolkit
-using StochasticDiffEq
-using JumpProcesses
+using DifferentialEquations ## using StochasticDiffEq, JumpProcesses
 using Plots
 
 # Model is the same as building the ODE problem
@@ -30,7 +29,7 @@ u₀ = [m₁ => 0.0, m₂ => 0.0, m₃ => 0.0, P₁ => 20.0, P₂ => 0.0, P₃ =
 # Build an `SDEProblem` with the reaction network
 
 tspan = (0.0, 10000.0)
-sprob = SDEProblem(repressilator, u₀, tspan, p)
+sprob = SDEProblem(repressilator, u₀, tspan, p);
 sol = solve(sprob, LambaEulerHeun())
 plot(sol)
 
@@ -38,11 +37,8 @@ plot(sol)
 # Create a Gillespie stochastic simulation model with the same reaction network. The initial conditions should be integers.
 u0 = [m₁ => 0, m₂ => 0, m₃ => 0, P₁ => 20, P₂ => 0, P₃ => 0]
 
-# Create a discrete problem because our species are integer-valued:
-dprob = DiscreteProblem(repressilator, u0, tspan, p)
-
-# Create a `JumpProblem`, and specify Gillespie's Direct Method as the solver.
-jprob = JumpProblem(repressilator, dprob, Direct(), save_positions=(false, false))
+# Create a `JumpProblem`
+jprob = JumpInputs(repressilator, u0, tspan, p) |> JumpProblem
 
 # Solve and visualize the problem.
 sol = solve(jprob, SSAStepper(), saveat=10.0)

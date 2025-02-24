@@ -1,12 +1,12 @@
 #===
 # ModelingToolkit: define ODEs with symbolic expressions
 
-You can also define ODE systems symbolically using [ModelingToolkit.jl (MTK)](https://github.com/SciML/ModelingToolkit.jl) and let MTK generate high-performace ODE functions.
+You can also define ODE systems symbolically using [ModelingToolkit.jl (MTK)](https://github.com/SciML/ModelingToolkit.jl) and let MTK generate high-performance ODE functions.
 
 - transforming and simplifying expressions for performance
 - Jacobian and Hessian generation
 - accessing eliminated states (called observed variables)
-- building and connecting subsystems programatically (component-based modeling)
+- building and connecting subsystems programmatically (component-based modeling)
 
 See also [Simulating Big Models in Julia with ModelingToolkit @ JuliaCon 2021 Workshop](https://youtu.be/HEVOgSLBzWA).
 ===#
@@ -16,7 +16,7 @@ See also [Simulating Big Models in Julia with ModelingToolkit @ JuliaCon 2021 Wo
 Here we use the same example of decaying radioactive elements
 ===#
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 # independent variable (time) and dependent variables
@@ -36,26 +36,23 @@ eqs = [
     D(c) ~ RHS
 ]
 
-@named sys = ODESystem(eqs, t)
-
-# `structural_simplify()` simplifies the two equations to one.
-# You can also use `@mtkbuild sys = ODESystem(eqs, t)`, which automatically simplifies the system.
-sys = structural_simplify(sys)
+# Build and ODE system from equations
+@mtkbuild sys = ODESystem(eqs, t)
 
 # Setup initial conditions, time span, parameter values, the `ODEProblem`, and solve the problem.
 p = [λ => 1.0]
 u0 = [c => 1.0]
 tspan = (0.0, 2.0)
-prob = ODEProblem(sys, u0, tspan, p)
+prob = ODEProblem(sys, u0, tspan, p);
 sol = solve(prob)
 
 # Visualize the solution
 plot(sol, label="Exp decay")
 
-# The solution interface provides symbolic access. You can access the results of the unknown `c` directly.
+# The solution interface provides symbolic access. You can access the results of `c` directly.
 sol[c]
 
-# With interpolations with specified timepoints
+# With interpolations with specified time points
 sol(0.0:0.1:2.0, idxs=c)
 
 # The eliminated term (RHS in this example) is still traceable.
@@ -67,9 +64,8 @@ plot(sol, idxs=[c * 1000])
 #===
 ## Lorenz system
 
-We use the same Lorenz system example as above. Here we setup the initial conditions and parameters with default values.
+Here we setup the initial conditions and parameters with default values.
 ===#
-
 @independent_variables t
 @variables x(t) = 1.0 y(t) = 0.0 z(t) = 0.0
 @parameters (σ=10.0, ρ=28.0, β=8 / 3)
@@ -86,11 +82,11 @@ eqs = [
 
 # Here we are using default values, so we pass empty arrays for initial conditions and parameter values.
 tspan = (0.0, 100.0)
-prob = ODEProblem(sys, [], tspan, [])
+prob = ODEProblem(sys, [], tspan, []);
 sol = solve(prob)
 
-# Plot the solution with symbols instead of index numbers.
-plot(sol, idxs=(x, y, z), size=(400, 400))
+# Phase plot w.r.t symbols.
+plot(sol, idxs=(x, y, z), size=(600, 600))
 
 #===
 ## Non-autonomous ODEs
@@ -110,7 +106,7 @@ f_fun(t) = t >= 10 ? value_vector[end] : value_vector[Int(floor(t))+1]
 @register_symbolic f_fun(t)
 @mtkbuild fol_external_f = ODESystem([f ~ f_fun(t), D(x) ~ (f - x) / τ], t)
 
-prob = ODEProblem(fol_external_f, [x => 0.0], (0.0, 10.0), [τ => 0.75])
+prob = ODEProblem(fol_external_f, [x => 0.0], (0.0, 10.0), [τ => 0.75]);
 sol = solve(prob)
 plot(sol, idxs=[x, f])
 
@@ -121,7 +117,7 @@ plot(sol, idxs=[x, f])
 ===#
 using Plots
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 
 @parameters σ ρ β
 @independent_variables t
@@ -159,52 +155,49 @@ plot(sol, idxs=(x, y, z), label="Trajectory", size=(500, 500))
 #===
 ## Composing systems
 
+https://docs.sciml.ai/ModelingToolkit/stable/basics/Composition/
+
 By connecting equation(s) to couple ODE systems together, we can build component-based, hierarchical models.
 ===#
 using Plots
+using DifferentialEquations ## using OrdinaryDiffEq
 using ModelingToolkit
-using OrdinaryDiffEq
+using ModelingToolkit: t_nounits as t, D_nounits as D
 
-@parameters σ ρ β
-@independent_variables t
-@variables x(t) y(t) z(t)
-D = Differential(t)
+function decay(; name)
+    @parameters a
+    @variables x(t) f(t)
+    ODESystem([
+            D(x) ~ -a * x + f
+        ], t; name)
+end
 
-eqs = [
-    D(x) ~ σ * (y - x),
-    D(y) ~ x * (ρ - z) - y,
-    D(z) ~ x * y - β * z
-]
-
-@named lorenz1 = ODESystem(eqs, t)
-@named lorenz2 = ODESystem(eqs, t)
+@named decay1 = decay()
+@named decay2 = decay()
 
 # Define relations (connectors) between the two systems.
-@variables a(t)
-@parameters γ
-connections = [0 ~ lorenz1.x + lorenz2.y + a * γ]
-@named connLorenz = ODESystem(connections, t, [a], [γ], systems=[lorenz1, lorenz2])
+connected = compose(
+    ODESystem([
+            decay2.f ~ decay1.x,
+            D(decay1.f) ~ 0], t; name=:connected), decay1, decay2)
 
-# All unknown state variables in the combined system
-unknowns(connLorenz)
+equations(connected)
+
+#----
+simplified_sys = structural_simplify(connected)
+equations(simplified_sys)
 
 #---
-u0 = [
-    lorenz1.x => 1.0, lorenz1.y => 0.0, lorenz1.z => 0.0,
-    lorenz2.x => 0.0, lorenz2.y => 1.0, lorenz2.z => 0.0,
-    a => 2.0
-]
+x0 = [decay1.x => 1.0
+      decay1.f => 0.0
+      decay2.x => 1.0]
+p = [decay1.a => 0.1
+     decay2.a => 0.2]
 
-p = [
-    lorenz1.σ => 10.0, lorenz1.ρ => 28.0, lorenz1.β => 8 / 3,
-    lorenz2.σ => 10.0, lorenz2.ρ => 28.0, lorenz2.β => 8 / 3,
-    γ => 2.0
-]
 
 tspan = (0.0, 100.0)
-sys = connLorenz |> structural_simplify
-sol = solve(ODEProblem(sys, u0, tspan, p, jac=true))
-plot(sol, idxs=(a, lorenz1.x, lorenz2.x), size=(600, 600))
+sol = solve(ODEProblem(simplified_sys, x0, tspan, p))
+plot(sol, idxs=[decay1.x, decay2.x])
 
 #===
 ### Convert existing functions into MTK systems
@@ -215,7 +208,7 @@ Example: **[DAE index reduction](https://mtk.sciml.ai/stable/mtkitize_tutorials/
 ===#
 using Plots
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using LinearAlgebra
 
 function pendulum!(du, u, p, t)
@@ -243,7 +236,7 @@ tracedSys = modelingtoolkitize(pendulum_prob)
 pendulumSys = tracedSys |> dae_index_lowering |> structural_simplify
 
 # The default `u0` is included in the system already so one can use an empty array `[]` as the initial conditions.
-prob = ODEProblem(pendulumSys, [], tspan)
+prob = ODEProblem(pendulumSys, [], tspan);
 sol = solve(prob, Rodas5P(), abstol=1e-8, reltol=1e-8)
 
 #---

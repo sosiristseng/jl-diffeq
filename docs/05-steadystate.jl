@@ -12,8 +12,7 @@ Solving steady state solutions for an ODE system is to find a combination of sta
 ===#
 
 # ## Defining a steady state problem
-using SteadyStateDiffEq
-using OrdinaryDiffEq
+using DifferentialEquations ## using SteadyStateDiffEq, OrdinaryDiffEq
 
 model(u, p, t) = 1 - p * u
 
@@ -65,7 +64,7 @@ eqs = [
 prob = NonlinearProblem(sys, [u5 => 0.0])
 sol = solve(prob, NewtonRaphson())
 
-# The answer should be 1.6 and 1.0.
+# The answer should be close to 1.6 and 1.0.
 @show sol[u5] sol[u1];
 
 # ## Finding Steady States through Homotopy Continuation
@@ -87,5 +86,4 @@ steady_states = hc_steady_states(wilhelm_2009_model, ps)
 
 # ## Steady state stability computation
 # `Catalyst.steady_state_stability()` shows there are two stable and one unstable steady states.
-using Catalyst
 [Catalyst.steady_state_stability(sstate, wilhelm_2009_model, ps) for sstate in steady_states]

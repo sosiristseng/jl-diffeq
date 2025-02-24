@@ -5,6 +5,7 @@ ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
 DiffEqCallbacks = "459566f4-90b8-5000-8ac3-15dfb0a30def"
 DiffEqNoiseProcess = "77a26b50-5914-5dd7-bc55-306e6241c503"
 DiffEqParamEstim = "1130ab10-4a5a-5621-a13d-e4788d82bd4c"
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
 HomotopyContinuation = "f213a82b-91d6-5c5d-acf7-10f1c761b327"
 JumpProcesses = "ccbc3e58-028d-4f4c-8cd5-9ae44345cda5"
@@ -27,6 +28,10 @@ StochasticDiffEq = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [preferences.BoundaryValueDiffEq]
+PrecompileAscher = false
+PrecompileAscherNLLS = false
+PrecompileFIRK = false
+PrecompileFIRKNLLS = false
 PrecompileMIRK = false
 PrecompileMIRKNLLS = false
 PrecompileMultipleShooting = false

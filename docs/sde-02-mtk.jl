@@ -6,7 +6,7 @@ Define a stochastic Lorentz system using `SDESystem(equations, noises, iv, dv, p
 Add a diagonal noise with 10% of the magnitude, using a Brownian variable (`@brownian x`).
 ===#
 using ModelingToolkit
-using StochasticDiffEq
+using DifferentialEquations ## using StochasticDiffEq
 using Plots
 
 @parameters σ ρ β
@@ -24,19 +24,19 @@ eqs = [
 @mtkbuild de = System(eqs, t)
 
 ics = [
-    x => 1.0,
+    x => 2.0,
     y => 0.0,
     z => 0.0
 ]
 
 ps = [
     σ => 10.0,
-    β => 26.0,
-    ρ => 2.33
+    β => 8/3,
+    ρ => 28.0
 ]
 
 tspan = (0.0, 100.0)
 
-prob = SDEProblem(de, ics, tspan, ps)
+prob = SDEProblem(de, ics, tspan, ps);
 sol = solve(prob, LambaEulerHeun())
 plot(sol, idxs=(x, y, z))

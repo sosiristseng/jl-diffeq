@@ -16,7 +16,7 @@ Solving the equation: $du=f(u,p,t)dt + g(u,p,t)dW$
 - $f(u,p,t)$ is the ordinary differential equations (ODEs) part
 - $g(u,p,t)$ is the stochastic part, paired with a Brownian motion term $dW$.
 ===#
-using StochasticDiffEq
+using DifferentialEquations ## using StochasticDiffEq
 using Plots
 
 # ODE function
@@ -47,17 +47,13 @@ prob = SDEProblem(ff, g, u0, (0.0, 1.0), p)
 sol = solve(prob, EM(), dt=dt)
 plot(sol, plot_analytic=true)
 
-# Use a higher-order solver for a more accurate result
-sol = solve(prob, SRIW1(), dt=dt, adaptive=false)
-plot(sol, plot_analytic=true)
-
-# The solver is adaptive and can find time steps itself
+# Use a higher-order adaptive solver `SRIW1()` for a more accurate result
 sol = solve(prob, SRIW1())
 plot(sol, plot_analytic=true)
 
 # ### SDEs with diagonal Noise
 # Each state variable are influenced by its own noise. Here we use the Lorenz system with noise as an example.
-using StochasticDiffEq
+using DifferentialEquations ## using StochasticDiffEq
 using Plots
 
 function lorenz!(du, u, p, t)
@@ -78,8 +74,7 @@ plot(sol, idxs=(1, 2, 3), label=false)
 
 # ### SDEs with scalar Noise
 # The same noise process (`W`) is applied to all state variables.
-using StochasticDiffEq
-using DiffEqNoiseProcess: WienerProcess
+using DifferentialEquations ## using StochasticDiffEq, DiffEqNoiseProcess: WienerProcess
 using Plots
 
 # Exponential growth with noise
@@ -107,7 +102,7 @@ du_2 &= f_2(u,p,t)dt + g_{21}(u,p,t)dW_1 + g_{22}(u,p,t)dW_2 + g_{23}(u,p,t)dW_3
 \end{aligned}
 $$
 ===#
-using StochasticDiffEq
+using DifferentialEquations ## using StochasticDiffEq
 using Plots
 
 f = (du, u, p, t) -> du .= 1.01u
@@ -146,7 +141,7 @@ The model function signature is
 - `f(u, p, t, W)` (out-of-place form).
 - `f(du, u, p, t, W)` (in-place form).
 ===#
-using StochasticDiffEq
+using DifferentialEquations ## using StochasticDiffEq
 using Plots
 
 # Scalar RODEs

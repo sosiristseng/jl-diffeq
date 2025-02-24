@@ -9,7 +9,7 @@
 ===#
 using Catalyst
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 # Define the reaction network
@@ -48,7 +48,7 @@ u0 = [m₁ => 0.0, m₂ => 0.0, m₃ => 0.0, P₁ => 20.0, P₂ => 0.0, P₃ => 
 
 # Then we can solve this reaction network as an ODE problem
 tspan = (0.0, 10000.0)
-oprob = ODEProblem(repressilator, u0, tspan, p)
+oprob = ODEProblem(repressilator, u0, tspan, p);
 sol = solve(oprob)
 plot(sol)
 
@@ -71,7 +71,7 @@ using Catalyst
 using ModelingToolkit
 
 @parameters α K n δ γ β μ
-@variables t
+@independent_variables t
 @species m₁(t) m₂(t) m₃(t) P₁(t) P₂(t) P₃(t)
 
 rxs = [
@@ -92,14 +92,14 @@ rxs = [
     Reaction(μ, [P₃], nothing)
 ]
 
-# Use `ReactionSystem(reactions, indenpendeent_variable)` to collect these reactions. `@named` macro is used because every system in `ModelingToolkit.jl` needs a name.
+# Use `ReactionSystem(reactions, independent_variable)` to collect these reactions. `@named` macro is used because every system in `ModelingToolkit.jl` needs a name.
 # `@named x = System(...)` is a short hand for `x = System(...; name=:x)`
 @named repressilator = ReactionSystem(rxs, t)
 
 # The `@reaction` macro provides the same syntax in the `@reaction_network` to build reactions.
 # Note that `@reaction` macro only allows one-way reaction; **reversible arrows are not allowed**.
 
-@variables t
+@independent_variables t
 @species P₁(t) P₂(t) P₃(t)
 
 rxs = [
@@ -129,7 +129,7 @@ For example, in the chemical reaction `A + B <--> C`, given the initial concentr
 ===#
 using Catalyst
 using ModelingToolkit
-using OrdinaryDiffEq
+using DifferentialEquations ## using OrdinaryDiffEq
 using Plots
 
 #---
@@ -151,8 +151,8 @@ unknowns(osys)
 observed(osys)
 
 # Solve the problem
-oprob = ODEProblem(osys, [], (0.0, 10.0), [])
-sol = solve(oprob, Tsit5())
+oprob = ODEProblem(osys, [], (0.0, 10.0));
+sol = solve(oprob)
 
 # You can still trace the eliminated variable
 plot(sol, idxs=osys.C)

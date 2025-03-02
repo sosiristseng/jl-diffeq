@@ -11,7 +11,7 @@ end
 
 # Strip SVG output from a Jupyter notebook
 @everywhere function strip_svg(ipynb)
-    @info "Stripping SVG in $(ipynb)"
+    oldfilesize = filesize(ipynb)
     nb = open(JSON.parse, ipynb, "r")
     for cell in nb["cells"]
         !haskey(cell, "outputs") && continue
@@ -25,6 +25,7 @@ end
         end
     end
     write(ipynb, JSON.json(nb, 1))
+    @info "Stripped SVG in $(ipynb). The original size is $(oldfilesize). The new size is $(filesize(ipynb))."
     return ipynb
 end
 
@@ -121,7 +122,8 @@ function main(;
     end
 
     if !isempty(ipynbs)
-        IJulia.installkernel("julia", "--project=@.")
+        IJulia.installkernel("Julia", "--project=@.")
+
         # nbconvert command array
         ntasks = parse(Int, get(ENV, "NBCONVERT_JOBS", "1"))
         kernelname = "--ExecutePreprocessor.kernel_name=julia-1.$(VERSION.minor)"

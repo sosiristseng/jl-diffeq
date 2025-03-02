@@ -137,7 +137,7 @@ The key function is `DiffEqParamEstim.build_loss_objective()`, which builds a lo
 
 Let's optimize the parameters of the Lotka-Volterra equation.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 using DiffEqParamEstim
 using ForwardDiff

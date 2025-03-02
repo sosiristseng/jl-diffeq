@@ -6,7 +6,7 @@ Define a stochastic Lorentz system using `SDESystem(equations, noises, iv, dv, p
 Add a diagonal noise with 10% of the magnitude, using a Brownian variable (`@brownian x`).
 ===#
 using ModelingToolkit
-using DifferentialEquations ## using StochasticDiffEq
+using StochasticDiffEq
 using Plots
 
 @parameters σ ρ β

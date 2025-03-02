@@ -5,14 +5,14 @@
 - ModelingToolkit docs: https://docs.sciml.ai/ModelingToolkit/stable/tutorials/nonlinear/
 - NonlinearSolve docs: https://docs.sciml.ai/NonlinearSolve/stable/
 
-Solving steady state solutions for an ODE system is to find a combination of state variables such that their derivatives are all zeroes. Their are two ways:
+Solving steady state solutions with `SteadyStateDiffEq.jl` for an ODE system is to find a combination of state variables such that their derivatives are all zeroes. Their are two ways:
 
-- Running the ODE solver until a steady state is reached (`DynamicSS()` and `DifferentialEquations.jl`)
+- Running the ODE solver until a steady state is reached (`DynamicSS()` and `OrdinaryDiffEq.jl`)
 - Using a root-finding algorithm to find a steady state (`SSRootfind()` and `NonlinearSolve.jl`)
 ===#
 
 # ## Defining a steady state problem
-using DifferentialEquations ## using SteadyStateDiffEq, OrdinaryDiffEq
+using SteadyStateDiffEq, OrdinaryDiffEq
 
 model(u, p, t) = 1 - p * u
 

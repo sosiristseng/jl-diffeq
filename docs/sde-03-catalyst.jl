@@ -2,7 +2,8 @@
 # ## Repressilator SDE
 using Catalyst
 using ModelingToolkit
-using DifferentialEquations ## using StochasticDiffEq, JumpProcesses
+using StochasticDiffEq
+using JumpProcesses
 using Plots
 
 # Model is the same as building the ODE problem

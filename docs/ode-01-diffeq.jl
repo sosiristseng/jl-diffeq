@@ -29,7 +29,7 @@ $$
 
 - $\lambda$: The rate constant of nuclear decay. The half-life: $t_{\frac{1}{2}} = \frac{ln2}{\lambda}$.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 # The exponential decay ODE model, out-of-place (3-parameter) form
@@ -83,7 +83,7 @@ $$
 - $\beta$ : the rate of infection when susceptible and infectious people meet
 - $\gamma$ : the rate of recovery of infectious people
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 # Here we use the in-place form: `f!(du, u, p ,t)` for the SIR model. The output is written to the first argument `du`, without allocating a new array in each function call.
@@ -143,7 +143,7 @@ $$
 - $l$: pendulum length
 - $g$: gradational acceleration
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 function pendulum!(du, u, p, t)
@@ -173,7 +173,7 @@ The ODE system could be anything as long as it returns the derivatives of state 
 
 $\dot{u} = Au$
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 A = [

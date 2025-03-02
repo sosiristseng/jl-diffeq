@@ -9,7 +9,7 @@
 ===#
 using Catalyst
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 # Define the reaction network
@@ -129,7 +129,7 @@ For example, in the chemical reaction `A + B <--> C`, given the initial concentr
 ===#
 using Catalyst
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 #---

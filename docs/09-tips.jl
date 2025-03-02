@@ -79,7 +79,7 @@ nm.sqrt(-1.0) ## returns NaN
 ## ODE function from an MTK ODE system
 # `f = ODEFunction(sys)` could be useful in visualizing vector fields.
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 @independent_variables t

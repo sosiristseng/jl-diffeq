@@ -16,7 +16,7 @@ See also [Simulating Big Models in Julia with ModelingToolkit @ JuliaCon 2021 Wo
 Here we use the same example of decaying radioactive elements
 ===#
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 # independent variable (time) and dependent variables
@@ -117,7 +117,7 @@ plot(sol, idxs=[x, f])
 ===#
 using Plots
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 
 @parameters σ ρ β
 @independent_variables t
@@ -160,7 +160,7 @@ https://docs.sciml.ai/ModelingToolkit/stable/basics/Composition/
 By connecting equation(s) to couple ODE systems together, we can build component-based, hierarchical models.
 ===#
 using Plots
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using ModelingToolkit
 using ModelingToolkit: t_nounits as t, D_nounits as D
 
@@ -208,7 +208,7 @@ Example: **[DAE index reduction](https://mtk.sciml.ai/stable/mtkitize_tutorials/
 ===#
 using Plots
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using LinearAlgebra
 
 function pendulum!(du, u, p, t)

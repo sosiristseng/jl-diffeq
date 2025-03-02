@@ -7,7 +7,7 @@ Docs: https://diffeq.sciml.ai/stable/features/ensemble/
 
 Solving $\dot{u} = 1.01u$ with $u(0)=0.5$ and $t \in [0, 1]$ with multiple initial conditions.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 # Linear ODE which starts at 0.5 and solves from t=0.0 to t=1.0
@@ -44,7 +44,7 @@ sim[1]
 plot(sim, linealpha=0.4)
 
 # ## Solving an SDE with Different Parameters
-using DifferentialEquations  ## using StochasticDiffEq
+using StochasticDiffEq
 using Plots
 
 function lotka_volterra!(du, u, p, t)
@@ -79,7 +79,7 @@ plot(summ, fillalpha=0.5)
 # ## Ensemble simulations of Modelingtoolkit (MTK) models
 # Radioactive decay example
 using ModelingToolkit
-using DifferentialEquations ## using OrdinaryDiffEq
+using OrdinaryDiffEq
 using Plots
 
 @independent_variables t

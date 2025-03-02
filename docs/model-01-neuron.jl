@@ -18,7 +18,7 @@ $C\dot{u} = -g_L (u - E_L) + I$
 - $C$: membrane capacitance
 ===#
 
-using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
+using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 #---
@@ -63,7 +63,7 @@ $$
 
 When $v \geq$ 30 mV, $v$ resets to $c$, $u$ increased by $d$.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
+using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 # In-place form of the Izhikevich Model
@@ -113,7 +113,7 @@ plot(sol, idxs=1, label="v")
 
 The [Hodgkin-Huxley (HH) model](https://en.wikipedia.org/wiki/Hodgkin%E2%80%93Huxley_model) is a biophysically realistic neuron model. All parameters and mechanisms of the model represent biological mechanisms. Opening and closing of sodium and potassium channels depolarize and hyperpolarize the membrane potential.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
+using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 # Potassium ion-channel rate functions
@@ -155,7 +155,7 @@ plot(sol, idxs=1, label="v")
 
 One of the most simple synaptic mechanisms used in computational neuroscience is the alpha synapse. When this mechanism is triggered, it causes an instantaneous rise in conductance followed by an exponential decay.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
+using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 function HH_syn!(du, u, p, t)
@@ -187,7 +187,7 @@ plot!(fig, sol2, idxs=1, label="suprathreshold")
 
 The Tsodyks-Markram synapse (TMS) is a dynamic system that models the changes of maximum conductance that occur between EPSPs at different firing frequencies.
 ===#
-using DifferentialEquations ## using OrdinaryDiffEq, DiffEqCallbacks
+using OrdinaryDiffEq, DiffEqCallbacks
 using Plots
 
 function HH_tms!(du, u, p, t)

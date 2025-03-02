@@ -23,7 +23,7 @@ parts:
     - file: advanced/symbolics
   - caption: Models
     chapters:
-    - file: 01-neuron
+    - file: models/01-neuron
   - caption: Tips
     chapters:
     - file: tips/09-tips

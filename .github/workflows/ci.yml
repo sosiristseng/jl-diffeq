@@ -69,11 +69,9 @@ jobs:
           ${{ steps.hash.outputs.ver }}-
     - name: Install Julia packages
       if: ${{ runner.environment == 'self-hosted' || steps.cache-julia.outputs.cache-hit != 'true' }}
-      shell: julia --color=yes {0}
+      shell: julia --color=yes --project=@. {0}
       run: |
         using Pkg
-        Pkg.add(["Literate", "Tables", "MarkdownTables", "JSON"])
-        Pkg.activate(".")
         Pkg.instantiate()
         Pkg.precompile()
     - name: Clean Julia package directory

@@ -2,6 +2,7 @@ using Distributed
 using Tables
 using MarkdownTables
 using SHA
+using IJulia
 
 @everywhere begin
     ENV["GKSwstype"] = "100"
@@ -120,9 +121,7 @@ function main(;
     end
 
     if !isempty(ipynbs)
-        Pkg.add("IJulia")
-        Pkg.build("IJulia")
-
+        IJulia.installkernel("julia", "--project=@.")
         # nbconvert command array
         ntasks = parse(Int, get(ENV, "NBCONVERT_JOBS", "1"))
         kernelname = "--ExecutePreprocessor.kernel_name=julia-1.$(VERSION.minor)"

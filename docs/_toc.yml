@@ -29,3 +29,4 @@ parts:
     - file: tips/smoothfunc
     - file: tips/odef-from-mtk
     - file: tips/nodomainerr
+    - file: tips/componentarrays

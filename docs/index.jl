@@ -1,7 +1,7 @@
 #===
 # Julia Differential Equations
 
-Big framworks:
+Big frameworks:
 
 - https://github.com/SciML/DifferentialEquations.jl : high-performance solvers for differential equations.
 - https://github.com/SciML/ModelingToolkit.jl : a modeling framework for high-performance symbolic-numeric computation in scientific computing and scientific machine learning

@@ -1,5 +1,5 @@
 #===
-# Optimization Problem
+# Optimization Problems
 
 Wikipedia: https://en.wikipedia.org/wiki/Optimization_problem
 
@@ -173,7 +173,7 @@ We will minimize the mean squared error using `L2Loss()`.
 
 Note that
 - the data should be transposed.
-- Uses `AutoForwardDiff()` as the automatic differentiation (AD) method since the number of parameters plus states is small (<100). For larger problems, one can use `Optimization.AutoZygote()`.
+- Uses `AutoForwardDiff()` as the automatic differentiation (AD) method since the number of parameters plus states is small (<100). For larger problems, `Optimization.AutoZygote()` is more efficient.
 ===#
 alg = Tsit5()
 

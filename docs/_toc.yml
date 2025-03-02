@@ -3,20 +3,27 @@
 
 format: jb-book
 root: index
-chapters:
-  - file: ode-01-diffeq
-    sections:
-    - file: ode-02-mtk
-    - file: ode-03-catalyst
-  - file: sde-01-diffeq
-    sections:
-    - file: sde-02-mtk
-    - file: sde-03-catalyst
-  - file: 04-optimization
-  - file: 05-steadystate
-  - file: 06-ensemble
-  - file: 07-callback
-  - file: 08-symbolics
-  - file: 09-tips
-  - file: model-01-neuron
-  - file: runtime
+parts:
+  - caption: Ordinary DEs
+    chapters:
+    - file: ode/diffeq
+    - file: ode/mtk
+    - file: ode/catalyst
+  - caption: Stochastic
+    chapters:
+    - file: stochastic/diffeq
+    - file: stochastic/mtk
+    - file: stochastic/catalyst
+  - caption: Advanced
+    chapters:
+    - file: advanced/optimization
+    - file: advanced/steadystate
+    - file: advanced/ensemble
+    - file: advanced/callback
+    - file: advanced/symbolics
+  - caption: Models
+    chapters:
+    - file: 01-neuron
+  - caption: Tips
+    chapters:
+    - file: tips/09-tips

@@ -26,4 +26,6 @@ parts:
     - file: models/01-neuron
   - caption: Tips
     chapters:
-    - file: tips/09-tips
+    - file: tips/smoothfunc
+    - file: tips/odef-from-mtk
+    - file: tips/nodomainerr

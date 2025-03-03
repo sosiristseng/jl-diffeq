@@ -55,5 +55,17 @@ comp_prob = ODEProblem(composed!, comp_ic, tspan, comp_p)
 # We can solve the composed system...
 comp_sol = solve(comp_prob)
 
+#---
+map(comp_sol(0:0.1:20).u) do u
+    u.lotka.x
+end
+
 # ...or we can unit test one of the component systems
 lotka_sol = solve(lotka_prob)
+lotka_sol(1.0).x
+
+# Symbolic mapping in `ODEFunction` using `syms=...`
+# Only available in non-nested ComponentArrays
+lotka_func = ODEFunction(lotka!; syms=keys(lotka_ic))
+lab_sol = solve(ODEProblem(lotka_func, lotka_ic, tspan, lotka_p))
+lab_sol(1.0, idxs=:x)

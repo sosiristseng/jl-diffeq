@@ -1,0 +1,1052 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Catalyst ODE examples &#8212; Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/mhchem"]}, "tex": {"packages": {"[+]": ["mhchem"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ode/catalyst';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Stochastic Differential Equations (SDEs)" href="../stochastic/diffeq.html" />
+    <link rel="prev" title="ModelingToolkit: define ODEs with symbolic expressions" href="mtk.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Differential Equations</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Julia Differential Equations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ordinary DEs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="diffeq.html">Ordinary Differential Equations (ODEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mtk.html">ModelingToolkit: define ODEs with symbolic expressions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Catalyst ODE examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/diffeq.html">Stochastic Differential Equations (SDEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/mtk.html">SDEs with ModelingToolkit.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/catalyst.html">Stochastic modeling in Catalyst</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../advanced/optimization.html">Optimization Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/steadystate.html">Steady state solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/ensemble.html">Parallel Ensemble Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/callback.html">Callbacks and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/symbolics.html">Symbolic calculations in Julia</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/01-neuron.html">Spiking Neural Systems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/smoothfunc.html">Use smooth functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/odef-from-mtk.html">Get the ODE function from ModelingToolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/nodomainerr.html">Avoid DomainErrors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/componentarrays.html">ComponentArrays</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/sosiristseng/jl-diffeq/gh-pages?urlpath=lab/tree/_sources/ode/catalyst.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/sosiristseng/jl-diffeq/blob/gh-pages/_sources/ode/catalyst.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/sosiristseng/jl-diffeq" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ode/catalyst.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Catalyst ODE examples</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repressilator">Repressilator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-reaction-systems-programmatically">Generating reaction systems programmatically</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-laws">Conservation laws</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="catalyst-ode-examples">
+<h1>Catalyst ODE examples<a class="headerlink" href="#catalyst-ode-examples" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://docs.sciml.ai/Catalyst/stable/">Catalyst.jl</a> is a symbolic modeling package for analysis and high-performance simulation of chemical reaction networks.</p>
+<section id="repressilator">
+<h2>Repressilator<a class="headerlink" href="#repressilator" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Repressilator">Repressilator</a> model consists of a biochemical reaction network with three components in a negative feedback loop.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Catalyst</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define the reaction network</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">repressilator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@reaction_network</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">hillr</span><span class="p">(</span><span class="n">P₃</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₁</span>
+<span class="w">    </span><span class="n">hillr</span><span class="p">(</span><span class="n">P₁</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₂</span>
+<span class="w">    </span><span class="n">hillr</span><span class="p">(</span><span class="n">P₂</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₃</span>
+<span class="w">    </span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="p">),</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">↔</span><span class="w"> </span><span class="n">∅</span>
+<span class="w">    </span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="p">),</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">↔</span><span class="w"> </span><span class="n">∅</span>
+<span class="w">    </span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="p">),</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">↔</span><span class="w"> </span><span class="n">∅</span>
+<span class="w">    </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₁</span>
+<span class="w">    </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₂</span>
+<span class="w">    </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₃</span>
+<span class="w">    </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₁</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span>
+<span class="w">    </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span>
+<span class="w">    </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₃</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align*}
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_3}^{n}}} \mathrm{\mathtt{m_1}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{\mathtt{P_1}^{n} + K^{n}}} \mathrm{\mathtt{m_2}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_2}^{n}}} \mathrm{\mathtt{m_3}} \\
+\mathrm{\mathtt{m_1}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_2}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_3}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_1}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_1}} + \mathrm{\mathtt{P_1}} \\
+\mathrm{\mathtt{m_2}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_2}} + \mathrm{\mathtt{P_2}} \\
+\mathrm{\mathtt{m_3}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_3}} + \mathrm{\mathtt{P_3}} \\
+\mathrm{\mathtt{P_1}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_2}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_3}} &amp;\xrightarrow{\mu} \varnothing  
+ \end{align*}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Reactions in the reaction network</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">reactions</span><span class="p">(</span><span class="n">repressilator</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15-element Vector{Catalyst.Reaction}:
+ Catalyst.hillr(P₃(t), α, K, n), ∅ --&gt; m₁
+ Catalyst.hillr(P₁(t), α, K, n), ∅ --&gt; m₂
+ Catalyst.hillr(P₂(t), α, K, n), ∅ --&gt; m₃
+ δ, m₁ --&gt; ∅
+ γ, ∅ --&gt; m₁
+ δ, m₂ --&gt; ∅
+ γ, ∅ --&gt; m₂
+ δ, m₃ --&gt; ∅
+ γ, ∅ --&gt; m₃
+ β, m₁ --&gt; m₁ + P₁
+ β, m₂ --&gt; m₂ + P₂
+ β, m₃ --&gt; m₃ + P₃
+ μ, P₁ --&gt; ∅
+ μ, P₂ --&gt; ∅
+ μ, P₃ --&gt; ∅
+</pre></div>
+</div>
+</div>
+</div>
+<p>State variables in the reaction network</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">unknowns</span><span class="p">(</span><span class="n">repressilator</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6-element Vector{SymbolicUtils.BasicSymbolic{Real}}:
+ m₁(t)
+ m₂(t)
+ m₃(t)
+ P₁(t)
+ P₂(t)
+ P₃(t)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Parameters in the reaction network</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span><span class="p">(</span><span class="n">repressilator</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7-element Vector{Any}:
+ α
+ K
+ n
+ δ
+ γ
+ β
+ μ
+</pre></div>
+</div>
+</div>
+</div>
+<p>To setup parameters (<code class="docutils literal notranslate"><span class="pre">p</span></code>) and initial conditions (<code class="docutils literal notranslate"><span class="pre">u0</span></code>), you can use Julia symbols to map the values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="ss">:α</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="ss">:K</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="ss">:n</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">:δ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="ss">:γ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">5e-3</span><span class="p">,</span><span class="w"> </span><span class="ss">:β</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="ss">:μ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="p">]</span>
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="ss">:m₁</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:m₂</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:m₃</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:P₁</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">20.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:P₂</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:P₃</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6-element Vector{Pair{Symbol, Float64}}:
+ :m₁ =&gt; 0.0
+ :m₂ =&gt; 0.0
+ :m₃ =&gt; 0.0
+ :P₁ =&gt; 20.0
+ :P₂ =&gt; 0.0
+ :P₃ =&gt; 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Or you can also use symbols from the reaction system with the <code class="docutils literal notranslate"><span class="pre">&#64;unpack</span></code> macro (less error prone)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@unpack</span><span class="w"> </span><span class="n">m₁</span><span class="p">,</span><span class="w"> </span><span class="n">m₂</span><span class="p">,</span><span class="w"> </span><span class="n">m₃</span><span class="p">,</span><span class="w"> </span><span class="n">P₁</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="p">,</span><span class="w"> </span><span class="n">P₃</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">μ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repressilator</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">α</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">δ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">5e-3</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="n">μ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">60</span><span class="p">]</span>
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">P₁</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">20.0</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">P₃</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6-element Vector{Pair{Symbolics.Num, Float64}}:
+ m₁(t) =&gt; 0.0
+ m₂(t) =&gt; 0.0
+ m₃(t) =&gt; 0.0
+ P₁(t) =&gt; 20.0
+ P₂(t) =&gt; 0.0
+ P₃(t) =&gt; 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we can solve this reaction network as an ODE problem</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10000.0</span><span class="p">)</span>
+<span class="n">oprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">repressilator</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">);</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">oprob</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6de97e4b48f68e0afdc3921c92bc455df12924cedd389b3efa6f3175b031ee74.png" src="../_images/6de97e4b48f68e0afdc3921c92bc455df12924cedd389b3efa6f3175b031ee74.png" />
+</div>
+</div>
+<p>Use extracted symbols for a phase plot</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">(</span><span class="n">P₁</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/312cf9aff07064538af1c026750664661b4da55d42b333df8f7264eeaca57f0a.png" src="../_images/312cf9aff07064538af1c026750664661b4da55d42b333df8f7264eeaca57f0a.png" />
+</div>
+</div>
+</section>
+<section id="generating-reaction-systems-programmatically">
+<h2>Generating reaction systems programmatically<a class="headerlink" href="#generating-reaction-systems-programmatically" title="Link to this heading">#</a></h2>
+<p>There are two ways to create a reaction for a <code class="docutils literal notranslate"><span class="pre">ReactionSystem</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Reaction()</span></code> function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;reaction</span></code> macro.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">Reaction(rate,</span> <span class="pre">substrates,</span> <span class="pre">products)</span></code> function builds reactions.</p>
+<p>To allow for other stoichiometric coefficients we also provide a five argument form: <code class="docutils literal notranslate"><span class="pre">Reaction(rate,</span> <span class="pre">substrates,</span> <span class="pre">products,</span> <span class="pre">substrate_stoichiometries,</span> <span class="pre">product_stoichiometries)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Catalyst</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+
+<span class="nd">@parameters</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">δ</span><span class="w"> </span><span class="n">γ</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="n">μ</span>
+<span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@species</span><span class="w"> </span><span class="n">m₁</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">m₂</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">m₃</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">P₁</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">P₂</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">P₃</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">rxs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">hillr</span><span class="p">(</span><span class="n">P₃</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">hillr</span><span class="p">(</span><span class="n">P₁</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₂</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">hillr</span><span class="p">(</span><span class="n">P₂</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₃</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₂</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₂</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₃</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₃</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">m₁</span><span class="p">,</span><span class="w"> </span><span class="n">P₁</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₂</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">m₂</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">m₃</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">m₃</span><span class="p">,</span><span class="w"> </span><span class="n">P₃</span><span class="p">]),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">P₁</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">P₂</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Reaction</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">P₃</span><span class="p">],</span><span class="w"> </span><span class="nb">nothing</span><span class="p">)</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15-element Vector{Catalyst.Reaction{Any, Int64}}:
+ Catalyst.hillr(P₃(t), α, K, n), ∅ --&gt; m₁
+ Catalyst.hillr(P₁(t), α, K, n), ∅ --&gt; m₂
+ Catalyst.hillr(P₂(t), α, K, n), ∅ --&gt; m₃
+ δ, m₁ --&gt; ∅
+ γ, ∅ --&gt; m₁
+ δ, m₂ --&gt; ∅
+ γ, ∅ --&gt; m₂
+ δ, m₃ --&gt; ∅
+ γ, ∅ --&gt; m₃
+ β, m₁ --&gt; m₁ + P₁
+ β, m₂ --&gt; m₂ + P₂
+ β, m₃ --&gt; m₃ + P₃
+ μ, P₁ --&gt; ∅
+ μ, P₂ --&gt; ∅
+ μ, P₃ --&gt; ∅
+</pre></div>
+</div>
+</div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ReactionSystem(reactions,</span> <span class="pre">independent_variable)</span></code> to collect these reactions. <code class="docutils literal notranslate"><span class="pre">&#64;named</span></code> macro is used because every system in <code class="docutils literal notranslate"><span class="pre">ModelingToolkit.jl</span></code> needs a name.
+<code class="docutils literal notranslate"><span class="pre">&#64;named</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">System(...)</span></code> is a short hand for <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">System(...;</span> <span class="pre">name=:x)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@named</span><span class="w"> </span><span class="n">repressilator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReactionSystem</span><span class="p">(</span><span class="n">rxs</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align*}
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_3}^{n}}} \mathrm{\mathtt{m_1}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{\mathtt{P_1}^{n} + K^{n}}} \mathrm{\mathtt{m_2}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_2}^{n}}} \mathrm{\mathtt{m_3}} \\
+\mathrm{\mathtt{m_1}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_2}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_3}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_1}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_1}} + \mathrm{\mathtt{P_1}} \\
+\mathrm{\mathtt{m_2}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_2}} + \mathrm{\mathtt{P_2}} \\
+\mathrm{\mathtt{m_3}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_3}} + \mathrm{\mathtt{P_3}} \\
+\mathrm{\mathtt{P_1}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_2}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_3}} &amp;\xrightarrow{\mu} \varnothing  
+ \end{align*}
+ \end{split}\]</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;reaction</span></code> macro provides the same syntax in the <code class="docutils literal notranslate"><span class="pre">&#64;reaction_network</span></code> to build reactions.
+Note that <code class="docutils literal notranslate"><span class="pre">&#64;reaction</span></code> macro only allows one-way reaction; <strong>reversible arrows are not allowed</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@species</span><span class="w"> </span><span class="n">P₁</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">P₂</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">P₃</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">rxs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">hillr</span><span class="p">(</span><span class="o">$</span><span class="n">P₃</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₁</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">hillr</span><span class="p">(</span><span class="o">$</span><span class="n">P₁</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₂</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">hillr</span><span class="p">(</span><span class="o">$</span><span class="n">P₂</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₃</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₁</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₂</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">δ</span><span class="p">,</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">∅</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₃</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₁</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₁</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₂</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₂</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">m₃</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">P₃</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₁</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₂</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="nd">@reaction</span><span class="w"> </span><span class="n">μ</span><span class="p">,</span><span class="w"> </span><span class="n">P₃</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="n">∅</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="nd">@named</span><span class="w"> </span><span class="n">repressilator2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReactionSystem</span><span class="p">(</span><span class="n">rxs</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align*}
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_3}^{n}}} \mathrm{\mathtt{m_1}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{\mathtt{P_1}^{n} + K^{n}}} \mathrm{\mathtt{m_2}} \\
+\varnothing &amp;\xrightarrow{\frac{K^{n} \alpha}{K^{n} + \mathtt{P_2}^{n}}} \mathrm{\mathtt{m_3}} \\
+\mathrm{\mathtt{m_1}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_2}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_3}} &amp;\xrightleftharpoons[\gamma]{\delta} \varnothing \\
+\mathrm{\mathtt{m_1}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_1}} + \mathrm{\mathtt{P_1}} \\
+\mathrm{\mathtt{m_2}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_2}} + \mathrm{\mathtt{P_2}} \\
+\mathrm{\mathtt{m_3}} &amp;\xrightarrow{\beta} \mathrm{\mathtt{m_3}} + \mathrm{\mathtt{P_3}} \\
+\mathrm{\mathtt{P_1}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_2}} &amp;\xrightarrow{\mu} \varnothing \\
+\mathrm{\mathtt{P_3}} &amp;\xrightarrow{\mu} \varnothing  
+ \end{align*}
+ \end{split}\]</div>
+</div>
+</div>
+</section>
+<section id="conservation-laws">
+<h2>Conservation laws<a class="headerlink" href="#conservation-laws" title="Link to this heading">#</a></h2>
+<p>We can use conservation laws to eliminate some unknown variables.
+For example, in the chemical reaction <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">+</span> <span class="pre">B</span> <span class="pre">&lt;--&gt;</span> <span class="pre">C</span></code>, given the initial concentrations of A, B, and C, the solver needs to find only one of [A], [B], and [C] instead of all three.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Catalyst</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@reaction_network</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="p">(</span><span class="n">k₊</span><span class="p">,</span><span class="w"> </span><span class="n">k₋</span><span class="p">),</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">&lt;--&gt;</span><span class="w"> </span><span class="n">C</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{align*}
+\mathrm{A} + \mathrm{B} &amp;\xrightleftharpoons[\mathtt{k_-}]{\mathtt{k.}} \mathrm{C}  
+ \end{align*}
+ \]</div>
+</div>
+</div>
+<p>Set initial condition and parameter values</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">setdefaults!</span><span class="p">(</span><span class="n">rn</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="ss">:A</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:B</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:C</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:k₊</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="ss">:k₋</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s convert it to a system of ODEs, using the conservation laws to eliminate two species, leaving only one of them as the state variable.
+The conserved quantities will be denoted as <code class="docutils literal notranslate"><span class="pre">Γ</span></code>s</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">osys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">convert</span><span class="p">(</span><span class="n">ODESystem</span><span class="p">,</span><span class="w"> </span><span class="n">rn</span><span class="p">;</span><span class="w"> </span><span class="n">remove_conserved</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">structural_simplify</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌ Warning: You are creating a system or problem while eliminating conserved quantities. Please note,
+│         due to limitations / design choices in ModelingToolkit if you use the created system to
+│         create a problem (e.g. an `ODEProblem`), or are directly creating a problem, you *should not*
+│         modify that problem&#39;s initial conditions for species (e.g. using `remake`). Changing initial
+│         conditions must be done by creating a new Problem from your reaction system or the
+│         ModelingToolkit system you converted it into with the new initial condition map.
+│         Modification of parameter values is still possible, *except* for the modification of any
+│         conservation law constants (Γ), which is not possible. You might
+│         get this warning when creating a problem directly.
+│ 
+│         You can remove this warning by setting `remove_conserved_warn = false`.
+└ @ Catalyst ~/.julia/packages/Catalyst/48wH3/src/reactionsystem_conversions.jl:456
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{align}
+\frac{\mathrm{d} A\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{k_-} \left(  - A\left( t \right) + \Gamma_{2} \right) + \mathtt{k.} \left(  - A\left( t \right) - \Gamma_{1} \right) A\left( t \right)
+\end{align}
+ \]</div>
+</div>
+</div>
+<p>Only one (unknown) state variable need to be solved</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">unknowns</span><span class="p">(</span><span class="n">osys</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1-element Vector{SymbolicUtils.BasicSymbolic{Real}}:
+ A(t)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The other two are constrained by conserved quantities</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">observed</span><span class="p">(</span><span class="n">osys</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+B\left( t \right) &amp;= A\left( t \right) + \Gamma_{1} \\
+C\left( t \right) &amp;=  - A\left( t \right) + \Gamma_{2}
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Solve the problem</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">oprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">osys</span><span class="p">,</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">));</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">oprob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌ Warning: Initialization system is overdetermined. 2 equations for 0 unknowns. Initialization will default to using least squares. `SCCNonlinearProblem` can only be used for initialization of fully determined systems and hence will not be used here. To suppress this warning pass warn_initialize_determined = false. To make this warning into an error, pass fully_determined = true
+└ @ ModelingToolkit ~/.julia/packages/ModelingToolkit/CvDvM/src/systems/diffeqs/abstractodesystem.jl:1446
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: 3rd order Hermite
+t: 19-element Vector{Float64}:
+  0.0
+  0.06602162921791198
+  0.16167383723177658
+  0.27797398569864795
+  0.42472768210212675
+  0.5991542465684496
+  0.8069250399875878
+  1.0494129741596487
+  1.3328285260259545
+  1.6634553095820483
+  2.0523543727756204
+  2.514619744984259
+  3.073985028187367
+  3.7668739415643824
+  4.65256513049854
+  5.821585305489345
+  7.328825483832256
+  8.975283435170365
+ 10.0
+u: 19-element Vector{Vector{Float64}}:
+ [1.0]
+ [0.8836569748526829]
+ [0.7588242777314499]
+ [0.6540331462534721]
+ [0.5681302593629073]
+ [0.5062418977317176]
+ [0.46461886630918997]
+ [0.43937914557022106]
+ [0.42544919657534686]
+ [0.4186148714289667]
+ [0.4156790083953944]
+ [0.4146117644861058]
+ [0.4142972990536097]
+ [0.4142270387749867]
+ [0.4142160588486048]
+ [0.4142152933849376]
+ [0.4142196830866055]
+ [0.41425212965225616]
+ [0.4142262306892306]
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can still trace the eliminated variable</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="n">osys</span><span class="o">.</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e07bce1cda91432094714f7c742b62c5e951cc50bdbe0bf863f70c58eb8a470c.png" src="../_images/e07bce1cda91432094714f7c742b62c5e951cc50bdbe0bf863f70c58eb8a470c.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><em>This notebook was generated using <a class="reference external" href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.10"
+        },
+        kernelOptions: {
+            name: "julia-1.10",
+            path: "./ode"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.10'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mtk.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ModelingToolkit: define ODEs with symbolic expressions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../stochastic/diffeq.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Stochastic Differential Equations (SDEs)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repressilator">Repressilator</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-reaction-systems-programmatically">Generating reaction systems programmatically</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-laws">Conservation laws</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Wen-Wei Tseng
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1272 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Symbolic calculations in Julia &#8212; Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/mhchem"]}, "tex": {"packages": {"[+]": ["mhchem"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'advanced/symbolics';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spiking Neural Systems" href="../models/01-neuron.html" />
+    <link rel="prev" title="Callbacks and Events" href="callback.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Differential Equations</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Julia Differential Equations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ordinary DEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ode/diffeq.html">Ordinary Differential Equations (ODEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ode/mtk.html">ModelingToolkit: define ODEs with symbolic expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ode/catalyst.html">Catalyst ODE examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/diffeq.html">Stochastic Differential Equations (SDEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/mtk.html">SDEs with ModelingToolkit.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/catalyst.html">Stochastic modeling in Catalyst</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="optimization.html">Optimization Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steadystate.html">Steady state solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensemble.html">Parallel Ensemble Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback.html">Callbacks and Events</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Symbolic calculations in Julia</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/01-neuron.html">Spiking Neural Systems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/smoothfunc.html">Use smooth functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/odef-from-mtk.html">Get the ODE function from ModelingToolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/nodomainerr.html">Avoid DomainErrors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/componentarrays.html">ComponentArrays</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/sosiristseng/jl-diffeq/gh-pages?urlpath=lab/tree/_sources/advanced/symbolics.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/sosiristseng/jl-diffeq/blob/gh-pages/_sources/advanced/symbolics.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/sosiristseng/jl-diffeq" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/advanced/symbolics.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Symbolic calculations in Julia</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats-about-symbolics-jl">Caveats about Symbolics.jl</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-operations">Basic operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-functions-used-in-symbolics">Custom functions used in Symbolics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-number-types">More number types</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rosenbrock-function">Example: Rosenbrock function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-matrix">Sparse matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-functions-from-symbols">Generate functions from symbols</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="symbolic-calculations-in-julia">
+<h1>Symbolic calculations in Julia<a class="headerlink" href="#symbolic-calculations-in-julia" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Symbolics.jl</span></code> is a computer Algebra System (CAS) for Julia. The symbols are number-like and follow Julia semantics so we can put them into a regular function to get a symbolic counterpart. Symbolics.jl is the backbone of ModelingToolkit.jl.</p>
+<p>Source:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://youtu.be/HEVOgSLBzWA">Simulating Big Models in Julia with ModelingToolkit &#64; JuliaCon 2021 Workshop</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/JuliaSymbolics/Symbolics.jl">Symbolics.jl</a> Github repo and its <a class="reference external" href="https://symbolics.juliasymbolics.org/dev/">docs</a>.</p></li>
+</ul>
+<section id="caveats-about-symbolics-jl">
+<h2>Caveats about Symbolics.jl<a class="headerlink" href="#caveats-about-symbolics-jl" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Symbolics.jl</span></code> can only handle <em>traceble</em>, <em>quasi-static</em> expressions. However, some expressions are not quasi-static e.g. factorial. The number of operations depends on the input value.</p></li>
+</ol>
+<blockquote>
+<div><p>Use <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code> to make it a primitive function.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Some code paths is <em>untraceable</em>, such as conditional statements: <code class="docutils literal notranslate"><span class="pre">if</span></code>…<code class="docutils literal notranslate"><span class="pre">else</span></code>…<code class="docutils literal notranslate"><span class="pre">end</span></code>.</p></li>
+</ol>
+<blockquote>
+<div><p>You can use <code class="docutils literal notranslate"><span class="pre">ifelse(cond,</span> <span class="pre">ex1,</span> <span class="pre">ex2)</span></code> to make it traceable.</p>
+</div></blockquote>
+</section>
+<section id="basic-operations">
+<h2>Basic operations<a class="headerlink" href="#basic-operations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">latexify</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">derivative</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gradient</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jacobian</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">substitute</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simplify</span></code></p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Symbolics</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Latexify</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@variables</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">y</span>
+<span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+x^{2} + y^{2}
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">Latexify.latexify()</span></code> to see the LaTeX code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="n">y</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="n">x</span>
+<span class="w">    </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="n">y</span>
+<span class="w">    </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="o">+</span><span class="n">x</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">]</span>
+
+<span class="n">latexify</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split}\begin{equation}
+\left[
+\begin{array}{ccc}
+y + x^{2} &amp; 0 &amp; 2 x \\
+0 &amp; 0 &amp; 2 y \\
+x + y^{2} &amp; 0 &amp; 0 \\
+\end{array}
+\right]
+\end{equation}\end{split}\]</div>
+</div>
+</div>
+<p>Derivative: <code class="docutils literal notranslate"><span class="pre">Symbolics.derivative(expr,</span> <span class="pre">variable)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+2 x
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Gradient: <code class="docutils literal notranslate"><span class="pre">Symbolics.gradient(expr,</span> <span class="pre">[variables])</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+2 x \\
+2 y \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Jacobian: <code class="docutils literal notranslate"><span class="pre">Symbolics.jacobian([exprs],</span> <span class="pre">[variables])</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">jacobian</span><span class="p">([</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{cc}
+2 x &amp; 2 y \\
+0 &amp; 2 y \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Substitute: <code class="docutils literal notranslate"><span class="pre">Symbolics.substitute(expr,</span> <span class="pre">mapping)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="kt">Dict</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+2 + \sin^{2}\left( y^{2} \right) + \cos^{2}\left( y^{2} \right)
+\end{equation}
+ \]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="kt">Dict</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+3
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Simplify: <code class="docutils literal notranslate"><span class="pre">Symbolics.simplify(expr)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">Symbolics</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+3
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>This expression gets automatically simplified because it’s always true</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+x
+\end{equation}
+ \]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">isequal</span><span class="p">(</span><span class="mi">2</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>false
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">isequal</span><span class="p">(</span><span class="n">simplify</span><span class="p">(</span><span class="mi">2</span><span class="n">ex</span><span class="p">),</span><span class="w"> </span><span class="n">simplify</span><span class="p">(</span><span class="n">ex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ex</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>true
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">ex</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+1
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Symbolic integration: use <a class="reference external" href="https://github.com/SciML/SymbolicNumericIntegration.jl">SymbolicNumericIntegration.jl</a>. The <a class="reference external" href="https://youtu.be/L47k2zjPU9s">Youtube video</a> by <code class="docutils literal notranslate"><span class="pre">doggo</span> <span class="pre">dot</span> <span class="pre">jl</span></code> gives a concise example.</p>
+</section>
+<section id="custom-functions-used-in-symbolics">
+<h2>Custom functions used in Symbolics<a class="headerlink" href="#custom-functions-used-in-symbolics" title="Link to this heading">#</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code>, the <code class="docutils literal notranslate"><span class="pre">rand()</span></code> in <code class="docutils literal notranslate"><span class="pre">foo()</span></code> will be evaluated as-is and <strong>will not</strong> be expanded by <code class="docutils literal notranslate"><span class="pre">Symbolics.jl</span></code>.</p>
+<blockquote>
+<div><p>By default, new functions are traced to the primitives and the symbolic expressions are written on the primitives. However, we can expand the allowed primitives by registering new functions.</p>
+</div></blockquote>
+</section>
+<section id="more-number-types">
+<h2>More number types<a class="headerlink" href="#more-number-types" title="Link to this heading">#</a></h2>
+<p>Complex number</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@variables</span><span class="w"> </span><span class="n">z</span><span class="o">::</span><span class="kt">Complex</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+\mathrm{real}\left( z \right) + \mathrm{imag}\left( z \right) \mathit{i} \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Array types with subscript</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@variables</span><span class="w"> </span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="mi">18</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1-element Vector{Symbolics.Arr{Symbolics.Num, 1}}:
+ xs[1:18]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\mathtt{xs}_{1}
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Explicit vector form</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">collect</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+\mathtt{xs}_{1} \\
+\mathtt{xs}_{2} \\
+\mathtt{xs}_{3} \\
+\mathtt{xs}_{4} \\
+\mathtt{xs}_{5} \\
+\mathtt{xs}_{6} \\
+\mathtt{xs}_{7} \\
+\mathtt{xs}_{8} \\
+\mathtt{xs}_{9} \\
+\mathtt{xs}_{10} \\
+\mathtt{xs}_{11} \\
+\mathtt{xs}_{12} \\
+\mathtt{xs}_{13} \\
+\mathtt{xs}_{14} \\
+\mathtt{xs}_{15} \\
+\mathtt{xs}_{16} \\
+\mathtt{xs}_{17} \\
+\mathtt{xs}_{18} \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Operations on arrays are supported</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sum</span><span class="p">(</span><span class="n">collect</span><span class="p">(</span><span class="n">xs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\mathtt{xs}_{1} + \mathtt{xs}_{10} + \mathtt{xs}_{11} + \mathtt{xs}_{12} + \mathtt{xs}_{13} + \mathtt{xs}_{14} + \mathtt{xs}_{15} + \mathtt{xs}_{16} + \mathtt{xs}_{17} + \mathtt{xs}_{18} + \mathtt{xs}_{2} + \mathtt{xs}_{3} + \mathtt{xs}_{4} + \mathtt{xs}_{5} + \mathtt{xs}_{6} + \mathtt{xs}_{7} + \mathtt{xs}_{8} + \mathtt{xs}_{9}
+\end{equation}
+ \]</div>
+</div>
+</div>
+</section>
+<section id="example-rosenbrock-function">
+<h2>Example: Rosenbrock function<a class="headerlink" href="#example-rosenbrock-function" title="Link to this heading">#</a></h2>
+<p>Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Rosenbrock_function">https://en.wikipedia.org/wiki/Rosenbrock_function</a>
+We use the vector form of Rosenbrock function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">length</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">i</span>
+<span class="w">    </span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rosenbrock (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The function is at minimum when xs are all one’s</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span>
+<span class="nd">@variables</span><span class="w"> </span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1-element Vector{Symbolics.Arr{Symbolics.Num, 1}}:
+ xs[1:20]
+</pre></div>
+</div>
+</div>
+</div>
+<p>A full list of vector components</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">collect</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+\mathtt{xs}_{1} \\
+\mathtt{xs}_{2} \\
+\mathtt{xs}_{3} \\
+\mathtt{xs}_{4} \\
+\mathtt{xs}_{5} \\
+\mathtt{xs}_{6} \\
+\mathtt{xs}_{7} \\
+\mathtt{xs}_{8} \\
+\mathtt{xs}_{9} \\
+\mathtt{xs}_{10} \\
+\mathtt{xs}_{11} \\
+\mathtt{xs}_{12} \\
+\mathtt{xs}_{13} \\
+\mathtt{xs}_{14} \\
+\mathtt{xs}_{15} \\
+\mathtt{xs}_{16} \\
+\mathtt{xs}_{17} \\
+\mathtt{xs}_{18} \\
+\mathtt{xs}_{19} \\
+\mathtt{xs}_{20} \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">rxs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rosenbrock</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\left( 1 - \mathtt{xs}_{1} \right)^{2} + \left( 1 - \mathtt{xs}_{10} \right)^{2} + \left( 1 - \mathtt{xs}_{11} \right)^{2} + \left( 1 - \mathtt{xs}_{12} \right)^{2} + \left( 1 - \mathtt{xs}_{13} \right)^{2} + \left( 1 - \mathtt{xs}_{14} \right)^{2} + \left( 1 - \mathtt{xs}_{15} \right)^{2} + \left( 1 - \mathtt{xs}_{16} \right)^{2} + \left( 1 - \mathtt{xs}_{17} \right)^{2} + \left( 1 - \mathtt{xs}_{18} \right)^{2} + \left( 1 - \mathtt{xs}_{19} \right)^{2} + \left( 1 - \mathtt{xs}_{2} \right)^{2} + \left( 1 - \mathtt{xs}_{3} \right)^{2} + \left( 1 - \mathtt{xs}_{4} \right)^{2} + \left( 1 - \mathtt{xs}_{5} \right)^{2} + \left( 1 - \mathtt{xs}_{6} \right)^{2} + \left( 1 - \mathtt{xs}_{7} \right)^{2} + \left( 1 - \mathtt{xs}_{8} \right)^{2} + \left( 1 - \mathtt{xs}_{9} \right)^{2} + 100 \left( \mathtt{xs}_{2} - \left( \mathtt{xs}_{1} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{11} - \left( \mathtt{xs}_{10} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{12} - \left( \mathtt{xs}_{11} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{13} - \left( \mathtt{xs}_{12} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{14} - \left( \mathtt{xs}_{13} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{15} - \left( \mathtt{xs}_{14} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{16} - \left( \mathtt{xs}_{15} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{17} - \left( \mathtt{xs}_{16} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{18} - \left( \mathtt{xs}_{17} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{19} - \left( \mathtt{xs}_{18} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{20} - \left( \mathtt{xs}_{19} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{3} - \left( \mathtt{xs}_{2} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{4} - \left( \mathtt{xs}_{3} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{5} - \left( \mathtt{xs}_{4} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{6} - \left( \mathtt{xs}_{5} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{7} - \left( \mathtt{xs}_{6} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{8} - \left( \mathtt{xs}_{7} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{9} - \left( \mathtt{xs}_{8} \right)^{2} \right)^{2} + 100 \left( \mathtt{xs}_{10} - \left( \mathtt{xs}_{9} \right)^{2} \right)^{2}
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Gradient</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">grad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Symbolics</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">rxs</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+ - 2 \left( 1 - \mathtt{xs}_{1} \right) - 400 \mathtt{xs}_{1} \left( \mathtt{xs}_{2} - \left( \mathtt{xs}_{1} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{2} \right) + 200 \left( \mathtt{xs}_{2} - \left( \mathtt{xs}_{1} \right)^{2} \right) - 400 \mathtt{xs}_{2} \left( \mathtt{xs}_{3} - \left( \mathtt{xs}_{2} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{3} \right) + 200 \left( \mathtt{xs}_{3} - \left( \mathtt{xs}_{2} \right)^{2} \right) - 400 \mathtt{xs}_{3} \left( \mathtt{xs}_{4} - \left( \mathtt{xs}_{3} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{4} \right) + 200 \left( \mathtt{xs}_{4} - \left( \mathtt{xs}_{3} \right)^{2} \right) - 400 \mathtt{xs}_{4} \left( \mathtt{xs}_{5} - \left( \mathtt{xs}_{4} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{5} \right) + 200 \left( \mathtt{xs}_{5} - \left( \mathtt{xs}_{4} \right)^{2} \right) - 400 \mathtt{xs}_{5} \left( \mathtt{xs}_{6} - \left( \mathtt{xs}_{5} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{6} \right) + 200 \left( \mathtt{xs}_{6} - \left( \mathtt{xs}_{5} \right)^{2} \right) - 400 \mathtt{xs}_{6} \left( \mathtt{xs}_{7} - \left( \mathtt{xs}_{6} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{7} \right) + 200 \left( \mathtt{xs}_{7} - \left( \mathtt{xs}_{6} \right)^{2} \right) - 400 \mathtt{xs}_{7} \left( \mathtt{xs}_{8} - \left( \mathtt{xs}_{7} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{8} \right) + 200 \left( \mathtt{xs}_{8} - \left( \mathtt{xs}_{7} \right)^{2} \right) - 400 \mathtt{xs}_{8} \left( \mathtt{xs}_{9} - \left( \mathtt{xs}_{8} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{9} \right) + 200 \left( \mathtt{xs}_{9} - \left( \mathtt{xs}_{8} \right)^{2} \right) - 400 \mathtt{xs}_{9} \left( \mathtt{xs}_{10} - \left( \mathtt{xs}_{9} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{10} \right) + 200 \left( \mathtt{xs}_{10} - \left( \mathtt{xs}_{9} \right)^{2} \right) - 400 \mathtt{xs}_{10} \left( \mathtt{xs}_{11} - \left( \mathtt{xs}_{10} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{11} \right) + 200 \left( \mathtt{xs}_{11} - \left( \mathtt{xs}_{10} \right)^{2} \right) - 400 \mathtt{xs}_{11} \left( \mathtt{xs}_{12} - \left( \mathtt{xs}_{11} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{12} \right) + 200 \left( \mathtt{xs}_{12} - \left( \mathtt{xs}_{11} \right)^{2} \right) - 400 \mathtt{xs}_{12} \left( \mathtt{xs}_{13} - \left( \mathtt{xs}_{12} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{13} \right) + 200 \left( \mathtt{xs}_{13} - \left( \mathtt{xs}_{12} \right)^{2} \right) - 400 \mathtt{xs}_{13} \left( \mathtt{xs}_{14} - \left( \mathtt{xs}_{13} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{14} \right) + 200 \left( \mathtt{xs}_{14} - \left( \mathtt{xs}_{13} \right)^{2} \right) - 400 \mathtt{xs}_{14} \left( \mathtt{xs}_{15} - \left( \mathtt{xs}_{14} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{15} \right) + 200 \left( \mathtt{xs}_{15} - \left( \mathtt{xs}_{14} \right)^{2} \right) - 400 \mathtt{xs}_{15} \left( \mathtt{xs}_{16} - \left( \mathtt{xs}_{15} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{16} \right) + 200 \left( \mathtt{xs}_{16} - \left( \mathtt{xs}_{15} \right)^{2} \right) - 400 \mathtt{xs}_{16} \left( \mathtt{xs}_{17} - \left( \mathtt{xs}_{16} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{17} \right) + 200 \left( \mathtt{xs}_{17} - \left( \mathtt{xs}_{16} \right)^{2} \right) - 400 \mathtt{xs}_{17} \left( \mathtt{xs}_{18} - \left( \mathtt{xs}_{17} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{18} \right) + 200 \left( \mathtt{xs}_{18} - \left( \mathtt{xs}_{17} \right)^{2} \right) - 400 \mathtt{xs}_{18} \left( \mathtt{xs}_{19} - \left( \mathtt{xs}_{18} \right)^{2} \right) \\
+ - 2 \left( 1 - \mathtt{xs}_{19} \right) + 200 \left( \mathtt{xs}_{19} - \left( \mathtt{xs}_{18} \right)^{2} \right) - 400 \mathtt{xs}_{19} \left( \mathtt{xs}_{20} - \left( \mathtt{xs}_{19} \right)^{2} \right) \\
+200 \left( \mathtt{xs}_{20} - \left( \mathtt{xs}_{19} \right)^{2} \right) \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Hessian = Jacobian of gradient</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">hes1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Symbolics</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{cccccccccccccccccccc}
+2 + 800 \left( \mathtt{xs}_{1} \right)^{2} - 400 \left( \mathtt{xs}_{2} - \left( \mathtt{xs}_{1} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{1} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+ - 400 \mathtt{xs}_{1} &amp; 202 - 400 \left( \mathtt{xs}_{3} - \left( \mathtt{xs}_{2} \right)^{2} \right) + 800 \left( \mathtt{xs}_{2} \right)^{2} &amp;  - 400 \mathtt{xs}_{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp;  - 400 \mathtt{xs}_{2} &amp; 202 - 400 \left( \mathtt{xs}_{4} - \left( \mathtt{xs}_{3} \right)^{2} \right) + 800 \left( \mathtt{xs}_{3} \right)^{2} &amp;  - 400 \mathtt{xs}_{3} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp;  - 400 \mathtt{xs}_{3} &amp; 202 - 400 \left( \mathtt{xs}_{5} - \left( \mathtt{xs}_{4} \right)^{2} \right) + 800 \left( \mathtt{xs}_{4} \right)^{2} &amp;  - 400 \mathtt{xs}_{4} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{4} &amp; 202 + 800 \left( \mathtt{xs}_{5} \right)^{2} - 400 \left( \mathtt{xs}_{6} - \left( \mathtt{xs}_{5} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{5} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{5} &amp; 202 - 400 \left( \mathtt{xs}_{7} - \left( \mathtt{xs}_{6} \right)^{2} \right) + 800 \left( \mathtt{xs}_{6} \right)^{2} &amp;  - 400 \mathtt{xs}_{6} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{6} &amp; 202 + 800 \left( \mathtt{xs}_{7} \right)^{2} - 400 \left( \mathtt{xs}_{8} - \left( \mathtt{xs}_{7} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{7} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{7} &amp; 202 + 800 \left( \mathtt{xs}_{8} \right)^{2} - 400 \left( \mathtt{xs}_{9} - \left( \mathtt{xs}_{8} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{8} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{8} &amp; 202 + 800 \left( \mathtt{xs}_{9} \right)^{2} - 400 \left( \mathtt{xs}_{10} - \left( \mathtt{xs}_{9} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{9} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{9} &amp; 202 - 400 \left( \mathtt{xs}_{11} - \left( \mathtt{xs}_{10} \right)^{2} \right) + 800 \left( \mathtt{xs}_{10} \right)^{2} &amp;  - 400 \mathtt{xs}_{10} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{10} &amp; 202 + 800 \left( \mathtt{xs}_{11} \right)^{2} - 400 \left( \mathtt{xs}_{12} - \left( \mathtt{xs}_{11} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{11} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{11} &amp; 202 - 400 \left( \mathtt{xs}_{13} - \left( \mathtt{xs}_{12} \right)^{2} \right) + 800 \left( \mathtt{xs}_{12} \right)^{2} &amp;  - 400 \mathtt{xs}_{12} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{12} &amp; 202 - 400 \left( \mathtt{xs}_{14} - \left( \mathtt{xs}_{13} \right)^{2} \right) + 800 \left( \mathtt{xs}_{13} \right)^{2} &amp;  - 400 \mathtt{xs}_{13} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{13} &amp; 202 - 400 \left( \mathtt{xs}_{15} - \left( \mathtt{xs}_{14} \right)^{2} \right) + 800 \left( \mathtt{xs}_{14} \right)^{2} &amp;  - 400 \mathtt{xs}_{14} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{14} &amp; 202 - 400 \left( \mathtt{xs}_{16} - \left( \mathtt{xs}_{15} \right)^{2} \right) + 800 \left( \mathtt{xs}_{15} \right)^{2} &amp;  - 400 \mathtt{xs}_{15} &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{15} &amp; 202 - 400 \left( \mathtt{xs}_{17} - \left( \mathtt{xs}_{16} \right)^{2} \right) + 800 \left( \mathtt{xs}_{16} \right)^{2} &amp;  - 400 \mathtt{xs}_{16} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{16} &amp; 202 - 400 \left( \mathtt{xs}_{18} - \left( \mathtt{xs}_{17} \right)^{2} \right) + 800 \left( \mathtt{xs}_{17} \right)^{2} &amp;  - 400 \mathtt{xs}_{17} &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{17} &amp; 202 + 800 \left( \mathtt{xs}_{18} \right)^{2} - 400 \left( \mathtt{xs}_{19} - \left( \mathtt{xs}_{18} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{18} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{18} &amp; 202 - 400 \left( \mathtt{xs}_{20} - \left( \mathtt{xs}_{19} \right)^{2} \right) + 800 \left( \mathtt{xs}_{19} \right)^{2} &amp;  - 400 \mathtt{xs}_{19} \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{19} &amp; 200 \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>call <code class="docutils literal notranslate"><span class="pre">hessian()</span></code> directly</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">hes2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Symbolics</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="n">rxs</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{cccccccccccccccccccc}
+2 + 800 \left( \mathtt{xs}_{1} \right)^{2} - 400 \left( \mathtt{xs}_{2} - \left( \mathtt{xs}_{1} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{1} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+ - 400 \mathtt{xs}_{1} &amp; 202 - 400 \left( \mathtt{xs}_{3} - \left( \mathtt{xs}_{2} \right)^{2} \right) + 800 \left( \mathtt{xs}_{2} \right)^{2} &amp;  - 400 \mathtt{xs}_{2} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp;  - 400 \mathtt{xs}_{2} &amp; 202 - 400 \left( \mathtt{xs}_{4} - \left( \mathtt{xs}_{3} \right)^{2} \right) + 800 \left( \mathtt{xs}_{3} \right)^{2} &amp;  - 400 \mathtt{xs}_{3} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp;  - 400 \mathtt{xs}_{3} &amp; 202 - 400 \left( \mathtt{xs}_{5} - \left( \mathtt{xs}_{4} \right)^{2} \right) + 800 \left( \mathtt{xs}_{4} \right)^{2} &amp;  - 400 \mathtt{xs}_{4} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{4} &amp; 202 + 800 \left( \mathtt{xs}_{5} \right)^{2} - 400 \left( \mathtt{xs}_{6} - \left( \mathtt{xs}_{5} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{5} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{5} &amp; 202 - 400 \left( \mathtt{xs}_{7} - \left( \mathtt{xs}_{6} \right)^{2} \right) + 800 \left( \mathtt{xs}_{6} \right)^{2} &amp;  - 400 \mathtt{xs}_{6} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{6} &amp; 202 + 800 \left( \mathtt{xs}_{7} \right)^{2} - 400 \left( \mathtt{xs}_{8} - \left( \mathtt{xs}_{7} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{7} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{7} &amp; 202 + 800 \left( \mathtt{xs}_{8} \right)^{2} - 400 \left( \mathtt{xs}_{9} - \left( \mathtt{xs}_{8} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{8} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{8} &amp; 202 + 800 \left( \mathtt{xs}_{9} \right)^{2} - 400 \left( \mathtt{xs}_{10} - \left( \mathtt{xs}_{9} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{9} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{9} &amp; 202 - 400 \left( \mathtt{xs}_{11} - \left( \mathtt{xs}_{10} \right)^{2} \right) + 800 \left( \mathtt{xs}_{10} \right)^{2} &amp;  - 400 \mathtt{xs}_{10} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{10} &amp; 202 + 800 \left( \mathtt{xs}_{11} \right)^{2} - 400 \left( \mathtt{xs}_{12} - \left( \mathtt{xs}_{11} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{11} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{11} &amp; 202 - 400 \left( \mathtt{xs}_{13} - \left( \mathtt{xs}_{12} \right)^{2} \right) + 800 \left( \mathtt{xs}_{12} \right)^{2} &amp;  - 400 \mathtt{xs}_{12} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{12} &amp; 202 - 400 \left( \mathtt{xs}_{14} - \left( \mathtt{xs}_{13} \right)^{2} \right) + 800 \left( \mathtt{xs}_{13} \right)^{2} &amp;  - 400 \mathtt{xs}_{13} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{13} &amp; 202 - 400 \left( \mathtt{xs}_{15} - \left( \mathtt{xs}_{14} \right)^{2} \right) + 800 \left( \mathtt{xs}_{14} \right)^{2} &amp;  - 400 \mathtt{xs}_{14} &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{14} &amp; 202 - 400 \left( \mathtt{xs}_{16} - \left( \mathtt{xs}_{15} \right)^{2} \right) + 800 \left( \mathtt{xs}_{15} \right)^{2} &amp;  - 400 \mathtt{xs}_{15} &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{15} &amp; 202 - 400 \left( \mathtt{xs}_{17} - \left( \mathtt{xs}_{16} \right)^{2} \right) + 800 \left( \mathtt{xs}_{16} \right)^{2} &amp;  - 400 \mathtt{xs}_{16} &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{16} &amp; 202 - 400 \left( \mathtt{xs}_{18} - \left( \mathtt{xs}_{17} \right)^{2} \right) + 800 \left( \mathtt{xs}_{17} \right)^{2} &amp;  - 400 \mathtt{xs}_{17} &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{17} &amp; 202 + 800 \left( \mathtt{xs}_{18} \right)^{2} - 400 \left( \mathtt{xs}_{19} - \left( \mathtt{xs}_{18} \right)^{2} \right) &amp;  - 400 \mathtt{xs}_{18} &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{18} &amp; 202 - 400 \left( \mathtt{xs}_{20} - \left( \mathtt{xs}_{19} \right)^{2} \right) + 800 \left( \mathtt{xs}_{19} \right)^{2} &amp;  - 400 \mathtt{xs}_{19} \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp;  - 400 \mathtt{xs}_{19} &amp; 200 \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">isequal</span><span class="p">(</span><span class="n">hes1</span><span class="p">,</span><span class="w"> </span><span class="n">hes2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>true
+</pre></div>
+</div>
+</div>
+</div>
+<section id="sparse-matrix">
+<h3>Sparse matrix<a class="headerlink" href="#sparse-matrix" title="Link to this heading">#</a></h3>
+<p>Sparse Hessian matrix of the Hessian matrix of the Rosenbrock function w.r.t. to vector components.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">hes_sp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Symbolics</span><span class="o">.</span><span class="n">hessian_sparsity</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20×20 SparseArrays.SparseMatrixCSC{Bool, Int64} with 58 stored entries:
+⎡⠻⣦⡀⠀⠀⠀⠀⠀⠀⠀⎤
+⎢⠀⠈⠻⣦⡀⠀⠀⠀⠀⠀⎥
+⎢⠀⠀⠀⠈⠻⣦⡀⠀⠀⠀⎥
+⎢⠀⠀⠀⠀⠀⠈⠻⣦⡀⠀⎥
+⎣⠀⠀⠀⠀⠀⠀⠀⠈⠻⣦⎦
+</pre></div>
+</div>
+</div>
+</div>
+<p>Visualize the sparse matrix with <code class="docutils literal notranslate"><span class="pre">Plots.spy()</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="n">spy</span><span class="p">(</span><span class="n">hes_sp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f52d4518e711d429b941280d703d4f75ada1866b2b0d90badbeb7edf6d99b41f.png" src="../_images/f52d4518e711d429b941280d703d4f75ada1866b2b0d90badbeb7edf6d99b41f.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="generate-functions-from-symbols">
+<h2>Generate functions from symbols<a class="headerlink" href="#generate-functions-from-symbols" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">build_function(ex,</span> <span class="pre">args...)</span></code> generates out-of-place (oop) and in-place (ip) function expressions in a pair.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_function(ex,</span> <span class="pre">args...,</span> <span class="pre">parallel=Symbolics.MultithreadedForm())</span></code> generates a parallel algorithm to evaluate the output. See the <a class="reference external" href="https://symbolics.juliasymbolics.org/stable/tutorials/auto_parallel/">example</a> in the official docs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_function(ex,</span> <span class="pre">args...,</span> <span class="pre">target=Symbolics.CTarget())</span></code> generates a C function from Julia.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fexprs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_function</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Get the Out-of-place <code class="docutils literal notranslate"><span class="pre">f(input)</span></code> version</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">foop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval</span><span class="p">(</span><span class="n">fexprs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>#3 (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Get the In-place <code class="docutils literal notranslate"><span class="pre">f!(out,</span> <span class="pre">in)</span></code> version</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval</span><span class="p">(</span><span class="n">fexprs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>#5 (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">inxs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">similar</span><span class="p">(</span><span class="n">inxs</span><span class="p">)</span>
+<span class="n">fip</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="n">inxs</span><span class="p">)</span><span class="w">  </span><span class="c">## The inplace version returns nothing. The results are stored in out parameter.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">foop</span><span class="p">(</span><span class="n">inxs</span><span class="p">)</span>
+<span class="n">isapprox</span><span class="p">(</span><span class="n">foop</span><span class="p">(</span><span class="n">inxs</span><span class="p">),</span><span class="w"> </span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>true
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can save the generated function for later use: <code class="docutils literal notranslate"><span class="pre">write(&quot;function.jl&quot;,</span> <span class="pre">string(fexprs[2]))</span></code>
+Here, <code class="docutils literal notranslate"><span class="pre">ForwardDiff.jl</span></code> checks if our gradient generated from <code class="docutils literal notranslate"><span class="pre">Symbolics.jl</span></code> is correct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">ForwardDiff</span><span class="o">:</span><span class="w"> </span><span class="n">gradient</span>
+<span class="n">gradient</span><span class="p">(</span><span class="n">rosenbrock</span><span class="p">,</span><span class="w"> </span><span class="n">inxs</span><span class="p">)</span><span class="w"> </span><span class="o">≈</span><span class="w"> </span><span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>true
+</pre></div>
+</div>
+</div>
+</div>
+<p>Sparse Hessian matrix, only non-zero expressions are calculated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">hexprs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_function</span><span class="p">(</span><span class="n">hes_sp</span><span class="p">,</span><span class="w"> </span><span class="n">xs</span><span class="p">)</span>
+<span class="n">hoop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval</span><span class="p">(</span><span class="n">hexprs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">hip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eval</span><span class="p">(</span><span class="n">hexprs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">hoop</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20×20 SparseArrays.SparseMatrixCSC{Bool, Int64} with 58 stored entries:
+⎡⠻⣦⡀⠀⠀⠀⠀⠀⠀⠀⎤
+⎢⠀⠈⠻⣦⡀⠀⠀⠀⠀⠀⎥
+⎢⠀⠀⠀⠈⠻⣦⡀⠀⠀⠀⎥
+⎢⠀⠀⠀⠀⠀⠈⠻⣦⡀⠀⎥
+⎣⠀⠀⠀⠀⠀⠀⠀⠈⠻⣦⎦
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><em>This notebook was generated using <a class="reference external" href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.10"
+        },
+        kernelOptions: {
+            name: "julia-1.10",
+            path: "./advanced"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.10'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="callback.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Callbacks and Events</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../models/01-neuron.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Spiking Neural Systems</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats-about-symbolics-jl">Caveats about Symbolics.jl</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-operations">Basic operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-functions-used-in-symbolics">Custom functions used in Symbolics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#more-number-types">More number types</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-rosenbrock-function">Example: Rosenbrock function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-matrix">Sparse matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-functions-from-symbols">Generate functions from symbols</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Wen-Wei Tseng
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

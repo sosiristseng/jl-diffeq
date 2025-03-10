@@ -1,0 +1,1281 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimization Problems &#8212; Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/mhchem"]}, "tex": {"packages": {"[+]": ["mhchem"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'advanced/optimization';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Steady state solutions" href="steadystate.html" />
+    <link rel="prev" title="Stochastic modeling in Catalyst" href="../stochastic/catalyst.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Differential Equations</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Julia Differential Equations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ordinary DEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ode/diffeq.html">Ordinary Differential Equations (ODEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ode/mtk.html">ModelingToolkit: define ODEs with symbolic expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ode/catalyst.html">Catalyst ODE examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/diffeq.html">Stochastic Differential Equations (SDEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/mtk.html">SDEs with ModelingToolkit.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/catalyst.html">Stochastic modeling in Catalyst</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Optimization Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steadystate.html">Steady state solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensemble.html">Parallel Ensemble Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback.html">Callbacks and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="symbolics.html">Symbolic calculations in Julia</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/01-neuron.html">Spiking Neural Systems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/smoothfunc.html">Use smooth functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/odef-from-mtk.html">Get the ODE function from ModelingToolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/nodomainerr.html">Avoid DomainErrors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/componentarrays.html">ComponentArrays</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/sosiristseng/jl-diffeq/gh-pages?urlpath=lab/tree/_sources/advanced/optimization.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/sosiristseng/jl-diffeq/blob/gh-pages/_sources/advanced/optimization.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/sosiristseng/jl-diffeq" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/advanced/optimization.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Optimization Problems</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curve-fitting-using-lsqfit">Curve fitting using LsqFit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curve-fitting-using-optimization-jl">Curve fitting using Optimization.jl</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-rosenbrock-function">2D Rosenbrock Function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-constraints">Adding constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-a-single-parameter-from-the-data-and-the-ode-model">Estimate a single parameter from the data and the ODE model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-multiple-parameters">Estimate multiple parameters</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="optimization-problems">
+<h1>Optimization Problems<a class="headerlink" href="#optimization-problems" title="Link to this heading">#</a></h1>
+<p>Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Optimization_problem">https://en.wikipedia.org/wiki/Optimization_problem</a></p>
+<p>Given a target (loss) function and a set of parameters. Find the parameters set (subjects to constraints) to minimize the function.</p>
+<ul class="simple">
+<li><p>Curve fitting: <a class="reference external" href="https://github.com/JuliaNLSolvers/LsqFit.jl">LsqFit.jl</a></p></li>
+<li><p>General optimization problems: <a class="reference external" href="https://github.com/JuliaNLSolvers/Optim.jl">Optim.jl</a></p></li>
+<li><p>Use with ModelingToolkit: <a class="reference external" href="https://github.com/SciML/Optimization.jl">Optimization.jl</a></p></li>
+</ul>
+<section id="curve-fitting-using-lsqfit">
+<h2>Curve fitting using LsqFit<a class="headerlink" href="#curve-fitting-using-lsqfit" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/JuliaNLSolvers/LsqFit.jl">LsqFit.jl</a> package is a small library that provides basic least-squares fitting in pure Julia.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">LsqFit</span>
+<span class="nd">@.</span><span class="w"> </span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generate data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">xdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ydata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="w"> </span><span class="mf">2.0</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">randn</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">xdata</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>20-element Vector{Float64}:
+  0.9907698733040153
+  0.35604392748819824
+  0.10877636417926459
+  0.039987399177125973
+  0.008326770047816387
+ -0.0001749218598639272
+  0.01191138370618043
+ -0.010317066548776264
+ -0.0017025032118731691
+  0.006083227355373311
+  0.012419693363010102
+  0.0023727735155543938
+ -0.027547393077237994
+ -0.010013481799379215
+ -0.007052519315875767
+ -0.0069150037249607185
+  0.0038431873053406574
+  0.005925785098905736
+ -0.011294820986911322
+ -0.014671086760553603
+</pre></div>
+</div>
+</div>
+</div>
+<p>Initial guess</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2-element Vector{Float64}:
+ 0.5
+ 0.5
+</pre></div>
+</div>
+</div>
+</div>
+<p>Fit the model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curve_fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="n">ydata</span><span class="p">,</span><span class="w"> </span><span class="n">p0</span><span class="p">;</span><span class="w"> </span><span class="n">autodiff</span><span class="o">=</span><span class="ss">:forwarddiff</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LsqFit.LsqFitResult{Vector{Float64}, Vector{Float64}, Matrix{Float64}, Vector{Float64}, Vector{LsqFit.LMState{LsqFit.LevenbergMarquardt}}}([0.992697357446109, 2.003283404867884], [0.0019274841420936495, -0.010172830068548022, 0.011730470187691439, 0.001999043857532537, 0.006301955434545271, 0.0052717958451559705, -0.0101355540583229, 0.010935793036288022, 0.0019180770800144619, -0.006008118088898734, -0.012393524134063244, -0.0023636557518506994, 0.02755056984699018, 0.010014588635044886, 0.007052904954523313, 0.006915138087423995, -0.0038431404913824283, -0.005925768788199371, 0.011294826669813435, 0.014671088740564504], [1.0 0.0; 0.34841545091795684 -0.18203741969455275; … ; 5.7247076065260524e-9 -5.383802001931627e-8; 1.9945765821012377e-9 -1.9800109022757906e-8], true, Iter     Function value   Gradient norm 
+------   --------------   --------------
+, Float64[])
+</pre></div>
+</div>
+</div>
+</div>
+<p>The parameters</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">coef</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2-element Vector{Float64}:
+ 0.992697357446109
+ 2.003283404867884
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="curve-fitting-using-optimization-jl">
+<h2>Curve fitting using Optimization.jl<a class="headerlink" href="#curve-fitting-using-optimization-jl" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Optimization</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OptimizationOptimJL</span>
+
+<span class="nd">@.</span><span class="w"> </span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>model (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Generate data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">xdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ydata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="w"> </span><span class="mf">2.0</span><span class="p">])</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">randn</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">xdata</span><span class="p">))</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">lossl2</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span>
+<span class="w">    </span><span class="n">y_pred</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">abs2</span><span class="p">,</span><span class="w"> </span><span class="n">y_pred</span><span class="w"> </span><span class="o">.-</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">]</span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">xdata</span><span class="p">,</span><span class="w"> </span><span class="n">ydata</span><span class="p">]</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizationProblem</span><span class="p">(</span><span class="n">lossl2</span><span class="p">,</span><span class="w"> </span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+<span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">Optim</span><span class="o">.</span><span class="n">NelderMead</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+u: 2-element Vector{Float64}:
+ 1.0022451124469054
+ 2.0599972211791684
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="d-rosenbrock-function">
+<h2>2D Rosenbrock Function<a class="headerlink" href="#d-rosenbrock-function" title="Link to this heading">#</a></h2>
+<p>From: <a class="reference external" href="https://docs.sciml.ai/ModelingToolkit/stable/tutorials/optimization/">https://docs.sciml.ai/ModelingToolkit/stable/tutorials/optimization/</a>
+Wikipedia: <a class="reference external" href="https://en.wikipedia.org/wiki/Rosenbrock_function">https://en.wikipedia.org/wiki/Rosenbrock_function</a></p>
+<p>Find <span class="math notranslate nohighlight">\((x, y)\)</span> that minimizes the loss function <span class="math notranslate nohighlight">\((a - x)^2 + b(y - x^2)^2\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Optimization</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OptimizationOptimJL</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@variables</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)]</span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">)]</span>
+<span class="k">end</span>
+
+<span class="nd">@parameters</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+a \\
+b \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Define the target (loss) function
+The optimization algorithm will try to minimize its value</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">loss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\left( a - x \right)^{2} + \left( y - x^{2} \right)^{2} b
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Build the OptimizationSystem</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizationSystem</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\left( a - x \right)^{2} + \left( y - x^{2} \right)^{2} b
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Initial guess</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">2.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2-element Vector{Pair{Symbolics.Num, Float64}}:
+ x =&gt; 1.0
+ y =&gt; 2.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>parameters</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">100.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2-element Vector{Pair{Symbolics.Num, Float64}}:
+ a =&gt; 1.0
+ b =&gt; 100.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>ModelingToolkit can generate gradient and Hessian to solve the problem more efficiently.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizationProblem</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">grad</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">hess</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>OptimizationProblem. In-place: true
+u0: 2-element Vector{Float64}:
+ 1.0
+ 2.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Solve the problem
+The true solution is (1.0, 1.0)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u_opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">GradientDescent</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+u: 2-element Vector{Float64}:
+ 1.0000000135463598
+ 1.0000000271355158
+</pre></div>
+</div>
+</div>
+</div>
+<section id="adding-constraints">
+<h3>Adding constraints<a class="headerlink" href="#adding-constraints" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">OptimizationSystem(...,</span> <span class="pre">constraints</span> <span class="pre">=</span> <span class="pre">cons)</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@variables</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)]</span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">)]</span>
+<span class="k">end</span>
+
+<span class="nd">@parameters</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span>
+
+<span class="n">loss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\left( a - x \right)^{2} + \left( y - x^{2} \right)^{2} b
+\end{equation}
+ \]</div>
+</div>
+</div>
+<p>Constraints are define using <code class="docutils literal notranslate"><span class="pre">≲</span></code> (<code class="docutils literal notranslate"><span class="pre">\lesssim</span></code>) or <code class="docutils literal notranslate"><span class="pre">≳</span></code> (<code class="docutils literal notranslate"><span class="pre">\gtrsim</span></code>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">cons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">≲</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizationSystem</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">],</span><span class="w"> </span><span class="n">constraints</span><span class="o">=</span><span class="n">cons</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{equation}
+\left( a - x \right)^{2} + \left( y - x^{2} \right)^{2} b
+\end{equation}
+ \]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.14</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.14</span><span class="p">]</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OptimizationProblem</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">grad</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">hess</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">cons_j</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">cons_h</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>OptimizationProblem. In-place: true
+u0: 2-element Vector{Float64}:
+ 0.14
+ 0.14
+</pre></div>
+</div>
+</div>
+</div>
+<p>Use interior point Newton method for constrained optimization</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">IPNewton</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌ Warning: The selected optimization algorithm requires second order derivatives, but `SecondOrder` ADtype was not provided. 
+│         So a `SecondOrder` with SciMLBase.NoAD() for both inner and outer will be created, this can be suboptimal and not work in some cases so 
+│         an explicit `SecondOrder` ADtype is recommended.
+└ @ OptimizationBase ~/.julia/packages/OptimizationBase/gvXsf/src/cache.jl:49
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+u: 2-element Vector{Float64}:
+ 0.7864151541684254
+ 0.6176983125233897
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="parameter-estimation">
+<h2>Parameter estimation<a class="headerlink" href="#parameter-estimation" title="Link to this heading">#</a></h2>
+<p>From: <a class="reference external" href="https://docs.sciml.ai/DiffEqParamEstim/stable/getting_started/">https://docs.sciml.ai/DiffEqParamEstim/stable/getting_started/</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">DiffEqParamEstim.jl</span></code> is not installed with <code class="docutils literal notranslate"><span class="pre">DifferentialEquations.jl</span></code>. You need to install it manually:</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Pkg</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;DiffEqParamEstim&quot;</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">DiffEqParamEstim</span>
+</pre></div>
+</div>
+<p>The key function is <code class="docutils literal notranslate"><span class="pre">DiffEqParamEstim.build_loss_objective()</span></code>, which builds a loss (objective) function for the problem against the data. Then we can use optimization packages to solve the problem.</p>
+<section id="estimate-a-single-parameter-from-the-data-and-the-ode-model">
+<h3>Estimate a single parameter from the data and the ODE model<a class="headerlink" href="#estimate-a-single-parameter-from-the-data-and-the-ode-model" title="Link to this heading">#</a></h3>
+<p>Let’s optimize the parameters of the Lotka-Volterra equation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="k">using</span><span class="w"> </span><span class="n">DiffEqParamEstim</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ForwardDiff</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Optimization</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OptimizationOptimJL</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Example model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">lotka_volterra!</span><span class="p">(</span><span class="n">du</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.5</span><span class="p">]</span><span class="w"> </span><span class="c">## The true parameter value</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">lotka_volterra!</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ODEProblem with uType Vector{Float64} and tType Float64. In-place: true
+Non-trivial mass matrix: false
+timespan: (0.0, 10.0)
+u0: 2-element Vector{Float64}:
+ 1.0
+ 1.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>True solution</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: specialized 4th order &quot;free&quot; interpolation
+t: 34-element Vector{Float64}:
+  0.0
+  0.0776084743154256
+  0.2326451370670694
+  0.42911851563726466
+  0.679082199936808
+  0.9444046279774128
+  1.2674601918628516
+  1.61929140093895
+  1.9869755481702074
+  2.2640903679981617
+  ⋮
+  7.5848624442719235
+  7.978067891667038
+  8.483164641366145
+  8.719247691882519
+  8.949206449510513
+  9.200184762926114
+  9.438028551201125
+  9.711807820573478
+ 10.0
+u: 34-element Vector{Vector{Float64}}:
+ [1.0, 1.0]
+ [1.0454942346944578, 0.8576684823217128]
+ [1.1758715885890039, 0.6394595702308831]
+ [1.419680958026516, 0.45699626144050703]
+ [1.8767193976262215, 0.3247334288460738]
+ [2.5882501035146133, 0.26336255403957304]
+ [3.860709084797009, 0.27944581878759106]
+ [5.750813064347339, 0.5220073551361045]
+ [6.814978696356636, 1.917783405671627]
+ [4.392997771045279, 4.194671543390719]
+ ⋮
+ [2.6142510825026886, 0.2641695435004172]
+ [4.241070648057757, 0.30512326533052475]
+ [6.79112182569163, 1.13452538354883]
+ [6.265374940295053, 2.7416885955953294]
+ [3.7807688120520893, 4.431164521488331]
+ [1.8164214705302744, 4.064057991958618]
+ [1.146502825635759, 2.791173034823897]
+ [0.955798652853089, 1.623563316340748]
+ [1.0337581330572414, 0.9063703732075853]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create a sample dataset with some noise.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">tspan</span><span class="p">[</span><span class="k">begin</span><span class="p">],</span><span class="w"> </span><span class="n">tspan</span><span class="p">[</span><span class="k">end</span><span class="p">],</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">.+</span><span class="w"> </span><span class="mf">0.03</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">randn</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>200×2 Matrix{Float64}:
+ 0.992931  1.0058
+ 1.04495   0.892355
+ 1.05944   0.816274
+ 1.09867   0.733301
+ 1.18063   0.65518
+ 1.22018   0.618778
+ 1.24194   0.579548
+ 1.29263   0.508841
+ 1.38401   0.486325
+ 1.45216   0.449797
+ ⋮         
+ 0.981894  2.02688
+ 0.993378  1.82693
+ 0.97382   1.75651
+ 1.00187   1.55181
+ 0.947521  1.35005
+ 0.967096  1.20347
+ 1.00327   1.10831
+ 0.978618  1.04457
+ 1.06113   0.88342
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting the sample dataset and the true solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;u1 data&quot;</span><span class="w"> </span><span class="s">&quot;u2 data&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4424801a04c3f4b96a519d2159d2150fe27bc8560c680418d83a07132f3888e1.png" src="../_images/4424801a04c3f4b96a519d2159d2150fe27bc8560c680418d83a07132f3888e1.png" />
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DiffEqParamEstim.build_loss_objective()</span></code> builds a loss function for the ODE problem for the data.</p>
+<p>We will minimize the mean squared error using <code class="docutils literal notranslate"><span class="pre">L2Loss()</span></code>.</p>
+<p>Note that</p>
+<ul class="simple">
+<li><p>the data should be transposed.</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">AutoForwardDiff()</span></code> as the automatic differentiation (AD) method since the number of parameters plus states is small (&lt;100). For larger problems, <code class="docutils literal notranslate"><span class="pre">Optimization.AutoZygote()</span></code> is more efficient.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">alg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">()</span>
+
+<span class="n">cost_function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_loss_objective</span><span class="p">(</span>
+<span class="w">    </span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">alg</span><span class="p">,</span>
+<span class="w">    </span><span class="n">L2Loss</span><span class="p">(</span><span class="n">collect</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+<span class="w">    </span><span class="n">Optimization</span><span class="o">.</span><span class="n">AutoForwardDiff</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">maxiters</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="w"> </span><span class="n">verbose</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">)</span>
+
+<span class="n">plot</span><span class="p">(</span>
+<span class="w">    </span><span class="n">cost_function</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="ss">:log10</span><span class="p">,</span>
+<span class="w">    </span><span class="n">xaxis</span><span class="o">=</span><span class="s">&quot;Parameter&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">yaxis</span><span class="o">=</span><span class="s">&quot;Cost&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;1-Parameter Cost Function&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2587b4f12e99fe07d2faec9b947ea882ddacb53558b234e7ed0116ef09bacffe.png" src="../_images/2587b4f12e99fe07d2faec9b947ea882ddacb53558b234e7ed0116ef09bacffe.png" />
+</div>
+</div>
+<p>There is a dip (minimum) in the cost function at the true parameter value (1.5). We can use an optimizer e.g., <code class="docutils literal notranslate"><span class="pre">Optimization.jl</span></code>, to find the parameter value that minimizes the cost. (1.5 in this case)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">optprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optimization</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">(</span><span class="n">cost_function</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.42</span><span class="p">])</span>
+<span class="n">optsol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">optprob</span><span class="p">,</span><span class="w"> </span><span class="n">BFGS</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+u: 1-element Vector{Float64}:
+ 1.5009096872530328
+</pre></div>
+</div>
+</div>
+</div>
+<p>The fitting result:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">newprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remake</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="n">optsol</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+<span class="n">newsol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">newprob</span><span class="p">,</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">())</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">newsol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/dce043e726737d70c2496282e5c2e9836d66dfac631bac0cd65751d434f90794.png" src="../_images/dce043e726737d70c2496282e5c2e9836d66dfac631bac0cd65751d434f90794.png" />
+</div>
+</div>
+</section>
+<section id="estimate-multiple-parameters">
+<h3>Estimate multiple parameters<a class="headerlink" href="#estimate-multiple-parameters" title="Link to this heading">#</a></h3>
+<p>Let’s use the Lotka-Volterra (Fox-rabbit) equations with all 4 parameters free.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">f2</span><span class="p">(</span><span class="n">du</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span><span class="w">  </span><span class="c">## True parameters</span>
+<span class="n">alg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">()</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">alg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: specialized 4th order &quot;free&quot; interpolation
+t: 34-element Vector{Float64}:
+  0.0
+  0.0776084743154256
+  0.2326451370670694
+  0.42911851563726466
+  0.679082199936808
+  0.9444046279774128
+  1.2674601918628516
+  1.61929140093895
+  1.9869755481702074
+  2.2640903679981617
+  ⋮
+  7.5848624442719235
+  7.978067891667038
+  8.483164641366145
+  8.719247691882519
+  8.949206449510513
+  9.200184762926114
+  9.438028551201125
+  9.711807820573478
+ 10.0
+u: 34-element Vector{Vector{Float64}}:
+ [1.0, 1.0]
+ [1.0454942346944578, 0.8576684823217128]
+ [1.1758715885890039, 0.6394595702308831]
+ [1.419680958026516, 0.45699626144050703]
+ [1.8767193976262215, 0.3247334288460738]
+ [2.5882501035146133, 0.26336255403957304]
+ [3.860709084797009, 0.27944581878759106]
+ [5.750813064347339, 0.5220073551361045]
+ [6.814978696356636, 1.917783405671627]
+ [4.392997771045279, 4.194671543390719]
+ ⋮
+ [2.6142510825026886, 0.2641695435004172]
+ [4.241070648057757, 0.30512326533052475]
+ [6.79112182569163, 1.13452538354883]
+ [6.265374940295053, 2.7416885955953294]
+ [3.7807688120520893, 4.431164521488331]
+ [1.8164214705302744, 4.064057991958618]
+ [1.146502825635759, 2.791173034823897]
+ [0.955798652853089, 1.623563316340748]
+ [1.0337581330572414, 0.9063703732075853]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">tspan</span><span class="p">[</span><span class="k">begin</span><span class="p">],</span><span class="w"> </span><span class="n">tspan</span><span class="p">[</span><span class="k">end</span><span class="p">],</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">sol</span><span class="o">.</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">.+</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">randn</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>200×2 Matrix{Float64}:
+ 1.00722   0.998884
+ 1.04194   0.902643
+ 1.071     0.812161
+ 1.08935   0.748317
+ 1.14447   0.673325
+ 1.22265   0.610484
+ 1.26416   0.566865
+ 1.32376   0.526703
+ 1.39381   0.483488
+ 1.45224   0.438782
+ ⋮         
+ 0.997702  2.06138
+ 0.977479  1.85614
+ 0.954559  1.66959
+ 0.938922  1.50314
+ 0.938475  1.34679
+ 0.964707  1.23251
+ 0.998553  1.09742
+ 1.01088   1.01277
+ 1.02419   0.908387
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then we can find multiple parameters at once using the same steps. True parameters are <code class="docutils literal notranslate"><span class="pre">[1.5,</span> <span class="pre">1.0,</span> <span class="pre">3.0,</span> <span class="pre">1.0]</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">cost_function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_loss_objective</span><span class="p">(</span>
+<span class="w">    </span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">alg</span><span class="p">,</span><span class="w"> </span><span class="n">L2Loss</span><span class="p">(</span><span class="n">collect</span><span class="p">(</span><span class="n">ts</span><span class="p">),</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
+<span class="w">    </span><span class="n">Optimization</span><span class="o">.</span><span class="n">AutoForwardDiff</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">maxiters</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="w"> </span><span class="n">verbose</span><span class="o">=</span><span class="nb">false</span>
+<span class="p">)</span>
+<span class="n">optprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optimization</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">(</span><span class="n">cost_function</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">1.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">2.8</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">result_bfgs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">optprob</span><span class="p">,</span><span class="w"> </span><span class="n">LBFGS</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Failure
+u: 4-element Vector{Float64}:
+ 1.5002028292315108
+ 1.0015303562135607
+ 3.0010025248586154
+ 1.0000321657858664
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<p><em>This notebook was generated using <a class="reference external" href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.10"
+        },
+        kernelOptions: {
+            name: "julia-1.10",
+            path: "./advanced"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.10'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../stochastic/catalyst.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Stochastic modeling in Catalyst</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="steadystate.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Steady state solutions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curve-fitting-using-lsqfit">Curve fitting using LsqFit</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curve-fitting-using-optimization-jl">Curve fitting using Optimization.jl</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#d-rosenbrock-function">2D Rosenbrock Function</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-constraints">Adding constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-estimation">Parameter estimation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-a-single-parameter-from-the-data-and-the-ode-model">Estimate a single parameter from the data and the ODE model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-multiple-parameters">Estimate multiple parameters</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Wen-Wei Tseng
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1268 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ModelingToolkit: define ODEs with symbolic expressions &#8212; Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"loader": {"load": ["[tex]/mhchem"]}, "tex": {"packages": {"[+]": ["mhchem"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ode/mtk';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Catalyst ODE examples" href="catalyst.html" />
+    <link rel="prev" title="Ordinary Differential Equations (ODEs)" href="diffeq.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Differential Equations</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Julia Differential Equations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ordinary DEs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="diffeq.html">Ordinary Differential Equations (ODEs)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">ModelingToolkit: define ODEs with symbolic expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catalyst.html">Catalyst ODE examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/diffeq.html">Stochastic Differential Equations (SDEs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/mtk.html">SDEs with ModelingToolkit.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stochastic/catalyst.html">Stochastic modeling in Catalyst</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../advanced/optimization.html">Optimization Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/steadystate.html">Steady state solutions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/ensemble.html">Parallel Ensemble Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/callback.html">Callbacks and Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/symbolics.html">Symbolic calculations in Julia</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/01-neuron.html">Spiking Neural Systems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/smoothfunc.html">Use smooth functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/odef-from-mtk.html">Get the ODE function from ModelingToolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/nodomainerr.html">Avoid DomainErrors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tips/componentarrays.html">ComponentArrays</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/sosiristseng/jl-diffeq/gh-pages?urlpath=lab/tree/_sources/ode/mtk.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/sosiristseng/jl-diffeq/blob/gh-pages/_sources/ode/mtk.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<a href="https://github.com/sosiristseng/jl-diffeq" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ode/mtk.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ModelingToolkit: define ODEs with symbolic expressions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#radioactive-decay">Radioactive decay</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lorenz-system">Lorenz system</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-autonomous-odes">Non-autonomous ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-order-ode-systems">Second-order ODE systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#composing-systems">Composing systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-existing-functions-into-mtk-systems">Convert existing functions into MTK systems</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modelingtoolkit-define-odes-with-symbolic-expressions">
+<h1>ModelingToolkit: define ODEs with symbolic expressions<a class="headerlink" href="#modelingtoolkit-define-odes-with-symbolic-expressions" title="Link to this heading">#</a></h1>
+<p>You can also define ODE systems symbolically using <a class="reference external" href="https://github.com/SciML/ModelingToolkit.jl">ModelingToolkit.jl (MTK)</a> and let MTK generate high-performance ODE functions.</p>
+<ul class="simple">
+<li><p>transforming and simplifying expressions for performance</p></li>
+<li><p>Jacobian and Hessian generation</p></li>
+<li><p>accessing eliminated states (called observed variables)</p></li>
+<li><p>building and connecting subsystems programmatically (component-based modeling)</p></li>
+</ul>
+<p>See also <a class="reference external" href="https://youtu.be/HEVOgSLBzWA">Simulating Big Models in Julia with ModelingToolkit &#64; JuliaCon 2021 Workshop</a>.</p>
+<section id="radioactive-decay">
+<h2>Radioactive decay<a class="headerlink" href="#radioactive-decay" title="Link to this heading">#</a></h2>
+<p>Here we use the same example of decaying radioactive elements</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>independent variable (time) and dependent variables</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@variables</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">RHS</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+c\left( t \right) \\
+\mathtt{RHS}\left( t \right) \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>parameters: decay rate</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@parameters</span><span class="w"> </span><span class="n">λ</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{equation}
+\left[
+\begin{array}{c}
+\lambda \\
+\end{array}
+\right]
+\end{equation}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Differential operator w.r.t. time</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Differential</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Differential(t)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Equations in MTK use the tilde character (<code class="docutils literal notranslate"><span class="pre">~</span></code>) for equality.
+Every MTK system requires a name. The <code class="docutils literal notranslate"><span class="pre">&#64;named</span></code> macro simply ensures that the symbolic name matches the name in the REPL.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">eqs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">RHS</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">-</span><span class="n">λ</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">RHS</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\mathtt{RHS}\left( t \right) &amp;=  - c\left( t \right) \lambda \\
+\frac{\mathrm{d} c\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{RHS}\left( t \right)
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Build and ODE system from equations</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODESystem</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{align}
+\frac{\mathrm{d} c\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{RHS}\left( t \right)
+\end{align}
+ \]</div>
+</div>
+</div>
+<p>Setup initial conditions, time span, parameter values, the <code class="docutils literal notranslate"><span class="pre">ODEProblem</span></code>, and solve the problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">λ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">c</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">);</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: 3rd order Hermite
+t: 8-element Vector{Float64}:
+ 0.0
+ 0.10001999200479662
+ 0.34208427066999536
+ 0.6553980136343391
+ 1.0312652525315806
+ 1.4709405856363595
+ 1.9659576669700232
+ 2.0
+u: 8-element Vector{Vector{Float64}}:
+ [1.0]
+ [0.9048193287657775]
+ [0.7102883621328676]
+ [0.5192354400036404]
+ [0.35655576576996556]
+ [0.2297097907863828]
+ [0.14002247272452764]
+ [0.1353360028400881]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Visualize the solution</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Exp decay&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ca7c012538e49660eb46d7971458b53e17561a928a4dd8cc9379f56b5e0ef578.png" src="../_images/ca7c012538e49660eb46d7971458b53e17561a928a4dd8cc9379f56b5e0ef578.png" />
+</div>
+</div>
+<p>The solution interface provides symbolic access. You can access the results of <code class="docutils literal notranslate"><span class="pre">c</span></code> directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8-element Vector{Float64}:
+ 1.0
+ 0.9048193287657775
+ 0.7102883621328676
+ 0.5192354400036404
+ 0.35655576576996556
+ 0.2297097907863828
+ 0.14002247272452764
+ 0.1353360028400881
+</pre></div>
+</div>
+</div>
+</div>
+<p>With interpolations with specified time points</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="p">(</span><span class="mf">0.0</span><span class="o">:</span><span class="mf">0.1</span><span class="o">:</span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>t: 0.0:0.1:2.0
+u: 21-element Vector{Float64}:
+ 1.0
+ 0.9048374180989599
+ 0.8187305973051514
+ 0.7408182261974484
+ 0.6703197822435771
+ 0.6065302341562359
+ 0.5488116548085096
+ 0.49658509875978446
+ 0.4493280239179766
+ 0.4065692349272286
+ ⋮
+ 0.30119273799114377
+ 0.2725309051375335
+ 0.24659717503493178
+ 0.22313045099430742
+ 0.20189530933816474
+ 0.18268185222253555
+ 0.16529821250790566
+ 0.14956912660454402
+ 0.13533600284008812
+</pre></div>
+</div>
+</div>
+</div>
+<p>The eliminated term (RHS in this example) is still traceable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">RHS</span><span class="p">],</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="ss">:right</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/018d3d12fc2503c9110f6270410e0a22c616fac9e3a887d0deddbc3cea0278ff.png" src="../_images/018d3d12fc2503c9110f6270410e0a22c616fac9e3a887d0deddbc3cea0278ff.png" />
+</div>
+</div>
+<p>The indexing interface allows symbolic calculations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c5c85ca653ea17566dc1763a5eac504b7dad431157a7868d5e7d45fed6de9cb8.png" src="../_images/c5c85ca653ea17566dc1763a5eac504b7dad431157a7868d5e7d45fed6de9cb8.png" />
+</div>
+</div>
+</section>
+<section id="lorenz-system">
+<h2>Lorenz system<a class="headerlink" href="#lorenz-system" title="Link to this heading">#</a></h2>
+<p>Here we setup the initial conditions and parameters with default values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@variables</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="nd">@parameters</span><span class="w"> </span><span class="p">(</span><span class="n">σ</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span><span class="w"> </span><span class="n">ρ</span><span class="o">=</span><span class="mf">28.0</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="o">=</span><span class="mi">8</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Differential</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">eqs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">σ</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">ρ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z</span>
+<span class="p">]</span>
+
+<span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODESystem</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} x\left( t \right)}{\mathrm{d}t} &amp;= \left(  - x\left( t \right) + y\left( t \right) \right) \sigma \\
+\frac{\mathrm{d} y\left( t \right)}{\mathrm{d}t} &amp;=  - y\left( t \right) + x\left( t \right) \left(  - z\left( t \right) + \rho \right) \\
+\frac{\mathrm{d} z\left( t \right)}{\mathrm{d}t} &amp;= x\left( t \right) y\left( t \right) - z\left( t \right) \beta
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Here we are using default values, so we pass empty arrays for initial conditions and parameter values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="p">[]);</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: 3rd order Hermite
+t: 1292-element Vector{Float64}:
+   0.0
+   3.5678604836301404e-5
+   0.0003924646531993154
+   0.003262408731175873
+   0.009058076622686189
+   0.01695647090176743
+   0.027689960116420883
+   0.041856352219618344
+   0.060240411865493296
+   0.08368541210909924
+   ⋮
+  99.43545175575305
+  99.50217600300971
+  99.56297541572351
+  99.62622492183432
+  99.69561088424294
+  99.77387244562912
+  99.86354266863755
+  99.93826978918452
+ 100.0
+u: 1292-element Vector{Vector{Float64}}:
+ [1.0, 0.0, 0.0]
+ [0.9996434557625105, 0.0009988049817849058, 1.781434788799189e-8]
+ [0.9961045497425811, 0.010965399721242457, 2.1469553658389193e-6]
+ [0.9693591548287857, 0.0897706331002921, 0.00014380191884671585]
+ [0.9242043547708632, 0.24228915014052968, 0.0010461625485930237]
+ [0.8800455783133068, 0.43873649717821195, 0.003424260078582332]
+ [0.8483309823046307, 0.6915629680633586, 0.008487625469885364]
+ [0.8495036699348377, 1.0145426764822272, 0.01821209108471829]
+ [0.9139069585506618, 1.442559985646147, 0.03669382222358562]
+ [1.0888638225734468, 2.0523265829961646, 0.07402573595703686]
+ ⋮
+ [1.2013409155396158, -2.429012698730855, 25.83593282347909]
+ [-0.4985909866565941, -2.2431908075030083, 21.591758421186338]
+ [-1.3554328352527145, -2.5773570617802326, 18.48962628032902]
+ [-2.1618698772305467, -3.5957801801676297, 15.934724265473792]
+ [-3.433783468673715, -5.786446127166032, 14.065327938066913]
+ [-5.971873646288483, -10.261846004477597, 14.060290896024572]
+ [-10.941900618598972, -17.312154206417734, 20.65905960858999]
+ [-14.71738043327772, -16.96871551014668, 33.06627229408802]
+ [-13.714517151605754, -8.323306384833089, 38.798231477265624]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Phase plot w.r.t symbols.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">),</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="mi">600</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/877d23eb27833008ff9a469f2137d536f544346145a3c443d5ba95aa1acbab61.png" src="../_images/877d23eb27833008ff9a469f2137d536f544346145a3c443d5ba95aa1acbab61.png" />
+</div>
+</div>
+</section>
+<section id="non-autonomous-odes">
+<h2>Non-autonomous ODEs<a class="headerlink" href="#non-autonomous-odes" title="Link to this heading">#</a></h2>
+<p>Sometimes a model might have a time-variant external force, which is too complex or impossible to express it symbolically. In such situation, one could apply <code class="docutils literal notranslate"><span class="pre">&#64;register_symbolic</span></code> to it to exclude it from symbolic transformations and use it numerically.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@variables</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nd">@parameters</span><span class="w"> </span><span class="n">τ</span>
+<span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Differential</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Differential(t)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define a time-dependent random external force</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">value_vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">f_fun</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">value_vector</span><span class="p">[</span><span class="k">end</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">value_vector</span><span class="p">[</span><span class="kt">Int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>f_fun (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<p>“Register” arbitrary Julia functions to be excluded from symbolic transformations. Just use it as-is.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="nd">@register_symbolic</span><span class="w"> </span><span class="n">f_fun</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">fol_external_f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODESystem</span><span class="p">([</span><span class="n">f</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">f_fun</span><span class="p">(</span><span class="n">t</span><span class="p">),</span><span class="w"> </span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">τ</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">fol_external_f</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">),</span><span class="w"> </span><span class="p">[</span><span class="n">τ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.75</span><span class="p">]);</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3c060d71aff62ef78161831c34e42e631392b91338ab1e1939d8a8e14cf98eb7.png" src="../_images/3c060d71aff62ef78161831c34e42e631392b91338ab1e1939d8a8e14cf98eb7.png" />
+</div>
+</div>
+</section>
+<section id="second-order-ode-systems">
+<h2>Second-order ODE systems<a class="headerlink" href="#second-order-ode-systems" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ode_order_lowering(sys)</span></code> automatically transforms a second-order ODE into two first-order ODEs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+
+<span class="nd">@parameters</span><span class="w"> </span><span class="n">σ</span><span class="w"> </span><span class="n">ρ</span><span class="w"> </span><span class="n">β</span>
+<span class="nd">@independent_variables</span><span class="w"> </span><span class="n">t</span>
+<span class="nd">@variables</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Differential</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">eqs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">σ</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">),</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">ρ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="p">,</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z</span>
+<span class="p">]</span>
+
+<span class="nd">@mtkbuild</span><span class="w"> </span><span class="n">sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODESystem</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} \mathtt{xˍt}\left( t \right)}{\mathrm{d}t} &amp;= \left(  - x\left( t \right) + y\left( t \right) \right) \sigma \\
+\frac{\mathrm{d} y\left( t \right)}{\mathrm{d}t} &amp;=  - y\left( t \right) + x\left( t \right) \left(  - z\left( t \right) + \rho \right) \\
+\frac{\mathrm{d} z\left( t \right)}{\mathrm{d}t} &amp;= x\left( t \right) y\left( t \right) - z\left( t \right) \beta \\
+\frac{\mathrm{d} x\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{xˍt}\left( t \right)
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p>Note that you need to provide the initial condition for x’s derivative (<code class="docutils literal notranslate"><span class="pre">D(x)</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">z</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="p">]</span>
+
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">σ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">28.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ρ</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">β</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3</span>
+<span class="p">]</span>
+
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">jac</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">),</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Trajectory&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e79f762d742c3eb104eb621a407bde3de2024cd7aa8d789614d59d4d7545590a.png" src="../_images/e79f762d742c3eb104eb621a407bde3de2024cd7aa8d789614d59d4d7545590a.png" />
+</div>
+</div>
+</section>
+<section id="composing-systems">
+<h2>Composing systems<a class="headerlink" href="#composing-systems" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://docs.sciml.ai/ModelingToolkit/stable/basics/Composition/">https://docs.sciml.ai/ModelingToolkit/stable/basics/Composition/</a></p>
+<p>By connecting equation(s) to couple ODE systems together, we can build component-based, hierarchical models.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span><span class="o">:</span><span class="w"> </span><span class="n">t_nounits</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">D_nounits</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">D</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">decay</span><span class="p">(;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+<span class="w">    </span><span class="nd">@parameters</span><span class="w"> </span><span class="n">a</span>
+<span class="w">    </span><span class="nd">@variables</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="w">    </span><span class="n">ODESystem</span><span class="p">([</span>
+<span class="w">            </span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="o">-</span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span>
+<span class="w">        </span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="n">name</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="nd">@named</span><span class="w"> </span><span class="n">decay1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">decay</span><span class="p">()</span>
+<span class="nd">@named</span><span class="w"> </span><span class="n">decay2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">decay</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: import of ModelingToolkit.t_nounits into ##292 conflicts with an existing identifier; ignored.
+WARNING: import of ModelingToolkit.D_nounits into ##292 conflicts with an existing identifier; ignored.
+</pre></div>
+</div>
+<div class="output text_latex math notranslate nohighlight">
+\[ \begin{align}
+\frac{\mathrm{d} x\left( t \right)}{\mathrm{d}t} &amp;= f\left( t \right) - a x\left( t \right)
+\end{align}
+ \]</div>
+</div>
+</div>
+<p>Define relations (connectors) between the two systems.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">connected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compose</span><span class="p">(</span>
+<span class="w">    </span><span class="n">ODESystem</span><span class="p">([</span>
+<span class="w">            </span><span class="n">decay2</span><span class="o">.</span><span class="n">f</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">decay1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+<span class="w">            </span><span class="n">D</span><span class="p">(</span><span class="n">decay1</span><span class="o">.</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="ss">:connected</span><span class="p">),</span><span class="w"> </span><span class="n">decay1</span><span class="p">,</span><span class="w"> </span><span class="n">decay2</span><span class="p">)</span>
+
+<span class="n">equations</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} \mathtt{decay1.f}\left( t \right)}{\mathrm{d}t} &amp;= 0 \\
+\mathtt{decay2.f}\left( t \right) &amp;= \mathtt{decay1.x}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{decay1.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{decay1.f}\left( t \right) - \mathtt{decay1.a} \mathtt{decay1.x}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{decay2.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{decay2.f}\left( t \right) - \mathtt{decay2.a} \mathtt{decay2.x}\left( t \right)
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">simplified_sys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">structural_simplify</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
+<span class="n">equations</span><span class="p">(</span><span class="n">simplified_sys</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} \mathtt{decay1.f}\left( t \right)}{\mathrm{d}t} &amp;= -0 \\
+\frac{\mathrm{d} \mathtt{decay1.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{decay1.f}\left( t \right) - \mathtt{decay1.a} \mathtt{decay1.x}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{decay2.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{decay2.f}\left( t \right) - \mathtt{decay2.a} \mathtt{decay2.x}\left( t \right)
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">x0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">decay1</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span>
+<span class="w">      </span><span class="n">decay1</span><span class="o">.</span><span class="n">f</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="w">      </span><span class="n">decay2</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">decay1</span><span class="o">.</span><span class="n">a</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.1</span>
+<span class="w">     </span><span class="n">decay2</span><span class="o">.</span><span class="n">a</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">0.2</span><span class="p">]</span>
+
+
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">)</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">simplified_sys</span><span class="p">,</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">))</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="p">[</span><span class="n">decay1</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">decay2</span><span class="o">.</span><span class="n">x</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9605731f73821e99a0f4e0637144c3dad5a68e1c05f41a6bb86bda4ed5b16db2.png" src="../_images/9605731f73821e99a0f4e0637144c3dad5a68e1c05f41a6bb86bda4ed5b16db2.png" />
+</div>
+</div>
+<section id="convert-existing-functions-into-mtk-systems">
+<h3>Convert existing functions into MTK systems<a class="headerlink" href="#convert-existing-functions-into-mtk-systems" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">modelingtoolkitize(prob)</span></code> generates MKT systems from regular DE problems. I t can also generate analytic Jacobin functions for faster solving.</p>
+<p>Example: <strong><a class="reference external" href="https://mtk.sciml.ai/stable/mtkitize_tutorials/modelingtoolkitize_index_reduction/">DAE index reduction</a></strong> for the pendulum problem, which cannot be solved by regular ODE solvers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="k">using</span><span class="w"> </span><span class="n">ModelingToolkit</span>
+<span class="k">using</span><span class="w"> </span><span class="n">OrdinaryDiffEq</span>
+<span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">pendulum!</span><span class="p">(</span><span class="n">du</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span>
+<span class="w">    </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dy</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">g</span>
+<span class="w">    </span><span class="c"># Do not write your function like this after you&#39;ve learned MTK</span>
+<span class="w">    </span><span class="n">du</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">L</span><span class="o">^</span><span class="mi">2</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">nothing</span>
+<span class="k">end</span>
+
+<span class="n">pendulum_fun!</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEFunction</span><span class="p">(</span><span class="n">pendulum!</span><span class="p">,</span><span class="w"> </span><span class="n">mass_matrix</span><span class="o">=</span><span class="n">Diagonal</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">u0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">]</span>
+<span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">9.8</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">]</span>
+<span class="n">tspan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">pendulum_prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">pendulum_fun!</span><span class="p">,</span><span class="w"> </span><span class="n">u0</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ODEProblem with uType Vector{Float64} and tType Float64. In-place: true
+Non-trivial mass matrix: true
+timespan: (0.0, 10.0)
+u0: 5-element Vector{Float64}:
+ 1.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Convert the ODE problem into a MTK system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">tracedSys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelingtoolkitize</span><span class="p">(</span><span class="n">pendulum_prob</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} \mathtt{x_1}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_2}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_2}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_1}\left( t \right) \mathtt{x_5}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_3}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_4}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_4}\left( t \right)}{\mathrm{d}t} &amp;=  - \mathtt{\alpha_1} + \mathtt{x_3}\left( t \right) \mathtt{x_5}\left( t \right) \\
+0 &amp;= \left( \mathtt{x_1}\left( t \right) \right)^{2} + \left( \mathtt{x_3}\left( t \right) \right)^{2} - \mathtt{\alpha_2}^{2}
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">structural_simplify()</span></code> and <code class="docutils literal notranslate"><span class="pre">dae_index_lowering()</span></code> transform the index-3 DAE into an index-0 ODE.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">pendulumSys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tracedSys</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">dae_index_lowering</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">structural_simplify</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[\begin{split} \begin{align}
+\frac{\mathrm{d} \mathtt{x_1}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_2}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_2}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_1}\left( t \right) \mathtt{x_5}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_3}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{x_4}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{x_4}\left( t \right)}{\mathrm{d}t} &amp;=  - \mathtt{\alpha_1} + \mathtt{x_3}\left( t \right) \mathtt{x_5}\left( t \right) \\
+0 &amp;= 2 \left( \mathtt{x_4}\left( t \right) \right)^{2} + 2 \left( \mathtt{x_2}\left( t \right) \right)^{2} + 2 \left( \mathtt{x_1}\left( t \right) \right)^{2} \mathtt{x_5}\left( t \right) + 2 \mathtt{x_3}\left( t \right) \left(  - \mathtt{\alpha_1} + \mathtt{x_3}\left( t \right) \mathtt{x_5}\left( t \right) \right)
+\end{align}
+ \end{split}\]</div>
+</div>
+</div>
+<p>The default <code class="docutils literal notranslate"><span class="pre">u0</span></code> is included in the system already so one can use an empty array <code class="docutils literal notranslate"><span class="pre">[]</span></code> as the initial conditions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ODEProblem</span><span class="p">(</span><span class="n">pendulumSys</span><span class="p">,</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="n">tspan</span><span class="p">);</span>
+<span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">Rodas5P</span><span class="p">(),</span><span class="w"> </span><span class="n">abstol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span><span class="w"> </span><span class="n">reltol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌ Warning: Initialization system is overdetermined. 1 equations for 0 unknowns. Initialization will default to using least squares. `SCCNonlinearProblem` can only be used for initialization of fully determined systems and hence will not be used here. To suppress this warning pass warn_initialize_determined = false. To make this warning into an error, pass fully_determined = true
+└ @ ModelingToolkit ~/.julia/packages/ModelingToolkit/CvDvM/src/systems/diffeqs/abstractodesystem.jl:1446
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>retcode: Success
+Interpolation: specialized 4rd order &quot;free&quot; stiffness-aware interpolation
+t: 1305-element Vector{Float64}:
+  0.0
+  1.0e-6
+  1.1e-5
+  0.00011099999999999999
+  0.0010466037811921202
+  0.004063045474513508
+  0.00794188545926928
+  0.0121077885763386
+  0.016784515118072017
+  0.02172605785948642
+  ⋮
+  9.939437955690178
+  9.947439461345477
+  9.955440967000776
+  9.963442472656075
+  9.971443978311374
+  9.979445483966673
+  9.987446989621972
+  9.995448495277271
+ 10.0
+u: 1305-element Vector{Vector{Float64}}:
+ [1.0, 0.0, 0.0, 0.0, 0.0]
+ [1.0, -4.8019999999999657e-17, -4.900000000000009e-12, -9.800000000000072e-6, -1.4405999999999968e-10]
+ [1.0, -6.391462000000028e-14, -5.929000000000031e-10, -0.00010780000000000034, -1.7431260000000092e-8]
+ [0.9999999999999981, -6.567364061999976e-11, -6.037289999999992e-8, -0.0010878000000000023, -1.7749632599999965e-6]
+ [0.9999999999855956, -5.5051486974382846e-8, -5.367359426515357e-6, -0.010256717055505578, -0.0001578003671397977]
+ [0.9999999967283344, -3.2208997265909783e-6, -8.089085867954903e-5, -0.039817845493907975, -0.0023781912454561662]
+ [0.9999999522408447, -2.405431542914682e-5, -0.0003090603628628303, -0.07783047304029803, -0.009086374669453116]
+ [0.9999997419989658, -8.523472721281003e-5, -0.0007183327924732369, -0.11865629131197372, -0.02111898410081311]
+ [0.9999990472098922, -0.00022706401192704043, -0.0013804272178232551, -0.16448806008980102, -0.0405845602082515]
+ [0.9999973252355406, -0.0004924523961325739, -0.002312903316891978, -0.21291468362508234, -0.06799935752282055]
+ ⋮
+ [0.5278328468315321, -3.465427042040252, -0.8493482890935731, -2.1536114783910314, -24.97083945477471]
+ [0.4996869763733456, -3.5691094793655735, -0.866206070207693, -2.0589067532381904, -25.466458204319615]
+ [0.47072670257725824, -3.6689096678613606, -0.8822790952663332, -1.9574914139212973, -25.939005126804407]
+ [0.4409849971450936, -3.7643521103462865, -0.897514491692352, -1.8495777213226952, -26.386925768515283]
+ [0.4104985982284327, -3.854971511620565, -0.9118612456942773, -1.7354179849967295, -26.80872032403176]
+ [0.37930791331729713, -3.940316652207845, -0.9252705212441953, -1.6153041265381212, -27.20295301417608]
+ [0.34745689109120964, -4.019954264375825, -0.9376959738977688, -1.48956682547582, -27.568261312321408]
+ [0.31499286241358354, -4.09347286033376, -0.9490940560881279, -1.3585742418097415, -27.903364920031716]
+ [0.2962719704513438, -4.132413586252531, -0.9551036332437013, -1.2818696081504504, -28.080046483499565]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">,</span><span class="w"> </span><span class="n">idxs</span><span class="o">=</span><span class="n">unknowns</span><span class="p">(</span><span class="n">tracedSys</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a73f050fc121202750885436e1c4d8ce4c11a8d42326c107164dac53f03d54e6.png" src="../_images/a73f050fc121202750885436e1c4d8ce4c11a8d42326c107164dac53f03d54e6.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><em>This notebook was generated using <a class="reference external" href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.10"
+        },
+        kernelOptions: {
+            name: "julia-1.10",
+            path: "./ode"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.10'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="diffeq.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Ordinary Differential Equations (ODEs)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="catalyst.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Catalyst ODE examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#radioactive-decay">Radioactive decay</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lorenz-system">Lorenz system</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-autonomous-odes">Non-autonomous ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-order-ode-systems">Second-order ODE systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#composing-systems">Composing systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-existing-functions-into-mtk-systems">Convert existing functions into MTK systems</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Wen-Wei Tseng
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

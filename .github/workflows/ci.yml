@@ -12,9 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NBCONVERT_JOBS: '3'
-  LITERATE_PROC: '3'
-  # JULIA_NUM_THREADS: '2'
+  LITERATE_PROC: '2'
+  JULIA_NUM_THREADS: '2'
   ALLOWERRORS: 'false'
   NBCACHE: '.cache'
   JULIA_CONDAPKG_BACKEND: 'Null'
@@ -77,7 +76,7 @@ jobs:
       shell: julia --color=yes {0}
       run: |
         using Pkg
-        Pkg.add(["Literate", "Tables", "MarkdownTables", "JSON", "IJulia"])
+        Pkg.add(["Literate", "Tables", "MarkdownTables", "JSON"])
         Pkg.activate(".")
         Pkg.instantiate()
         Pkg.precompile()

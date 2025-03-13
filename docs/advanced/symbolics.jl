@@ -67,7 +67,7 @@ Symbolics.simplify(sin(x)^2 + 2 + cos(x)^2)
 ex = x^2 + y^2 + sin(x)
 isequal(2ex, ex + ex)
 
-#---
+# You need to simplify the expressions.
 isequal(simplify(2ex), simplify(ex + ex))
 
 #---
@@ -88,7 +88,7 @@ With `@register_symbolic` and `@register_array_symbolic`, functions will be eval
 @variables z::Complex
 
 # Array types with subscript
-@variables xs[1:100]
+@variables xs[1:20]
 
 #---
 xs[1]
@@ -226,9 +226,9 @@ eqs = let
     dE4 = v24 + v34 - v45
     dE5 = v15 + v45
 
-    # Make sure the rates are conserved
+    ## Make sure the rates are conserved
     @assert isequal(dE1 + dE2 + dE3 + dE4 + dE5, 0)
-    # The following terms should be all zeroes.
+    ## The following terms should be all zeroes.
     [dE1, dE2, dE3, dE4, E1 + E2 + E3 + E4 + E5 - 1 ]
 end
 

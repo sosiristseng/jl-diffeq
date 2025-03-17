@@ -671,9 +671,9 @@ version = "0.6.1"
 
 [[deps.DynamicQuantities]]
 deps = ["DispatchDoctor", "PrecompileTools", "TestItems", "Tricks"]
-git-tree-sha1 = "4405eb6c35adfa18f6541dc59a6ffbc9ad47ba35"
+git-tree-sha1 = "2cf4f27ea6997aabf4b3e3b97355af3d757efd6b"
 uuid = "06fc5a27-2a28-4c7c-a15d-362465fb6821"
-version = "1.6.0"
+version = "1.7.0"
 
     [deps.DynamicQuantities.extensions]
     DynamicQuantitiesLinearAlgebraExt = "LinearAlgebra"

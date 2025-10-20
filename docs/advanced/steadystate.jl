@@ -43,7 +43,7 @@ eqs = [
 guess = [x => 1.0, y => 0.0, z => 0.0]
 ps = [σ => 10.0, ρ => 26.0, β => 8 / 3]
 prob = NonlinearProblem(ns, guess, ps)
-sol = solve(prob, NewtonRaphson()) ## The results should be all zeroes
+sol = solve(prob, NewtonRaphson()) ## The results should be close to zeroes
 
 # Another nonlinear system example with `structural_simplify()`.
 @independent_variables t
@@ -70,6 +70,9 @@ sol = solve(prob, NewtonRaphson())
 # ## Finding Steady States through Homotopy Continuation
 # For systems of rational polynomials. e.g., mass-action reactions and reaction rates with integer Hill coefficients.
 # Source: https://docs.sciml.ai/Catalyst/stable/steady_state_functionality/homotopy_continuation/#homotopy_continuation
+#===
+
+```julia
 using Catalyst
 import HomotopyContinuation
 
@@ -87,3 +90,5 @@ steady_states = hc_steady_states(wilhelm_2009_model, ps)
 # ## Steady state stability computation
 # `Catalyst.steady_state_stability()` shows there are two stable and one unstable steady states.
 [Catalyst.steady_state_stability(sstate, wilhelm_2009_model, ps) for sstate in steady_states]
+```
+===#

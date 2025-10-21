@@ -15,5 +15,6 @@
         "Rosenbrock",
         "stoichiometries",
         "tspan"
-    ]
+    ],
+    "julia.executablePath": "julia +lts"
 }

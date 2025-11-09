@@ -23,3 +23,6 @@ SimpleUnPack = "ce78b400-467f-4804-87d8-8f486da07d0a"
 SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
 StochasticDiffEq = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
+
+[compat]
+Symbolics = "7.0.0"

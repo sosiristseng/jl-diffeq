@@ -16,5 +16,4 @@
         "stoichiometries",
         "tspan"
     ],
-    "julia.executablePath": "julia +lts"
 }

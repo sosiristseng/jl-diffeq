@@ -1,0 +1,32 @@
+# Table of contents
+# # https://jupyterbook.org/v1/structure/toc.html
+
+format: jb-book
+root: index
+parts:
+  - caption: Ordinary DEs
+    chapters:
+    - file: ode/diffeq
+    - file: ode/mtk
+    - file: ode/catalyst
+  - caption: Stochastic
+    chapters:
+    - file: stochastic/diffeq
+    - file: stochastic/mtk
+    - file: stochastic/catalyst
+  - caption: Advanced
+    chapters:
+    - file: advanced/optimization
+    - file: advanced/steadystate
+    - file: advanced/ensemble
+    - file: advanced/callback
+    - file: advanced/symbolics
+  - caption: Models
+    chapters:
+    - file: models/01-neuron
+  - caption: Tips
+    chapters:
+    - file: tips/smoothfunc
+    - file: tips/odef-from-mtk
+    - file: tips/nodomainerr
+    - file: tips/componentarrays

@@ -1,0 +1,58 @@
+# https://quarto.org/docs/projects/quarto-projects.html
+project:
+  type: book
+  output-dir: ../_site
+
+# https://quarto.org/docs/books/
+book:
+  title: Differential Equations
+  author: Wen-Wei Tseng
+  repo-url: https://github.com/sosiristseng/jl-diffeq
+  site-url: https://sosiristseng.github.io/jl-diffeq
+  page-navigation: true
+  bread-crumbs: true
+  chapters:
+    - index.ipynb
+    - part: "ODE"
+      chapters:
+        - ode/01-diffeq.ipynb
+        - ode/02-mtk.ipynb
+        - ode/03-catalyst.ipynb
+    - part: "Stochastic"
+      chapters:
+        - stochastic/01-diffeq.ipynb
+        - stochastic/02-mtk.ipynb
+        - stochastic/03-catalyst.ipynb
+    - part: "Models"
+      chapters:
+        - models/01-neuron.ipynb
+    - part: "Advanced"
+      chapters:
+        - advanced/01-optimization.ipynb
+        - advanced/02-steadystate.ipynb
+        - advanced/03-ensemble.ipynb
+        - advanced/04-callback.ipynb
+        - advanced/05-symbolics.ipynb
+  appendices:
+    - tips/01-smoothfunc.ipynb
+    - tips/02-odef-from-mtk.ipynb
+    - tips/03-nodomainerr.ipynb
+    - tips/04-componentarrays.ipynb
+
+# bibliography: references.bib
+
+# https://quarto.org/docs/output-formats/html-basics.html
+format:
+  html:
+    code-link: true
+    theme:
+      light: cosmo
+      dark: cyborg
+
+# Default options
+# notebook-links: true
+
+# Execution
+# execute:
+#   cache: true
+# engines: ['julia']

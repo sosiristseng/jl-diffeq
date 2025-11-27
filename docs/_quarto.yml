@@ -13,14 +13,31 @@ book:
   bread-crumbs: true
   chapters:
     - index.ipynb
-    - pythonplot-lit.ipynb
-    - pythonplot.ipynb
-    - part: "Subdir"
+    - part: "ODE"
       chapters:
-        - sub/plots-lit.ipynb
-        - sub/plots.ipynb
+        - ode/01-diffeq.ipynb
+        - ode/02-mtk.ipynb
+        - ode/03-catalyst.ipynb
+    - part: "Stochastic"
+      chapters:
+        - stochastic/01-diffeq.ipynb
+        - stochastic/02-mtk.ipynb
+        - stochastic/03-catalyst.ipynb
+    - part: "Models"
+      chapters:
+        - models/01-neuron.ipynb
+    - part: "Advanced"
+      chapters:
+        - advanced/01-optimization.ipynb
+        - advanced/02-steadystate.ipynb
+        - advanced/03-ensemble.ipynb
+        - advanced/04-callback.ipynb
+        - advanced/05-symbolics.ipynb
   appendices:
-    - about.qmd
+    - tips/01-smoothfunc.ipynb
+    - tips/02-odef-from-mtk
+    - tips/03-nodomainerr
+    - tips/04-componentarrays
 
 # bibliography: references.bib
 

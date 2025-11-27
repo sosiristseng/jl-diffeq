@@ -14,6 +14,7 @@ website:
     style: docked
     search: true
     contents:
+      - index.ipynb
       - section: "ODE"
         contents: ode/*.ipynb
       - section: "Stochastic"

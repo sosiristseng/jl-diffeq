@@ -35,9 +35,9 @@ book:
         - advanced/05-symbolics.ipynb
   appendices:
     - tips/01-smoothfunc.ipynb
-    - tips/02-odef-from-mtk
-    - tips/03-nodomainerr
-    - tips/04-componentarrays
+    - tips/02-odef-from-mtk.ipynb
+    - tips/03-nodomainerr.ipynb
+    - tips/04-componentarrays.ipynb
 
 # bibliography: references.bib
 
